@@ -39,6 +39,9 @@
   <!-- Font Awesome for Icons -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
   <link rel="stylesheet" href="app.css">
+
+  <!-- Netlify Identity Widget -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
   <button class="menu-toggle btn btn-primary" id="menuToggle" aria-label="Toggle Menu">
@@ -62,13 +65,13 @@
       </a>
     </div>
     <div class="nav-section p-3">
-      <a href="#" class="nav-icon text-white" data-tooltip-en="Profile" data-tooltip-pt="Perfil" data-tooltip-es="Perfil" data-tooltip-fr="Profil" data-tooltip aria-label="Profile">
+      <a href="#" class="nav-icon text-white" data-tooltip-en="Profile" data-tooltip-pt="Perfil" data-tooltip-es="Perfil" data-tooltip-fr="Profil" data-tooltip aria-label="Profile" id="profile-link" style="display: none;">
         <i class="fas fa-user"></i>
       </a>
       <a href="#" class="nav-icon text-white" data-tooltip-en="Settings" data-tooltip-pt="Configurações" data-tooltip-es="Configuración" data-tooltip-fr="Paramètres" data-tooltip aria-label="Settings">
         <i class="fas fa-cog"></i>
       </a>
-      <a href="#" class="nav-icon text-white" data-tooltip-en="Logout" data-tooltip-pt="Sair" data-tooltip-es="Salir" data-tooltip-fr="Déconnexion" data-tooltip aria-label="Logout">
+      <a href="#" class="nav-icon text-white" data-tooltip-en="Logout" data-tooltip-pt="Sair" data-tooltip-es="Salir" data-tooltip-fr="Déconnexion" data-tooltip aria-label="Logout" id="logout-link" style="display: none;">
         <i class="fas fa-sign-out-alt"></i>
       </a>
     </div>
@@ -309,6 +312,8 @@
     const loading = document.getElementById("loading");
     const navLinks = document.querySelectorAll(".nav-icon");
     const langButtons = document.querySelectorAll(".language-btn");
+    const profileLink = document.getElementById("profile-link");
+    const logoutLink = document.getElementById("logout-link");
 
     // Current language
     let currentLang = "pt";
@@ -676,6 +681,44 @@
       currentLang = savedLang;
     }
 
+    // Initialize Netlify Identity
+    const netlifyIdentity = window.netlifyIdentity;
+    netlifyIdentity.on('init', user => {
+      if (!user) {
+        netlifyIdentity.on('login', () => {
+          document.location.href = "/";
+        });
+      }
+    });
+
+    netlifyIdentity.on('login', user => {
+      safeStorage.setItem('authenticated', 'true');
+      updateAuthUI();
+    });
+
+    netlifyIdentity.on('logout', () => {
+      safeStorage.setItem('authenticated', 'false');
+      updateAuthUI();
+    });
+
+    // Function to update UI based on authentication status
+    function updateAuthUI() {
+      const isAuthenticated = safeStorage.getItem('authenticated') === 'true';
+      if (isAuthenticated) {
+        profileLink.style.display = 'block';
+        logoutLink.style.display = 'block';
+      } else {
+        profileLink.style.display = 'none';
+        logoutLink.style.display = 'none';
+      }
+    }
+
+    // Handle logout
+    logoutLink.addEventListener('click', function(event) {
+      event.preventDefault();
+      netlifyIdentity.logout();
+    });
+
     // Initialize page with error handling
     document.addEventListener("DOMContentLoaded", () => {
       try {
@@ -689,6 +732,12 @@
 
         // Generate content
         setTimeout(generateContent, 500);
+
+        // Initialize Netlify Identity
+        netlifyIdentity.init();
+
+        // Update auth UI
+        updateAuthUI();
       } catch (error) {
         console.error("Initialization error:", error);
         loading.innerHTML = `
