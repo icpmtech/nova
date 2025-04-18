@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -605,8 +606,7 @@
         { title: "Nova Search Dividends", url: "https://nova-search-dividends.netlify.app/" },
         { title: "Nova Search Stock", url: "https://nova-search-stock.netlify.app/" },
         { title: "NovaSearch", url: "https://novasearch.app/" },
-        { title: "NovaSearch Hub", url: "https://novasearch.app/hubsearch" },
-        { title:"NovaSearch Analytics", url:"https://nova-hub.netlify.app/#analytics"}
+        { title: "NovaSearch Hub", url: "https://novasearch.app/hubsearch" }
       ],
       "LLM Platforms": [
         { title: "ChatGPT", url: "https://chat.openai.com" },
@@ -637,6 +637,25 @@
     
     // Current language
     let currentLang = "pt";
+
+    // Safe storage implementation to handle localStorage errors
+    const safeStorage = {
+      data: {},
+      getItem: function(key) {
+        try {
+          return localStorage.getItem(key);
+        } catch (e) {
+          return this.data[key] || null;
+        }
+      },
+      setItem: function(key, value) {
+        try {
+          localStorage.setItem(key, value);
+        } catch (e) {
+          this.data[key] = value;
+        }
+      }
+    };
 
     // Function to update language tooltips
     function updateTooltips(lang) {
@@ -685,8 +704,8 @@
         }
       });
       
-      // Store language preference
-      localStorage.setItem("novaagg-lang", lang);
+      // Store language preference with safe storage
+      safeStorage.setItem("novaagg-lang", lang);
       
       // Update HTML lang attribute
       document.documentElement.lang = lang;
@@ -841,9 +860,13 @@
           if (iframe) {
             if (entry.isIntersecting) {
               // Resume iframe when visible (reload src)
-              const src = iframe.src;
+              const src = iframe.getAttribute('data-src') || iframe.src;
               iframe.src = src;
             } else if (!document.querySelector('.frame.fullscreen')) {
+              // Save current src to data attribute if not already done
+              if (!iframe.getAttribute('data-src')) {
+                iframe.setAttribute('data-src', iframe.src);
+              }
               // Pause iframe when not visible (except fullscreen mode)
               iframe.src = "about:blank";
             }
@@ -856,8 +879,8 @@
       });
     };
     
-    // Check for saved language preference
-    const savedLang = localStorage.getItem("novaagg-lang");
+    // Check for saved language preference with safe storage
+    const savedLang = safeStorage.getItem("novaagg-lang");
     if (savedLang && translations[savedLang]) {
       currentLang = savedLang;
     }
