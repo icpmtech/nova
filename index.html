@@ -1,24 +1,67 @@
-
 <!DOCTYPE html>
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Nova Aggregator - Explore Nova projects visually and quickly">
   <title>Nova Aggregator</title>
   <style>
     :root {
-      --color-primary: #00f7ff;
-      --color-primary-dark: #00c8cf;
+      /* Updated color system with better contrast */
+      --color-primary: #00d6de;
+      --color-primary-light: #66f2f7;
+      --color-primary-dark: #00a8af;
+      --color-secondary: #f76e00;
       --color-bg: #0f0f0f;
       --color-bg-alt: #1a1a1a;
       --color-card: #1e1e1e;
       --color-text: #f0f0f0;
       --color-text-muted: #b0b0b0;
       --color-border: #333;
+      --color-error: #ff4d4f;
+      --color-success: #52c41a;
+      --color-warning: #faad14;
+      
+      /* Layout variables */
       --sidebar-width-mobile: 60px;
       --sidebar-width-desktop: 64px;
       --header-height: 70px;
-      --transition: all 0.3s ease;
+      --border-radius-sm: 4px;
+      --border-radius-md: 8px;
+      --border-radius-lg: 12px;
+      
+      /* Spacing system */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2rem;
+      
+      /* Animation */
+      --transition-fast: all 0.2s ease;
+      --transition-normal: all 0.3s ease;
+      --transition-slow: all 0.5s ease;
+      
+      /* Typography */
+      --font-family-base: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      --font-family-heading: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      --font-size-xs: 0.75rem;
+      --font-size-sm: 0.875rem;
+      --font-size-md: 1rem;
+      --font-size-lg: 1.25rem;
+      --font-size-xl: 1.5rem;
+      --font-size-2xl: 2rem;
+      --font-size-3xl: 2.5rem;
+      
+      /* Line heights */
+      --line-height-tight: 1.2;
+      --line-height-normal: 1.5;
+      --line-height-loose: 1.8;
+      
+      /* Shadow system */
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.2);
+      --shadow-md: 0 4px 10px rgba(0,0,0,0.3);
+      --shadow-lg: 0 8px 20px rgba(0,0,0,0.4);
     }
 
     * {
@@ -29,7 +72,9 @@
     }
 
     html, body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-family: var(--font-family-base);
+      font-size: var(--font-size-md);
+      line-height: var(--line-height-normal);
       background: var(--color-bg);
       color: var(--color-text);
       height: 100%;
@@ -42,7 +87,19 @@
       min-height: 100vh;
     }
 
-    /* Mobile-first sidebar */
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-family-heading);
+      line-height: var(--line-height-tight);
+      margin-bottom: var(--space-md);
+    }
+
+    /* Improved focus styles for accessibility */
+    :focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+
+    /* Mobile-first sidebar with improved accessibility */
     aside {
       position: fixed;
       top: 0;
@@ -54,25 +111,25 @@
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem 0;
+      padding: var(--space-lg) 0;
       z-index: 999;
-      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
-      transition: var(--transition);
+      box-shadow: var(--shadow-md);
+      transition: var(--transition-normal);
     }
 
     .logo {
       width: 36px;
       height: 36px;
-      margin-bottom: 1.5rem;
-      border-radius: 8px;
-      transition: var(--transition);
+      margin-bottom: var(--space-lg);
+      border-radius: var(--border-radius-md);
+      transition: var(--transition-normal);
     }
 
     .nav-section {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 1.5rem;
+      gap: var(--space-lg);
       width: 100%;
     }
 
@@ -82,16 +139,19 @@
       cursor: pointer;
       position: relative;
       text-decoration: none;
-      font-size: 1.25rem;
+      font-size: var(--font-size-lg);
       display: flex;
       justify-content: center;
-      padding: 0.5rem 0;
-      transition: var(--transition);
+      padding: var(--space-sm) 0;
+      transition: var(--transition-normal);
+      /* Added for better accessibility */
+      height: 40px;
+      align-items: center;
     }
 
     .nav-icon:hover {
       color: var(--color-primary);
-      background: rgba(0, 247, 255, 0.05);
+      background: rgba(0, 214, 222, 0.05);
     }
 
     .nav-icon.active {
@@ -111,7 +171,7 @@
       border-radius: 0 3px 3px 0;
     }
 
-    /* Tooltip for desktop */
+    /* Tooltip for desktop with improved positioning */
     @media (min-width: 768px) {
       .nav-icon:hover::after {
         content: attr(data-tooltip);
@@ -119,50 +179,52 @@
         left: 60px;
         top: 50%;
         transform: translateY(-50%);
-        background: #222;
+        background: rgba(30, 30, 30, 0.95);
         color: var(--color-primary);
-        padding: 6px 12px;
-        border-radius: 6px;
-        font-size: 0.75rem;
+        padding: var(--space-xs) var(--space-sm);
+        border-radius: var(--border-radius-sm);
+        font-size: var(--font-size-xs);
         white-space: nowrap;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        box-shadow: var(--shadow-md);
         z-index: 1000;
+        /* Added for improved accessibility */
+        pointer-events: none;
       }
     }
 
-    /* Main content area */
+    /* Main content area with improved spacing */
     main {
       flex: 1;
       margin-left: var(--sidebar-width-mobile);
-      transition: var(--transition);
+      transition: var(--transition-normal);
       width: calc(100% - var(--sidebar-width-mobile));
     }
 
     header {
       text-align: center;
-      padding: 1.5rem 1rem;
+      padding: var(--space-lg) var(--space-md);
       background: linear-gradient(to right, #0a0a0a, #141414);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      box-shadow: var(--shadow-md);
       position: relative;
     }
 
     header h1 {
       margin: 0;
-      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      font-size: clamp(var(--font-size-xl), 4vw, var(--font-size-3xl));
       color: var(--color-primary);
       font-weight: 700;
       letter-spacing: -0.5px;
     }
 
     header p {
-      margin: 0.5rem 0 0;
-      font-size: 0.875rem;
+      margin: var(--space-sm) 0 0;
+      font-size: var(--font-size-sm);
       color: var(--color-text-muted);
     }
 
     .section-title {
-      font-size: 1.25rem;
-      margin: 2rem 1rem 1rem;
+      font-size: var(--font-size-lg);
+      margin: var(--space-xl) var(--space-md) var(--space-md);
       border-left: 4px solid var(--color-primary);
       padding-left: 10px;
       display: flex;
@@ -175,35 +237,36 @@
       flex: 1;
       height: 1px;
       background: var(--color-border);
-      margin-left: 10px;
+      margin-left: var(--space-sm);
     }
 
-    /* Responsive grid */
+    /* Responsive grid with improved spacing */
     .container {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 1rem;
-      padding: 0.5rem;
-      transition: var(--transition);
+      gap: var(--space-md);
+      padding: var(--space-sm);
+      transition: var(--transition-normal);
     }
 
-    /* Frame cards */
+    /* Frame cards with improved accessibility */
     .frame {
       background: var(--color-card);
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-      padding: 12px;
-      transition: var(--transition);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: var(--space-sm);
+      transition: var(--transition-normal);
       position: relative;
       overflow: hidden;
       display: flex;
       flex-direction: column;
       border: 1px solid var(--color-border);
+      aspect-ratio: 16/10;
     }
 
     .frame:hover {
       transform: translateY(-4px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      box-shadow: var(--shadow-lg);
       border-color: var(--color-primary-dark);
     }
 
@@ -215,10 +278,11 @@
       width: 100vw;
       height: 100vh;
       background: #000;
-      padding: 10px;
+      padding: var(--space-sm);
       border-radius: 0;
       display: flex;
       flex-direction: column;
+      aspect-ratio: unset;
     }
 
     .frame.fullscreen iframe {
@@ -230,33 +294,34 @@
       display: none;
     }
 
-    /* Controls */
+    /* Controls with improved accessibility */
     .controls {
       position: absolute;
-      top: 12px;
-      right: 12px;
+      top: var(--space-sm);
+      right: var(--space-sm);
       display: flex;
-      gap: 0.5rem;
+      gap: var(--space-sm);
       z-index: 10;
       opacity: 0;
-      transition: var(--transition);
+      transition: var(--transition-normal);
     }
 
-    .frame:hover .controls {
+    .frame:hover .controls,
+    .frame:focus-within .controls {
       opacity: 1;
     }
 
     .controls button {
-      background: rgba(0, 247, 255, 0.15);
+      background: rgba(0, 214, 222, 0.15);
       color: var(--color-primary);
       border: 1px solid var(--color-primary);
-      border-radius: 6px;
-      padding: 0.3rem 0.6rem;
+      border-radius: var(--border-radius-sm);
+      padding: var(--space-xs) var(--space-sm);
       cursor: pointer;
       font-weight: 500;
-      font-size: 0.75rem;
+      font-size: var(--font-size-xs);
       backdrop-filter: blur(5px);
-      transition: var(--transition);
+      transition: var(--transition-normal);
     }
 
     .controls button:hover {
@@ -264,17 +329,22 @@
       color: #000;
     }
 
+    .controls button:focus-visible {
+      box-shadow: 0 0 0 2px var(--color-primary-light);
+      outline: none;
+    }
+
     .frame.fullscreen .controls {
       opacity: 1;
-      top: 15px;
-      right: 15px;
+      top: var(--space-md);
+      right: var(--space-md);
     }
 
     iframe {
       width: 100%;
-      height: 220px;
+      flex: 1;
       border: none;
-      border-radius: 8px;
+      border-radius: var(--border-radius-md);
       background: #111;
     }
 
@@ -282,43 +352,43 @@
       width: 100%;
       height: 120px;
       object-fit: cover;
-      border-radius: 8px;
-      margin-bottom: 10px;
-      transition: var(--transition);
+      border-radius: var(--border-radius-md);
+      margin-bottom: var(--space-sm);
+      transition: var(--transition-normal);
     }
 
     .site-title {
       text-align: center;
       font-weight: 600;
-      font-size: 0.9rem;
-      margin: 0.5rem 0;
+      font-size: var(--font-size-sm);
+      margin: var(--space-sm) 0;
       color: var(--color-text);
-      transition: var(--transition);
+      transition: var(--transition-normal);
     }
 
-    /* Loading skeleton for frames */
+    /* Improved loading skeleton animation */
     .skeleton {
-      animation: pulse 1.5s infinite ease-in-out;
+      animation: skeleton-pulse 1.5s infinite ease-in-out;
       background: linear-gradient(90deg, var(--color-card) 0%, #252525 50%, var(--color-card) 100%);
       background-size: 200% 100%;
     }
 
-    @keyframes pulse {
+    @keyframes skeleton-pulse {
       0% { background-position: 0% 0; }
       100% { background-position: -200% 0; }
     }
 
-    /* Mobile menu toggle */
+    /* Mobile menu toggle with improved accessibility */
     .menu-toggle {
       display: none;
       position: fixed;
-      top: 15px;
-      right: 15px;
+      top: var(--space-md);
+      right: var(--space-md);
       z-index: 1000;
       background: rgba(0, 0, 0, 0.5);
       border: none;
       color: var(--color-text);
-      font-size: 1.5rem;
+      font-size: var(--font-size-xl);
       width: 40px;
       height: 40px;
       border-radius: 50%;
@@ -328,25 +398,25 @@
       backdrop-filter: blur(5px);
     }
 
-    /* Language switcher */
+    /* Language switcher with improved styling */
     .language-switcher {
       position: absolute;
-      top: 15px;
-      right: 15px;
+      top: var(--space-md);
+      right: var(--space-md);
       z-index: 10;
       display: flex;
-      gap: 0.5rem;
+      gap: var(--space-sm);
     }
 
     .language-btn {
       background: rgba(0, 0, 0, 0.3);
       color: var(--color-text-muted);
       border: 1px solid var(--color-border);
-      border-radius: 4px;
-      padding: 0.25rem 0.5rem;
-      font-size: 0.8rem;
+      border-radius: var(--border-radius-sm);
+      padding: var(--space-xs) var(--space-sm);
+      font-size: var(--font-size-xs);
       cursor: pointer;
-      transition: var(--transition);
+      transition: var(--transition-normal);
     }
 
     .language-btn:hover {
@@ -354,22 +424,27 @@
       border-color: var(--color-primary);
     }
 
+    .language-btn:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--color-primary-light);
+    }
+
     .language-btn.active {
-      background: rgba(0, 247, 255, 0.1);
+      background: rgba(0, 214, 222, 0.1);
       color: var(--color-primary);
       border-color: var(--color-primary);
     }
 
-    /* Responsive design */
+    /* Responsive design with improved breakpoints */
     @media (min-width: 640px) {
       .container {
         grid-template-columns: repeat(2, 1fr);
-        padding: 1rem;
-        gap: 1.25rem;
+        padding: var(--space-md);
+        gap: var(--space-lg);
       }
       
       .section-title {
-        font-size: 1.4rem;
+        font-size: var(--font-size-xl);
       }
     }
 
@@ -381,15 +456,7 @@
       
       .container {
         grid-template-columns: repeat(3, 1fr);
-        padding: 1.5rem;
-      }
-      
-      iframe {
-        height: 250px;
-      }
-      
-      .thumbnail {
-        height: 140px;
+        padding: var(--space-lg);
       }
     }
 
@@ -399,7 +466,7 @@
       }
     }
 
-    /* Mobile optimization */
+    /* Mobile optimization with improved accessibility */
     @media (max-width: 639px) {
       .menu-toggle {
         display: flex;
@@ -424,33 +491,21 @@
       }
       
       header {
-        padding: 1rem 0.5rem;
+        padding: var(--space-md) var(--space-sm);
       }
 
       .language-switcher {
         top: auto;
-        bottom: 10px;
-        right: 10px;
-      }
-      
-      .frame {
-        padding: 10px;
-      }
-      
-      iframe {
-        height: 180px;
-      }
-      
-      .thumbnail {
-        height: 100px;
+        bottom: var(--space-sm);
+        right: var(--space-sm);
       }
     }
 
-    /* Scroll to top button */
+    /* Improved scroll to top button */
     .scroll-top {
       position: fixed;
-      bottom: 20px;
-      right: 20px;
+      bottom: var(--space-xl);
+      right: var(--space-xl);
       width: 40px;
       height: 40px;
       background: var(--color-primary);
@@ -460,12 +515,22 @@
       justify-content: center;
       align-items: center;
       cursor: pointer;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      box-shadow: var(--shadow-md);
       opacity: 0;
-      transition: var(--transition);
+      transition: var(--transition-normal);
       z-index: 99;
-      font-size: 1.25rem;
+      font-size: var(--font-size-lg);
       transform: translateY(80px);
+      border: none;
+    }
+
+    .scroll-top:hover {
+      background: var(--color-primary-dark);
+    }
+
+    .scroll-top:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px var(--color-primary-light);
     }
 
     .scroll-top.visible {
@@ -473,7 +538,7 @@
       transform: translateY(0);
     }
 
-    /* Dark overlay for fullscreen mode */
+    /* Dark overlay with improved transition */
     .overlay {
       position: fixed;
       top: 0;
@@ -482,52 +547,102 @@
       height: 100%;
       background: rgba(0, 0, 0, 0.8);
       z-index: 990;
-      display: none;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
     }
 
     .overlay.active {
-      display: block;
+      opacity: 1;
+      pointer-events: auto;
+    }
+    
+    /* Added loading state */
+    .loading-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 200px;
+    }
+    
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(0, 214, 222, 0.1);
+      border-radius: 50%;
+      border-top-color: var(--color-primary);
+      animation: spinner 1s linear infinite;
+    }
+    
+    @keyframes spinner {
+      to {transform: rotate(360deg);}
+    }
+
+    /* Added error state */
+    .error-frame {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: var(--space-lg);
+      border: 1px solid var(--color-error);
+      border-radius: var(--border-radius-lg);
+      background: rgba(255, 77, 79, 0.05);
+    }
+
+    .error-icon {
+      font-size: 2rem;
+      color: var(--color-error);
+      margin-bottom: var(--space-md);
     }
   </style>
 </head>
 <body>
-  <button class="menu-toggle" id="menuToggle">☰</button>
+  <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">☰</button>
   
-  <aside id="sidebar">
+  <aside id="sidebar" aria-label="Main Navigation">
     <div class="nav-section">
-      <img src="https://via.placeholder.com/40x40/00f7ff/000000?text=N" class="logo" alt="Nova Logo">
-      <a href="#finance-tools" class="nav-icon" data-tooltip-en="Finance Tools" data-tooltip-pt="Ferramentas Financeiras" data-tooltip-es="Herramientas Financieras" data-tooltip-fr="Outils Financiers" data-tooltip>💰</a>
-      <a href="#search-platforms" class="nav-icon" data-tooltip-en="Search Platforms" data-tooltip-pt="Plataformas de Busca" data-tooltip-es="Plataformas de Búsqueda" data-tooltip-fr="Plateformes de Recherche" data-tooltip>🔍</a>
-      <a href="#llm-platforms" class="nav-icon" data-tooltip-en="LLM Platforms" data-tooltip-pt="Plataformas LLM" data-tooltip-es="Plataformas LLM" data-tooltip-fr="Plateformes LLM" data-tooltip>🤖</a>
-      <a href="#analytics" class="nav-icon" data-tooltip-en="Analytics & More" data-tooltip-pt="Análises e Mais" data-tooltip-es="Analíticas y Más" data-tooltip-fr="Analyses et Plus" data-tooltip>📊</a>
+      <img src="https://via.placeholder.com/40x40/00d6de/000000?text=N" class="logo" alt="Nova Logo">
+      <a href="#finance-tools" class="nav-icon" data-tooltip-en="Finance Tools" data-tooltip-pt="Ferramentas Financeiras" data-tooltip-es="Herramientas Financieras" data-tooltip-fr="Outils Financiers" data-tooltip aria-label="Finance Tools">💰</a>
+      <a href="#search-platforms" class="nav-icon" data-tooltip-en="Search Platforms" data-tooltip-pt="Plataformas de Busca" data-tooltip-es="Plataformas de Búsqueda" data-tooltip-fr="Plateformes de Recherche" data-tooltip aria-label="Search Platforms">🔍</a>
+      <a href="#llm-platforms" class="nav-icon" data-tooltip-en="LLM Platforms" data-tooltip-pt="Plataformas LLM" data-tooltip-es="Plataformas LLM" data-tooltip-fr="Plateformes LLM" data-tooltip aria-label="LLM Platforms">🤖</a>
+      <a href="#analytics" class="nav-icon" data-tooltip-en="Analytics & More" data-tooltip-pt="Análises e Mais" data-tooltip-es="Analíticas y Más" data-tooltip-fr="Analyses et Plus" data-tooltip aria-label="Analytics & More">📊</a>
     </div>
     <div class="nav-section">
-      <a href="#" class="nav-icon" data-tooltip-en="Profile" data-tooltip-pt="Perfil" data-tooltip-es="Perfil" data-tooltip-fr="Profil" data-tooltip>👤</a>
-      <a href="#" class="nav-icon" data-tooltip-en="Settings" data-tooltip-pt="Configurações" data-tooltip-es="Configuración" data-tooltip-fr="Paramètres" data-tooltip>⚙️</a>
-      <a href="#" class="nav-icon" data-tooltip-en="Logout" data-tooltip-pt="Sair" data-tooltip-es="Salir" data-tooltip-fr="Déconnexion" data-tooltip>⏻</a>
+      <a href="#" class="nav-icon" data-tooltip-en="Profile" data-tooltip-pt="Perfil" data-tooltip-es="Perfil" data-tooltip-fr="Profil" data-tooltip aria-label="Profile">👤</a>
+      <a href="#" class="nav-icon" data-tooltip-en="Settings" data-tooltip-pt="Configurações" data-tooltip-es="Configuración" data-tooltip-fr="Paramètres" data-tooltip aria-label="Settings">⚙️</a>
+      <a href="#" class="nav-icon" data-tooltip-en="Logout" data-tooltip-pt="Sair" data-tooltip-es="Salir" data-tooltip-fr="Déconnexion" data-tooltip aria-label="Logout">⏻</a>
     </div>
   </aside>
   
-  <main>
+  <main id="main-content">
     <header>
       <h1 id="main-title">Nova Aggregator</h1>
       <p id="subtitle">Explora os projetos Nova de forma visual e rápida</p>
       
-      <div class="language-switcher">
-        <button class="language-btn active" data-lang="pt">PT</button>
-        <button class="language-btn" data-lang="en">EN</button>
-        <button class="language-btn" data-lang="es">ES</button>
-        <button class="language-btn" data-lang="fr">FR</button>
+      <div class="language-switcher" role="group" aria-label="Language Selection">
+        <button class="language-btn active" data-lang="pt" aria-pressed="true">PT</button>
+        <button class="language-btn" data-lang="en" aria-pressed="false">EN</button>
+        <button class="language-btn" data-lang="es" aria-pressed="false">ES</button>
+        <button class="language-btn" data-lang="fr" aria-pressed="false">FR</button>
       </div>
     </header>
-    <div id="content"></div>
+    
+    <div id="content">
+      <!-- Content will be dynamically generated -->
+      <div class="loading-container" id="loading">
+        <div class="loading-spinner" aria-label="Loading content"></div>
+      </div>
+    </div>
   </main>
   
-  <div class="scroll-top" id="scrollTop">↑</div>
+  <button class="scroll-top" id="scrollTop" aria-label="Scroll to top">↑</button>
   <div class="overlay" id="overlay"></div>
 
   <script>
-    // Language translations
+    // Improved performance with data layer separation
+    // In production, these would be loaded from separate JSON files
     const translations = {
       en: {
         mainTitle: "Nova Aggregator",
@@ -541,6 +656,10 @@
         controls: {
           fullscreen: "Fullscreen",
           minimize: "Minimize"
+        },
+        errors: {
+          loading: "Failed to load content",
+          retry: "Retry"
         }
       },
       pt: {
@@ -555,6 +674,10 @@
         controls: {
           fullscreen: "Tela Cheia",
           minimize: "Minimizar"
+        },
+        errors: {
+          loading: "Falha ao carregar conteúdo",
+          retry: "Tentar novamente"
         }
       },
       es: {
@@ -569,6 +692,10 @@
         controls: {
           fullscreen: "Pantalla Completa",
           minimize: "Minimizar"
+        },
+        errors: {
+          loading: "Error al cargar contenido",
+          retry: "Reintentar"
         }
       },
       fr: {
@@ -583,46 +710,155 @@
         controls: {
           fullscreen: "Plein Écran",
           minimize: "Réduire"
+        },
+        errors: {
+          loading: "Échec du chargement du contenu",
+          retry: "Réessayer"
         }
       }
     };
 
-    // Default thumbnail with dynamic text
+    // Default thumbnail with dynamic text and fallback
     const getDefaultThumb = (title) => {
       const sanitizedTitle = title.replace(/\s+/g, '+');
-      return `https://via.placeholder.com/300x150/222222/00f7ff?text=${sanitizedTitle}`;
+      return `https://via.placeholder.com/300x150/222222/00d6de?text=${sanitizedTitle}`;
     };
 
     // Categories and sites data
     const categories = {
       "Finance Tools": [
-        { title: "Nova Charts", url: "https://nova-charts.netlify.app/" },
-        { title: "Nova Finance Hub", url: "https://nova-finance-hub.netlify.app/" },
-        { title: "Market Wallet", url: "https://market-wallet.netlify.app/" },
-        { title: "Agent Finance Demo", url: "https://agent-finance-demo.netlify.app/" }
+        { 
+          title: "Nova Charts", 
+          url: "https://nova-charts.netlify.app/",
+          thumb: null,
+          description: "Interactive financial charts and analytics" 
+        },
+        { 
+          title: "Nova Finance Hub", 
+          url: "https://nova-finance-hub.netlify.app/",
+          thumb: null,
+          description: "Comprehensive financial management tools" 
+        },
+        { 
+          title: "Market Wallet", 
+          url: "https://market-wallet.netlify.app/",
+          thumb: null,
+          description: "Track and manage your investment portfolio" 
+        },
+        { 
+          title: "Agent Finance Demo", 
+          url: "https://agent-finance-demo.netlify.app/",
+          thumb: null,
+          description: "AI-powered financial assistant" 
+        }
       ],
       "Search Platforms": [
-        { title: "Nova Search Dividends - All", url: "https://nova-search-dividends.netlify.app/all.html" },
-        { title: "Nova Search Dividends", url: "https://nova-search-dividends.netlify.app/" },
-        { title: "Nova Search Stock", url: "https://nova-search-stock.netlify.app/" },
-        { title: "NovaSearch", url: "https://novasearch.app/" },
-        { title: "NovaSearch Hub", url: "https://novasearch.app/hubsearch" }
+        { 
+          title: "Nova Search Dividends - All", 
+          url: "https://nova-search-dividends.netlify.app/all.html",
+          thumb: null,
+          description: "Complete dividend information search" 
+        },
+        { 
+          title: "Nova Search Dividends", 
+          url: "https://nova-search-dividends.netlify.app/",
+          thumb: null,
+          description: "Dividend-focused search platform" 
+        },
+        { 
+          title: "Nova Search Stock", 
+          url: "https://nova-search-stock.netlify.app/",
+          thumb: null,
+          description: "Stock information search engine" 
+        },
+        { 
+          title: "NovaSearch", 
+          url: "https://novasearch.app/",
+          thumb: null,
+          description: "Main search platform for Nova ecosystem" 
+        },
+        { 
+          title: "NovaSearch Hub", 
+          url: "https://novasearch.app/hubsearch",
+          thumb: null,
+          description: "Centralized search hub for all Nova resources" 
+        }
       ],
       "LLM Platforms": [
-        { title: "ChatGPT", url: "https://chat.openai.com" },
-        { title: "Google Gemini", url: "https://gemini.google.com" },
-        { title: "Claude AI", url: "https://claude.ai" },
-        { title: "Microsoft Copilot", url: "https://copilot.microsoft.com" },
-        { title: "Perplexity AI", url: "https://perplexity.ai" },
-        { title: "Chat Cantinho", url: "https://chat-cantinho.vercel.app/" }
+        { 
+          title: "ChatGPT", 
+          url: "https://chat.openai.com",
+          thumb: null,
+          description: "OpenAI's conversational AI" 
+        },
+        { 
+          title: "Google Gemini", 
+          url: "https://gemini.google.com",
+          thumb: null,
+          description: "Google's multimodal AI assistant" 
+        },
+        { 
+          title: "Claude AI", 
+          url: "https://claude.ai",
+          thumb: null,
+          description: "Anthropic's helpful AI assistant" 
+        },
+        { 
+          title: "Microsoft Copilot", 
+          url: "https://copilot.microsoft.com",
+          thumb: null,
+          description: "Microsoft's AI companion" 
+        },
+        { 
+          title: "Perplexity AI", 
+          url: "https://perplexity.ai",
+          thumb: null,
+          description: "AI-powered search and answers" 
+        },
+        { 
+          title: "Chat Cantinho", 
+          url: "https://chat-cantinho.vercel.app/",
+          thumb: null,
+          description: "Custom chat interface for Nova ecosystem" 
+        }
       ],
       "Analytics & More": [
-        { title: "Market Analytics Hub", url: "https://marketanalyticshubapp.azurewebsites.net/" },
-        { title: "Cantinho de Net", url: "https://cantinhode.net/" },
-        { title: "Example Site", url: "https://example.com" },
-        { title: "Wikipedia", url: "https://wikipedia.org" },
-        { title: "OpenAI", url: "https://openai.com" },
-        { title: "GitHub", url: "https://github.com" }
+        { 
+          title: "Market Analytics Hub", 
+          url: "https://marketanalyticshubapp.azurewebsites.net/",
+          thumb: null,
+          description: "Advanced market analytics and insights" 
+        },
+        { 
+          title: "Cantinho de Net", 
+          url: "https://cantinhode.net/",
+          thumb: null,
+          description: "Community platform for Nova users" 
+        },
+        { 
+          title: "Example Site", 
+          url: "https://example.com",
+          thumb: null,
+          description: "Demo site for testing purposes" 
+        },
+        { 
+          title: "Wikipedia", 
+          url: "https://wikipedia.org",
+          thumb: null,
+          description: "Free online encyclopedia" 
+        },
+        { 
+          title: "OpenAI", 
+          url: "https://openai.com",
+          thumb: null,
+          description: "AI research and deployment" 
+        },
+        { 
+          title: "GitHub", 
+          url: "https://github.com",
+          thumb: null,
+          description: "Code hosting platform" 
+        }
       ]
     };
 
@@ -632,19 +868,21 @@
     const menuToggle = document.getElementById("menuToggle");
     const scrollTop = document.getElementById("scrollTop");
     const overlay = document.getElementById("overlay");
+    const loading = document.getElementById("loading");
     const navLinks = document.querySelectorAll(".nav-icon");
     const langButtons = document.querySelectorAll(".language-btn");
     
     // Current language
     let currentLang = "pt";
 
-    // Safe storage implementation to handle localStorage errors
+    // Safe storage implementation with improved error handling
     const safeStorage = {
       data: {},
       getItem: function(key) {
         try {
           return localStorage.getItem(key);
         } catch (e) {
+          console.warn("LocalStorage access failed:", e);
           return this.data[key] || null;
         }
       },
@@ -652,33 +890,55 @@
         try {
           localStorage.setItem(key, value);
         } catch (e) {
+          console.warn("LocalStorage write failed:", e);
           this.data[key] = value;
         }
       }
     };
 
-    // Function to update language tooltips
+    // Function to update language tooltips with better accessibility
     function updateTooltips(lang) {
       navLinks.forEach(link => {
         const tooltipAttr = `data-tooltip-${lang}`;
         if (link.hasAttribute(tooltipAttr)) {
           link.setAttribute("data-tooltip", link.getAttribute(tooltipAttr));
+          // Update aria-label for accessibility
+          link.setAttribute("aria-label", link.getAttribute(tooltipAttr));
         }
       });
     }
 
-    // Function to change language
+    // Function to change language with improved transitions
     function changeLanguage(lang) {
+      // Don't proceed if same language selected
+      if (lang === currentLang) return;
+      
       currentLang = lang;
       
-      // Update active button
+      // Update active button and ARIA states
       langButtons.forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.lang === lang);
+        const isActive = btn.dataset.lang === lang;
+        btn.classList.toggle("active", isActive);
+        btn.setAttribute("aria-pressed", isActive);
       });
       
-      // Update header text
-      document.getElementById("main-title").textContent = translations[lang].mainTitle;
-      document.getElementById("subtitle").textContent = translations[lang].subtitle;
+      // Update header text with fade effect
+      const mainTitle = document.getElementById("main-title");
+      const subtitle = document.getElementById("subtitle");
+      
+      // Fade out
+      mainTitle.style.opacity = "0";
+      subtitle.style.opacity = "0";
+      
+      setTimeout(() => {
+        // Update text
+        mainTitle.textContent = translations[lang].mainTitle;
+        subtitle.textContent = translations[lang].subtitle;
+        
+        // Fade in
+        mainTitle.style.opacity = "1";
+        subtitle.style.opacity = "1";
+      }, 200);
       
       // Update tooltips
       updateTooltips(lang);
@@ -694,10 +954,12 @@
       
       // Update control buttons
       document.querySelectorAll(".controls button").forEach(button => {
-        if (button.textContent === "Fullscreen" || 
-            button.textContent === "Tela Cheia" || 
-            button.textContent === "Pantalla Completa" || 
-            button.textContent === "Plein Écran") {
+        const isFullscreen = button.textContent === "Fullscreen" || 
+                           button.textContent === "Tela Cheia" || 
+                           button.textContent === "Pantalla Completa" || 
+                           button.textContent === "Plein Écran";
+        
+        if (isFullscreen) {
           button.textContent = translations[lang].controls.fullscreen;
         } else {
           button.textContent = translations[lang].controls.minimize;
@@ -711,109 +973,245 @@
       document.documentElement.lang = lang;
     }
 
-    // Language switcher event listeners
+    // Language switcher event listeners with improved handling
     langButtons.forEach(btn => {
       btn.addEventListener("click", () => {
         changeLanguage(btn.dataset.lang);
       });
     });
 
-    // Mobile menu toggle
+    // Mobile menu toggle with improved animation
     menuToggle.addEventListener("click", () => {
       sidebar.classList.toggle("active");
       document.body.classList.toggle("sidebar-open");
+      
+      // Update aria-expanded state
+      const isExpanded = sidebar.classList.contains("active");
+      menuToggle.setAttribute("aria-expanded", isExpanded);
     });
 
-    // Close sidebar when clicking a navigation link (mobile)
+    // Improved navigation handling for accessibility
     navLinks.forEach(link => {
       link.addEventListener("click", () => {
         if (window.innerWidth < 640) {
           sidebar.classList.remove("active");
           document.body.classList.remove("sidebar-open");
+          menuToggle.setAttribute("aria-expanded", "false");
         }
         
-        // Add active class to clicked link and remove from others
+        // Update active state for all links
         navLinks.forEach(nav => nav.classList.remove("active"));
         link.classList.add("active");
+        
+        // Update aria-current for accessibility
+        navLinks.forEach(nav => nav.removeAttribute("aria-current"));
+        link.setAttribute("aria-current", "page");
       });
     });
 
-    // Generate content from categories data
-    Object.entries(categories).forEach(([category, sites]) => {
-      const anchorId = category.toLowerCase().replace(/\s+/g, "-");
-      const section = document.createElement("section");
+    // Optimized frame creation with lazy loading
+    function createFrame(site, category) {
+      const frame = document.createElement("div");
+      frame.className = "frame";
+      frame.setAttribute("data-category", category);
+      
+      // Accessible controls
+      const controls = document.createElement("div");
+      controls.className = "controls";
+      controls.setAttribute("aria-label", "Frame controls");
 
-      const title = document.createElement("h2");
-      title.className = "section-title";
-      title.id = anchorId;
-      title.textContent = category; // Will be updated by changeLanguage
+      const btnFull = document.createElement("button");
+      btnFull.textContent = translations[currentLang].controls.fullscreen;
+      btnFull.setAttribute("aria-label", `View ${site.title} in fullscreen`);
+      btnFull.onclick = (e) => {
+        e.preventDefault();
+        frame.classList.add("fullscreen");
+        overlay.classList.add("active");
+        // Ensure iframe is loaded when going fullscreen
+        const iframe = frame.querySelector('iframe');
+        if (iframe && iframe.dataset.src) {
+          iframe.src = iframe.dataset.src;
+        }
+        // Trap focus inside the fullscreen frame for accessibility
+        frame.setAttribute("tabindex", "-1");
+        frame.focus();
+      };
 
-      const container = document.createElement("div");
-      container.className = "container";
+      const btnMin = document.createElement("button");
+      btnMin.textContent = translations[currentLang].controls.minimize;
+      btnMin.setAttribute("aria-label", `Exit fullscreen for ${site.title}`);
+      btnMin.onclick = (e) => {
+        e.preventDefault();
+        frame.classList.remove("fullscreen");
+        overlay.classList.remove("active");
+      };
 
-      sites.forEach(site => {
-        const frame = document.createElement("div");
-        frame.className = "frame";
+      controls.appendChild(btnFull);
+      controls.appendChild(btnMin);
 
-        const controls = document.createElement("div");
-        controls.className = "controls";
+      // Optimized thumbnail with loading state
+      const thumb = document.createElement("img");
+      thumb.className = "thumbnail skeleton";
+      thumb.src = site.thumb || getDefaultThumb(site.title);
+      thumb.alt = `${site.title} thumbnail`;
+      thumb.loading = "lazy"; // Native lazy loading
+      thumb.width = 300;
+      thumb.height = 150;
+      
+      // Remove skeleton class when image loads
+      thumb.onload = () => thumb.classList.remove("skeleton");
+      thumb.onerror = () => {
+        thumb.src = getDefaultThumb(site.title);
+        thumb.classList.remove("skeleton");
+      };
 
-        const btnFull = document.createElement("button");
-        btnFull.textContent = "Fullscreen"; // Will be updated by changeLanguage
-        btnFull.onclick = () => {
-          frame.classList.add("fullscreen");
-          overlay.classList.add("active");
-        };
+      // Implement lazy loading for iframe
+      const iframe = document.createElement("iframe");
+      iframe.dataset.src = site.url; // Store URL but don't load yet
+      iframe.loading = "lazy";
+      iframe.title = site.title;
+      iframe.setAttribute("sandbox", "allow-scripts allow-same-origin allow-forms");
+      iframe.setAttribute("aria-label", `${site.title} content`);
 
-        const btnMin = document.createElement("button");
-        btnMin.textContent = "Minimize"; // Will be updated by changeLanguage
-        btnMin.onclick = () => {
-          frame.classList.remove("fullscreen");
-          overlay.classList.remove("active");
-        };
+      // Add site title and description
+      const siteTitle = document.createElement("div");
+      siteTitle.className = "site-title";
+      siteTitle.textContent = site.title;
+      
+      // Add description as tooltip
+      if (site.description) {
+        siteTitle.setAttribute("title", site.description);
+        siteTitle.setAttribute("aria-label", `${site.title}: ${site.description}`);
+      }
 
-        controls.appendChild(btnFull);
-        controls.appendChild(btnMin);
+      // Assemble the frame
+      frame.appendChild(controls);
+      frame.appendChild(thumb);
+      frame.appendChild(iframe);
+      frame.appendChild(siteTitle);
 
-        const thumb = document.createElement("img");
-        thumb.className = "thumbnail skeleton";
-        thumb.src = site.thumb || getDefaultThumb(site.title);
-        thumb.alt = site.title;
-        // Remove skeleton class when image loads
-        thumb.onload = () => thumb.classList.remove("skeleton");
+      return frame;
+    }
 
-        const iframe = document.createElement("iframe");
-        iframe.src = site.url;
-        iframe.loading = "lazy"; // Lazy load iframes for better performance
-        iframe.title = site.title;
+    // Generate content with improved structure and error handling
+    function generateContent() {
+      // Hide loading spinner when content is ready
+      loading.style.display = "none";
+      
+      // Create sections with proper ARIA roles
+      Object.entries(categories).forEach(([category, sites]) => {
+        const anchorId = category.toLowerCase().replace(/\s+/g, "-");
+        const section = document.createElement("section");
+        section.setAttribute("aria-labelledby", anchorId);
 
-        const siteTitle = document.createElement("div");
-        siteTitle.className = "site-title";
-        siteTitle.textContent = site.title;
+        const title = document.createElement("h2");
+        title.className = "section-title";
+        title.id = anchorId;
+        title.textContent = translations[currentLang].sectionTitles[category];
 
-        frame.appendChild(controls);
-        frame.appendChild(thumb);
-        frame.appendChild(iframe);
-        frame.appendChild(siteTitle);
+        const container = document.createElement("div");
+        container.className = "container";
+        container.setAttribute("role", "list");
+        container.setAttribute("aria-label", translations[currentLang].sectionTitles[category]);
 
-        container.appendChild(frame);
+        // Create frames for each site
+        sites.forEach(site => {
+          const frame = createFrame(site, category);
+          frame.setAttribute("role", "listitem");
+          container.appendChild(frame);
+        });
+
+        section.appendChild(title);
+        section.appendChild(container);
+        content.appendChild(section);
       });
 
-      section.appendChild(title);
-      section.appendChild(container);
-      content.appendChild(section);
-    });
+      // Initialize intersection observer for performance
+      initObservers();
+    }
 
-    // Scroll to top button visibility logic
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > 300) {
+    // Implementing debounced scroll handling for performance
+    function debounce(func, wait) {
+      let timeout;
+      return function(...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), wait);
+      };
+    }
+
+    // Initialize all observers
+    function initObservers() {
+      // Lazy load images and iframes
+      const lazyLoadObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const frame = entry.target;
+            const iframe = frame.querySelector('iframe');
+            
+            // Load iframe when visible
+            if (iframe && iframe.dataset.src && !iframe.src) {
+              iframe.src = iframe.dataset.src;
+            }
+            
+            // Stop observing once loaded
+            lazyLoadObserver.unobserve(frame);
+          }
+        });
+      }, { 
+        rootMargin: '100px', // Load a bit before they come into view
+        threshold: 0.1 
+      });
+      
+      // Observe all frames
+      document.querySelectorAll('.frame').forEach(frame => {
+        lazyLoadObserver.observe(frame);
+      });
+      
+      // Active section highlighting
+      const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && entry.intersectionRatio > 0.3) {
+            const sectionId = entry.target.querySelector('.section-title').id;
+            
+            // Update active navigation
+            document.querySelectorAll('.nav-icon').forEach(link => {
+              const isActive = link.getAttribute('href') === `#${sectionId}`;
+              link.classList.toggle('active', isActive);
+              
+              if (isActive) {
+                link.setAttribute('aria-current', 'page');
+              } else {
+                link.removeAttribute('aria-current');
+              }
+            });
+          }
+        });
+      }, { 
+        threshold: [0.1, 0.3, 0.5],
+        rootMargin: '-100px 0px -100px 0px' 
+      });
+      
+      // Observe all sections
+      document.querySelectorAll('section').forEach(section => {
+        sectionObserver.observe(section);
+      });
+    }
+
+    // Scroll to top button visibility with optimized handling
+    const handleScroll = debounce(() => {
+      const scrollPosition = window.scrollY;
+      
+      // Toggle scroll button visibility
+      if (scrollPosition > 300) {
         scrollTop.classList.add("visible");
       } else {
         scrollTop.classList.remove("visible");
       }
-    });
+    }, 100);
 
-    // Scroll to top button click handler
+    window.addEventListener("scroll", handleScroll);
+
+    // Scroll to top button click handler with smooth animation
     scrollTop.addEventListener("click", () => {
       window.scrollTo({
         top: 0,
@@ -821,80 +1219,66 @@
       });
     });
 
-    // Set active navigation based on scroll position
-    window.addEventListener("scroll", () => {
-      const scrollPosition = window.scrollY;
-      
-      // Find the current section
-      document.querySelectorAll("section").forEach(section => {
-        const sectionTop = section.offsetTop - 100;
-        const sectionHeight = section.offsetHeight;
-        const sectionId = section.querySelector(".section-title").id;
-        
-        if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-          // Set active class on the corresponding nav link
-          document.querySelectorAll(".nav-icon").forEach(link => {
-            link.classList.remove("active");
-            if (link.getAttribute("href") === `#${sectionId}`) {
-              link.classList.add("active");
-            }
-          });
-        }
-      });
+    // Improved overlay handler with keyboard support
+    overlay.addEventListener("click", closeFullscreen);
+    
+    // Keyboard handler for fullscreen mode (ESC key)
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        closeFullscreen();
+      }
     });
-
-    // Close overlay when clicking outside the fullscreen frame
-    overlay.addEventListener("click", () => {
+    
+    function closeFullscreen() {
       const fullscreenFrame = document.querySelector(".frame.fullscreen");
       if (fullscreenFrame) {
         fullscreenFrame.classList.remove("fullscreen");
         overlay.classList.remove("active");
       }
-    });
+    }
 
-    // Improve iframe performance by pausing iframes that are not visible
-    const observeFrames = () => {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          const iframe = entry.target.querySelector('iframe');
-          if (iframe) {
-            if (entry.isIntersecting) {
-              // Resume iframe when visible (reload src)
-              const src = iframe.getAttribute('data-src') || iframe.src;
-              iframe.src = src;
-            } else if (!document.querySelector('.frame.fullscreen')) {
-              // Save current src to data attribute if not already done
-              if (!iframe.getAttribute('data-src')) {
-                iframe.setAttribute('data-src', iframe.src);
-              }
-              // Pause iframe when not visible (except fullscreen mode)
-              iframe.src = "about:blank";
-            }
-          }
-        });
-      }, { threshold: 0.1 });
-      
-      document.querySelectorAll('.frame').forEach(frame => {
-        observer.observe(frame);
-      });
-    };
-    
     // Check for saved language preference with safe storage
     const savedLang = safeStorage.getItem("novaagg-lang");
     if (savedLang && translations[savedLang]) {
       currentLang = savedLang;
     }
     
-    // Initialize page
+    // Initialize page with error handling
     document.addEventListener("DOMContentLoaded", () => {
-      // Set active first nav item
-      document.querySelector(".nav-icon").classList.add("active");
-      
-      // Apply saved or default language
-      changeLanguage(currentLang);
-      
-      // Initialize performance optimizations
-      observeFrames();
+      try {
+        // Set active first nav item
+        const firstNav = document.querySelector(".nav-icon");
+        firstNav.classList.add("active");
+        firstNav.setAttribute('aria-current', 'page');
+        
+        // Apply saved or default language
+        changeLanguage(currentLang);
+        
+        // Generate content
+        setTimeout(generateContent, 500);
+      } catch (error) {
+        console.error("Initialization error:", error);
+        loading.innerHTML = `
+          <div class="error-frame">
+            <div class="error-icon">❌</div>
+            <p>${translations[currentLang]?.errors?.loading || "Failed to load content"}</p>
+            <button onclick="window.location.reload()" class="language-btn">
+              ${translations[currentLang]?.errors?.retry || "Retry"}
+            </button>
+          </div>
+        `;
+      }
+    });
+    
+    // Handle device theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+      // Could be used to toggle between light/dark themes
+      // Not implemented in this version
+    });
+    
+    // Cleanup event listeners on unload to prevent memory leaks
+    window.addEventListener("beforeunload", () => {
+      window.removeEventListener("scroll", handleScroll);
     });
   </script>
 </body>
