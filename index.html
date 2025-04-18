@@ -19,20 +19,18 @@
   <meta name="twitter:description" content="Explore Nova projects visually and quickly">
   <meta name="twitter:image" content="https://nova-hub.netlify.app/logo.png">
 
-  
-  
   <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-8M25SCL0G0"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8M25SCL0G0"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-8M25SCL0G0');
+  </script>
 
-  gtag('config', 'G-8M25SCL0G0');
-</script>
-
-  !-- Auth0 SDK -->
+  <!-- Auth0 SDK -->
   <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
+
   <!-- Structured Data for SEO -->
   <script type="application/ld+json">
     {
@@ -49,23 +47,26 @@
   </script>
 
   <link rel="stylesheet" href="app.css">
-  
+  <style>
+    .private-section { display: none; }
+    .authenticated .private-section { display: block; }
+  </style>
 </head>
+
 <body>
   <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">☰</button>
 
   <aside id="sidebar" aria-label="Main Navigation">
     <div class="nav-section">
       <img src="/logo.png" class="logo" alt="Nova Logo">
-      <a href="#finance-tools" class="nav-icon" data-tooltip-en="Finance Tools" data-tooltip-pt="Ferramentas Financeiras" data-tooltip-es="Herramientas Financieras" data-tooltip-fr="Outils Financiers" data-tooltip aria-label="Finance Tools">💰</a>
-      <a href="#search-platforms" class="nav-icon" data-tooltip-en="Search Platforms" data-tooltip-pt="Plataformas de Busca" data-tooltip-es="Plataformas de Búsqueda" data-tooltip-fr="Plateformes de Recherche" data-tooltip aria-label="Search Platforms">🔍</a>
-      <a href="#llm-platforms" class="nav-icon" data-tooltip-en="LLM Platforms" data-tooltip-pt="Plataformas LLM" data-tooltip-es="Plataformas LLM" data-tooltip-fr="Plateformes LLM" data-tooltip aria-label="LLM Platforms">🤖</a>
-      <a href="#analytics" class="nav-icon" data-tooltip-en="Analytics & More" data-tooltip-pt="Análises e Mais" data-tooltip-es="Analíticas y Más" data-tooltip-fr="Analyses et Plus" data-tooltip aria-label="Analytics & More">📊</a>
+      <a href="#finance-tools" class="nav-icon" aria-label="Finance Tools">💰</a>
+      <a href="#search-platforms" class="nav-icon" aria-label="Search Platforms">🔍</a>
+      <a href="#llm-platforms" class="nav-icon" aria-label="LLM Platforms">🤖</a>
+      <a href="#analytics" class="nav-icon" aria-label="Analytics & More">📊</a>
     </div>
     <div class="nav-section">
-      <a href="#" class="nav-icon" data-tooltip-en="Profile" data-tooltip-pt="Perfil" data-tooltip-es="Perfil" data-tooltip-fr="Profil" data-tooltip aria-label="Profile">👤</a>
-      <a href="#" class="nav-icon" data-tooltip-en="Settings" data-tooltip-pt="Configurações" data-tooltip-es="Configuración" data-tooltip-fr="Paramètres" data-tooltip aria-label="Settings">⚙️</a>
-      <a href="#" class="nav-icon" data-tooltip-en="Logout" data-tooltip-pt="Sair" data-tooltip-es="Salir" data-tooltip-fr="Déconnexion" data-tooltip aria-label="Logout">⏻</a>
+      <a href="#" onclick="login()" class="nav-icon" aria-label="Login">🔐</a>
+      <a href="#" onclick="logout()" class="nav-icon" aria-label="Logout">⏻</a>
     </div>
   </aside>
 
@@ -83,15 +84,69 @@
     </header>
 
     <div id="content">
-      <!-- Content will be dynamically generated -->
+      <!-- Loading spinner -->
       <div class="loading-container" id="loading">
         <div class="loading-spinner" aria-label="Loading content"></div>
+      </div>
+
+      <!-- Conteúdo privado -->
+      <div class="private-section">
+        <h2>Área Privada</h2>
+        <p>Bem-vindo! Estás autenticado.</p>
       </div>
     </div>
   </main>
 
   <button class="scroll-top" id="scrollTop" aria-label="Scroll to top">↑</button>
   <div class="overlay" id="overlay"></div>
-<script src="app.js"></script>
+
+  <!-- App Script -->
+  <script src="app.js"></script>
+
+  <!-- Auth0 Script -->
+  <script>
+    let auth0 = null;
+
+    async function initAuth0() {
+      auth0 = await createAuth0Client({
+        domain: "SEU_DOMINIO.auth0.com", // Substituir pelo teu domínio
+        client_id: "SEU_CLIENT_ID",       // Substituir pelo teu Client ID
+        cacheLocation: "localstorage"
+      });
+
+      const isAuthenticated = await auth0.isAuthenticated();
+
+      if (!isAuthenticated && window.location.search.includes("code=") && window.location.search.includes("state=")) {
+        await auth0.handleRedirectCallback();
+        window.history.replaceState({}, document.title, "/");
+      }
+
+      const loggedIn = await auth0.isAuthenticated();
+
+      if (loggedIn) {
+        document.body.classList.add("authenticated");
+        const user = await auth0.getUser();
+        console.log("Utilizador autenticado:", user);
+      } else {
+        document.body.classList.remove("authenticated");
+      }
+    }
+
+    async function login() {
+      await auth0.loginWithRedirect({
+        redirect_uri: window.location.origin
+      });
+    }
+
+    async function logout() {
+      auth0.logout({
+        returnTo: window.location.origin
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      await initAuth0();
+    });
+  </script>
 </body>
 </html>
