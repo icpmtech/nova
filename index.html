@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nova Aggregator</title>
+  <style>
+    :root {
+      --color-primary: #00f7ff;
+      --color-bg: #0f0f0f;
+      --color-bg-alt: #1a1a1a;
+      --color-card: #1e1e1e;
+      --color-text: #f0f0f0;
+      --color-border: #333;
+    }
+
+    * {
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      height: 100%;
+    }
+
+    body {
+      padding-left: 64px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    aside {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 64px;
+      height: 100vh;
+      background: #0d0d0d;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+      z-index: 999;
+    }
+
+    .logo {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 20px;
+    }
+
+    .nav-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .nav-icon {
+      width: 24px;
+      height: 24px;
+      color: #ccc;
+      cursor: pointer;
+      position: relative;
+      text-decoration: none;
+      font-size: 1.25rem;
+      transition: transform 0.3s;
+    }
+
+    .nav-icon:hover {
+      transform: scale(1.2);
+      color: var(--color-primary);
+    }
+
+    .nav-icon:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      left: 60px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #fff;
+      color: #000;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      white-space: nowrap;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    main {
+      flex: 1;
+    }
+
+    header {
+      text-align: center;
+      padding: 2rem 1rem;
+      background: #141414;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: var(--color-primary);
+    }
+
+    header p {
+      margin: 0.5rem 0 0;
+      font-size: 1rem;
+      color: #ccc;
+    }
+
+    .section-title {
+      font-size: 1.4rem;
+      margin: 2.5rem 1rem 0.5rem;
+      border-left: 4px solid var(--color-primary);
+      padding-left: 10px;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      padding: 1.5rem;
+    }
+
+    .frame {
+      background: var(--color-card);
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+      padding: 15px;
+      transition: transform 0.3s;
+      position: relative;
+    }
+
+    .frame:hover {
+      transform: translateY(-6px);
+    }
+
+    .frame.fullscreen {
+      position: fixed;
+      z-index: 1000;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #000;
+      padding: 10px;
+      border-radius: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .frame.fullscreen iframe {
+      height: 90vh;
+    }
+
+    .controls {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .controls button {
+      background: var(--color-primary);
+      color: #000;
+      border: none;
+      border-radius: 4px;
+      padding: 0.3rem 0.6rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    iframe {
+      width: 100%;
+      height: 300px;
+      border: none;
+      border-radius: 12px;
+    }
+
+    .thumbnail {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #444;
+    }
+
+    .site-title {
+      text-align: center;
+      font-weight: 600;
+      font-size: 1rem;
+      margin-top: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <aside>
+    <div class="nav-section">
+      <img src="https://via.placeholder.com/40x40/00f7ff/ffffff?text=N" class="logo" alt="Nova Logo">
+      <a href="#finance-tools" class="nav-icon" data-tooltip="Finance Tools">💰</a>
+      <a href="#search-platforms" class="nav-icon" data-tooltip="Search Platforms">🔍</a>
+      <a href="#llm-platforms" class="nav-icon" data-tooltip="LLM Platforms">🤖</a>
+      <a href="#analytics" class="nav-icon" data-tooltip="Analytics & More">📊</a>
+    </div>
+    <div class="nav-section">
+      <a href="#" class="nav-icon" data-tooltip="Profile">👤</a>
+      <a href="#" class="nav-icon" data-tooltip="Logout">⏻</a>
+    </div>
+  </aside>
+  <main>
+    <header>
+      <h1>Nova Aggregator</h1>
+      <p>Explora os projetos Nova de forma visual e rápida</p>
+    </header>
+    <div id="content"></div>
+  </main>
+
+  <script>
+    const defaultThumb = 'https://via.placeholder.com/300x150/333333/ffffff?text=Nova+Project';
+
+    const categories = {
+      "Finance Tools": [
+        { title: "Nova Charts", url: "https://nova-charts.netlify.app/" },
+        { title: "Nova Finance Hub", url: "https://nova-finance-hub.netlify.app/" },
+        { title: "Market Wallet", url: "https://market-wallet.netlify.app/" },
+        { title: "Agent Finance Demo", url: "https://agent-finance-demo.netlify.app/" }
+      ],
+      "Search Platforms": [
+        { title: "Nova Search Dividends - All", url: "https://nova-search-dividends.netlify.app/all.html" },
+        { title: "Nova Search Dividends", url: "https://nova-search-dividends.netlify.app/" },
+        { title: "Nova Search Stock", url: "https://nova-search-stock.netlify.app/" },
+        { title: "NovaSearch", url: "https://novasearch.app/" },
+        { title: "NovaSearch Hub", url: "https://novasearch.app/hubsearch" }
+      ],
+      "LLM Platforms": [
+        { title: "ChatGPT", url: "https://chat.openai.com" },
+        { title: "Google Gemini", url: "https://gemini.google.com" },
+        { title: "Claude AI", url: "https://claude.ai" },
+        { title: "Microsoft Copilot", url: "https://copilot.microsoft.com" },
+        { title: "Perplexity AI", url: "https://perplexity.ai" },
+        { title: "Chat Cantinho", url: "https://chat-cantinho.vercel.app/" }
+      ],
+      "Analytics & More": [
+        { title: "Market Analytics Hub", url: "https://marketanalyticshubapp.azurewebsites.net/" },
+        { title: "Cantinho de Net", url: "https://cantinhode.net/" },
+        { title: "Example Site", url: "https://example.com" },
+        { title: "Wikipedia", url: "https://wikipedia.org" },
+        { title: "OpenAI", url: "https://openai.com" },
+        { title: "GitHub", url: "https://github.com" }
+      ]
+    };
+
+    const content = document.getElementById("content");
+
+    Object.entries(categories).forEach(([category, sites]) => {
+      const anchorId = category.toLowerCase().replace(/\s+/g, "-");
+      const section = document.createElement("section");
+
+      const title = document.createElement("h2");
+      title.className = "section-title";
+      title.id = anchorId;
+      title.textContent = category;
+
+      const container = document.createElement("div");
+      container.className = "container";
+
+      sites.forEach(site => {
+        const frame = document.createElement("div");
+        frame.className = "frame";
+
+        const controls = document.createElement("div");
+        controls.className = "controls";
+
+        const btnFull = document.createElement("button");
+        btnFull.textContent = "Fullscreen";
+        btnFull.onclick = () => frame.classList.add("fullscreen");
+
+        const btnMin = document.createElement("button");
+        btnMin.textContent = "Minimize";
+        btnMin.onclick = () => frame.classList.remove("fullscreen");
+
+        controls.appendChild(btnFull);
+        controls.appendChild(btnMin);
+
+        const thumb = document.createElement("img");
+        thumb.className = "thumbnail";
+        thumb.src = site.thumb || defaultThumb;
+        thumb.alt = site.title;
+
+        const iframe = document.createElement("iframe");
+        iframe.src = site.url;
+
+        const siteTitle = document.createElement("div");
+        siteTitle.className = "site-title";
+        siteTitle.textContent = site.title;
+
+        frame.appendChild(controls);
+        frame.appendChild(thumb);
+        frame.appendChild(iframe);
+        frame.appendChild(siteTitle);
+
+        container.appendChild(frame);
+      });
+
+      section.appendChild(title);
+      section.appendChild(container);
+      content.appendChild(section);
+    });
+  </script>
+</body>
+</html>
