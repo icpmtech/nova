@@ -1,59 +1,71 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Nova Aggregator - Explore Nova projects visually and quickly" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Nova Aggregator - Explore Nova projects visually and quickly">
   <title>Nova Hub</title>
 
-  <!-- SEO e Social -->
-  <meta name="keywords" content="Nova Hub, Nova projects, finance tools, search platforms, LLM platforms, analytics" />
-  <meta name="author" content="pedro martins & cantinhode.net" />
-  <meta property="og:title" content="Nova Hub & cantinhode.net" />
-  <meta property="og:description" content="Explore Nova projects visually and quickly" />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://nova-hub.netlify.app/" />
-  <meta property="og:image" content="https://nova-hub.netlify.app/logo.png" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Nova Hub" />
-  <meta name="twitter:description" content="Explore Nova projects visually and quickly" />
-  <meta name="twitter:image" content="https://nova-hub.netlify.app/logo.png" />
+  <!-- SEO Meta Tags -->
+  <meta name="keywords" content="Nova Hub, Nova projects, finance tools, search platforms, LLM platforms, analytics">
+  <meta name="author" content="pedro martins & cantinhode.net">
+  <meta property="og:title" content="Nova Hub & cantinhode.net">
+  <meta property="og:description" content="Explore Nova projects visually and quickly">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://nova-hub.netlify.app/">
+  <meta property="og:image" content="https://nova-hub.netlify.app/logo.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Nova Hub">
+  <meta name="twitter:description" content="Explore Nova projects visually and quickly">
+  <meta name="twitter:image" content="https://nova-hub.netlify.app/logo.png">
 
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8M25SCL0G0"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-8M25SCL0G0');
+  
+  
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8M25SCL0G0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8M25SCL0G0');
+</script>
+
+  !-- Auth0 SDK -->
+  <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
+  <!-- Structured Data for SEO -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Nova Hub",
+      "url": "https://nova-hub.netlify.app/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://nova-hub.netlify.app/?search={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
   </script>
 
-  <!-- Auth0 SDK -->
-  <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
-
-  <link rel="stylesheet" href="app.css" />
-  <style>
-    .private-section { display: none; margin-top: 2rem; }
-    .authenticated .private-section { display: block; }
-    #user-profile img { border-radius: 50%; }
-    #save-msg { color: green; margin-top: 10px; }
-  </style>
+  <link rel="stylesheet" href="app.css">
+  
 </head>
-
 <body>
   <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">☰</button>
 
   <aside id="sidebar" aria-label="Main Navigation">
     <div class="nav-section">
-      <img src="/logo.png" class="logo" alt="Nova Logo" />
-      <a href="#finance-tools" class="nav-icon" aria-label="Finance Tools">💰</a>
-      <a href="#search-platforms" class="nav-icon" aria-label="Search Platforms">🔍</a>
-      <a href="#llm-platforms" class="nav-icon" aria-label="LLM Platforms">🤖</a>
-      <a href="#analytics" class="nav-icon" aria-label="Analytics & More">📊</a>
+      <img src="/logo.png" class="logo" alt="Nova Logo">
+      <a href="#finance-tools" class="nav-icon" data-tooltip-en="Finance Tools" data-tooltip-pt="Ferramentas Financeiras" data-tooltip-es="Herramientas Financieras" data-tooltip-fr="Outils Financiers" data-tooltip aria-label="Finance Tools">💰</a>
+      <a href="#search-platforms" class="nav-icon" data-tooltip-en="Search Platforms" data-tooltip-pt="Plataformas de Busca" data-tooltip-es="Plataformas de Búsqueda" data-tooltip-fr="Plateformes de Recherche" data-tooltip aria-label="Search Platforms">🔍</a>
+      <a href="#llm-platforms" class="nav-icon" data-tooltip-en="LLM Platforms" data-tooltip-pt="Plataformas LLM" data-tooltip-es="Plataformas LLM" data-tooltip-fr="Plateformes LLM" data-tooltip aria-label="LLM Platforms">🤖</a>
+      <a href="#analytics" class="nav-icon" data-tooltip-en="Analytics & More" data-tooltip-pt="Análises e Mais" data-tooltip-es="Analíticas y Más" data-tooltip-fr="Analyses et Plus" data-tooltip aria-label="Analytics & More">📊</a>
     </div>
     <div class="nav-section">
-      <a href="#" id="loginBtn" class="nav-icon" aria-label="Login">🔐</a>
-      <a href="#" id="logoutBtn" class="nav-icon" aria-label="Logout">⏻</a>
+      <a href="#" class="nav-icon" data-tooltip-en="Profile" data-tooltip-pt="Perfil" data-tooltip-es="Perfil" data-tooltip-fr="Profil" data-tooltip aria-label="Profile">👤</a>
+      <a href="#" class="nav-icon" data-tooltip-en="Settings" data-tooltip-pt="Configurações" data-tooltip-es="Configuración" data-tooltip-fr="Paramètres" data-tooltip aria-label="Settings">⚙️</a>
+      <a href="#" class="nav-icon" data-tooltip-en="Logout" data-tooltip-pt="Sair" data-tooltip-es="Salir" data-tooltip-fr="Déconnexion" data-tooltip aria-label="Logout">⏻</a>
     </div>
   </aside>
 
@@ -61,118 +73,25 @@
     <header>
       <h1 id="main-title">Nova Hub</h1>
       <p id="subtitle">Explora os projetos Nova de forma visual e rápida</p>
+
+      <div class="language-switcher" role="group" aria-label="Language Selection">
+        <button class="language-btn active" data-lang="pt" aria-pressed="true">PT</button>
+        <button class="language-btn" data-lang="en" aria-pressed="false">EN</button>
+        <button class="language-btn" data-lang="es" aria-pressed="false">ES</button>
+        <button class="language-btn" data-lang="fr" aria-pressed="false">FR</button>
+      </div>
     </header>
 
     <div id="content">
+      <!-- Content will be dynamically generated -->
       <div class="loading-container" id="loading">
         <div class="loading-spinner" aria-label="Loading content"></div>
-      </div>
-
-      <div class="private-section">
-        <h2>Área Privada</h2>
-        <p>Bem-vindo! Estás autenticado.</p>
-
-        <div id="user-profile" style="display: flex; align-items: center; gap: 1rem;">
-          <img id="user-picture" src="" alt="Foto de perfil" width="60" height="60" />
-          <div>
-            <p><strong>Nome:</strong> <span id="user-name"></span></p>
-            <p><strong>Email:</strong> <span id="user-email"></span></p>
-          </div>
-        </div>
-
-        <form id="user-form" style="margin-top: 1rem;">
-          <label for="user-notes"><strong>Notas pessoais:</strong></label><br />
-          <textarea id="user-notes" rows="4" cols="40" placeholder="Escreve as tuas notas..."></textarea><br />
-          <button type="submit">Guardar</button>
-        </form>
-
-        <p id="save-msg" style="display: none;">Notas guardadas com sucesso!</p>
       </div>
     </div>
   </main>
 
   <button class="scroll-top" id="scrollTop" aria-label="Scroll to top">↑</button>
   <div class="overlay" id="overlay"></div>
-
-  <!-- Auth0 App Script -->
-  <script>
-    let auth0 = null;
-
-    async function configureClient() {
-      auth0 = await createAuth0Client({
-        domain: "dev-t72hy4qhy68mjz53.us.auth0.com",
-        client_id: "SlfOOEYc6bzI8onYrFR4zFl1QZpBcCXJ",
-        cacheLocation: "localstorage"
-      });
-    }
-
-    async function login() {
-      if (!auth0) return;
-      await auth0.loginWithRedirect({
-        redirect_uri: window.location.origin
-      });
-    }
-
-    async function logout() {
-      if (!auth0) return;
-      await auth0.logout({
-        returnTo: window.location.origin
-      });
-    }
-
-    async function initAuth() {
-      await configureClient();
-
-      const query = window.location.search;
-      if (query.includes("code=") && query.includes("state=")) {
-        await auth0.handleRedirectCallback();
-        window.history.replaceState({}, document.title, "/");
-      }
-
-      const isAuthenticated = await auth0.isAuthenticated();
-      if (isAuthenticated) {
-        document.body.classList.add("authenticated");
-        const user = await auth0.getUser();
-
-        // Preencher perfil
-        document.getElementById("user-name").textContent = user.name || "Sem nome";
-        document.getElementById("user-email").textContent = user.email || "Sem email";
-        document.getElementById("user-picture").src = user.picture || "";
-
-        // Notas pessoais
-        const notesKey = `user-notes-${user.sub}`;
-        const notesTextarea = document.getElementById("user-notes");
-        const savedNotes = localStorage.getItem(notesKey);
-        if (savedNotes) {
-          notesTextarea.value = savedNotes;
-        }
-
-        document.getElementById("user-form").addEventListener("submit", function (e) {
-          e.preventDefault();
-          const notes = notesTextarea.value;
-          localStorage.setItem(notesKey, notes);
-          const msg = document.getElementById("save-msg");
-          msg.style.display = "block";
-          setTimeout(() => (msg.style.display = "none"), 2000);
-        });
-      } else {
-        document.body.classList.remove("authenticated");
-      }
-    }
-
-    document.addEventListener("DOMContentLoaded", async () => {
-      await initAuth();
-
-      // Botões só funcionam depois da Auth0 estar configurado
-      document.getElementById("loginBtn").addEventListener("click", (e) => {
-        e.preventDefault();
-        login();
-      });
-      document.getElementById("logoutBtn").addEventListener("click", (e) => {
-        e.preventDefault();
-        logout();
-      });
-    });
-  </script>
+<script src="app.js"></script>
 </body>
 </html>
