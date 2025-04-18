@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Nova Aggregator - Explore Nova projects visually and quickly">
   <title>Nova Aggregator</title>
- <link rel="stylesheet" href="app.css"> </head>
+  <link rel="stylesheet" href="app.css">
 </head>
 <body>
   <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">☰</button>
-  
+
   <aside id="sidebar" aria-label="Main Navigation">
     <div class="nav-section">
       <img src="/logo.png" class="logo" alt="Nova Logo">
@@ -24,12 +24,12 @@
       <a href="#" class="nav-icon" data-tooltip-en="Logout" data-tooltip-pt="Sair" data-tooltip-es="Salir" data-tooltip-fr="Déconnexion" data-tooltip aria-label="Logout">⏻</a>
     </div>
   </aside>
-  
+
   <main id="main-content">
     <header>
       <h1 id="main-title">Nova Aggregator</h1>
       <p id="subtitle">Explora os projetos Nova de forma visual e rápida</p>
-      
+
       <div class="language-switcher" role="group" aria-label="Language Selection">
         <button class="language-btn active" data-lang="pt" aria-pressed="true">PT</button>
         <button class="language-btn" data-lang="en" aria-pressed="false">EN</button>
@@ -37,7 +37,7 @@
         <button class="language-btn" data-lang="fr" aria-pressed="false">FR</button>
       </div>
     </header>
-    
+
     <div id="content">
       <!-- Content will be dynamically generated -->
       <div class="loading-container" id="loading">
@@ -45,13 +45,12 @@
       </div>
     </div>
   </main>
-  
+
   <button class="scroll-top" id="scrollTop" aria-label="Scroll to top">↑</button>
   <div class="overlay" id="overlay"></div>
 
   <script>
     // Improved performance with data layer separation
-    // In production, these would be loaded from separate JSON files
     const translations = {
       en: {
         mainTitle: "Nova Aggregator",
@@ -127,146 +126,119 @@
       }
     };
 
-    // Default thumbnail with dynamic text and fallback
-    const getDefaultThumb = (title) => {
-      const sanitizedTitle = title.replace(/\s+/g, '+');
-      return `https://via.placeholder.com/300x150/222222/00d6de?text=${sanitizedTitle}`;
-    };
-
     // Categories and sites data
     const categories = {
       "Finance Tools": [
-        { 
-          title: "Nova Charts", 
+        {
+          title: "Nova Charts",
           url: "https://nova-charts.netlify.app/",
-          thumb: null,
-          description: "Interactive financial charts and analytics" 
+          description: "Interactive financial charts and analytics"
         },
-        { 
-          title: "Nova Finance Hub", 
+        {
+          title: "Nova Finance Hub",
           url: "https://nova-finance-hub.netlify.app/",
-          thumb: null,
-          description: "Comprehensive financial management tools" 
+          description: "Comprehensive financial management tools"
         },
-        { 
-          title: "Market Wallet", 
+        {
+          title: "Market Wallet",
           url: "https://market-wallet.netlify.app/",
-          thumb: null,
-          description: "Track and manage your investment portfolio" 
+          description: "Track and manage your investment portfolio"
         },
-        { 
-          title: "Agent Finance Demo", 
+        {
+          title: "Agent Finance Demo",
           url: "https://agent-finance-demo.netlify.app/",
-          thumb: null,
-          description: "AI-powered financial assistant" 
+          description: "AI-powered financial assistant"
         }
       ],
       "Search Platforms": [
-        { 
-          title: "Nova Search Dividends - All", 
+        {
+          title: "Nova Search Dividends - All",
           url: "https://nova-search-dividends.netlify.app/all.html",
-          thumb: null,
-          description: "Complete dividend information search" 
+          description: "Complete dividend information search"
         },
-        { 
-          title: "Nova Search Dividends", 
+        {
+          title: "Nova Search Dividends",
           url: "https://nova-search-dividends.netlify.app/",
-          thumb: null,
-          description: "Dividend-focused search platform" 
+          description: "Dividend-focused search platform"
         },
-        { 
-          title: "Nova Search Stock", 
+        {
+          title: "Nova Search Stock",
           url: "https://nova-search-stock.netlify.app/",
-          thumb: null,
-          description: "Stock information search engine" 
+          description: "Stock information search engine"
         },
-        { 
-          title: "NovaSearch", 
+        {
+          title: "NovaSearch",
           url: "https://novasearch.app/",
-          thumb: null,
-          description: "Main search platform for Nova ecosystem" 
+          description: "Main search platform for Nova ecosystem"
         },
-        { 
-          title: "NovaSearch Hub", 
+        {
+          title: "NovaSearch Hub",
           url: "https://novasearch.app/hubsearch",
-          thumb: null,
-          description: "Centralized search hub for all Nova resources" 
+          description: "Centralized search hub for all Nova resources"
         }
       ],
       "LLM Platforms": [
-        { 
-          title: "ChatGPT", 
+        {
+          title: "ChatGPT",
           url: "https://chat.openai.com",
-          thumb: null,
-          description: "OpenAI's conversational AI" 
+          description: "OpenAI's conversational AI"
         },
-        { 
-          title: "Google Gemini", 
+        {
+          title: "Google Gemini",
           url: "https://gemini.google.com",
-          thumb: null,
-          description: "Google's multimodal AI assistant" 
+          description: "Google's multimodal AI assistant"
         },
-        { 
-          title: "Claude AI", 
+        {
+          title: "Claude AI",
           url: "https://claude.ai",
-          thumb: null,
-          description: "Anthropic's helpful AI assistant" 
+          description: "Anthropic's helpful AI assistant"
         },
-        { 
-          title: "Microsoft Copilot", 
+        {
+          title: "Microsoft Copilot",
           url: "https://copilot.microsoft.com",
-          thumb: null,
-          description: "Microsoft's AI companion" 
+          description: "Microsoft's AI companion"
         },
-        { 
-          title: "Perplexity AI", 
+        {
+          title: "Perplexity AI",
           url: "https://perplexity.ai",
-          thumb: null,
-          description: "AI-powered search and answers" 
+          description: "AI-powered search and answers"
         },
-        { 
-          title: "Chat Cantinho", 
+        {
+          title: "Chat Cantinho",
           url: "https://chat-cantinho.vercel.app/",
-          thumb: null,
-          description: "Custom chat interface for Nova ecosystem" 
+          description: "Custom chat interface for Nova ecosystem"
         }
       ],
       "Analytics & More": [
-        { 
-          title: "Market Analytics Hub", 
+        {
+          title: "Market Analytics Hub",
           url: "https://marketanalyticshubapp.azurewebsites.net/",
-          thumb: null,
-          description: "Advanced market analytics and insights" 
+          description: "Advanced market analytics and insights"
         },
-        { 
-          title: "Cantinho de Net", 
+        {
+          title: "Cantinho de Net",
           url: "https://cantinhode.net/",
-          thumb: null,
-          description: "Community platform for Nova users" 
+          description: "Community platform for Nova users"
         },
-        { 
-          title: "Example Site", 
+        {
+          title: "Example Site",
           url: "https://example.com",
-          thumb: null,
-          description: "Demo site for testing purposes" 
+          description: "Demo site for testing purposes"
         },
-        { 
-          title: "Wikipedia", 
+        {
+          title: "Wikipedia",
           url: "https://wikipedia.org",
-          thumb: null,
-          description: "Free online encyclopedia" 
+          description: "Free online encyclopedia"
         },
-        { 
-          title: "OpenAI", 
+        {
+          title: "OpenAI",
           url: "https://openai.com",
-          thumb: null,
-          description: "AI research and deployment" 
+          description: "AI research and deployment"
         },
-        { 
-          title: "GitHub", 
+        {
+          title: "GitHub",
           url: "https://github.com",
-          thumb: null,
-          description: "Code hosting platform" 
+          description: "Code hosting platform"
         }
       ]
     };
@@ -280,7 +252,7 @@
     const loading = document.getElementById("loading");
     const navLinks = document.querySelectorAll(".nav-icon");
     const langButtons = document.querySelectorAll(".language-btn");
-    
+
     // Current language
     let currentLang = "pt";
 
@@ -321,37 +293,37 @@
     function changeLanguage(lang) {
       // Don't proceed if same language selected
       if (lang === currentLang) return;
-      
+
       currentLang = lang;
-      
+
       // Update active button and ARIA states
       langButtons.forEach(btn => {
         const isActive = btn.dataset.lang === lang;
         btn.classList.toggle("active", isActive);
         btn.setAttribute("aria-pressed", isActive);
       });
-      
+
       // Update header text with fade effect
       const mainTitle = document.getElementById("main-title");
       const subtitle = document.getElementById("subtitle");
-      
+
       // Fade out
       mainTitle.style.opacity = "0";
       subtitle.style.opacity = "0";
-      
+
       setTimeout(() => {
         // Update text
         mainTitle.textContent = translations[lang].mainTitle;
         subtitle.textContent = translations[lang].subtitle;
-        
+
         // Fade in
         mainTitle.style.opacity = "1";
         subtitle.style.opacity = "1";
       }, 200);
-      
+
       // Update tooltips
       updateTooltips(lang);
-      
+
       // Update section titles
       Object.keys(categories).forEach(category => {
         const sectionId = category.toLowerCase().replace(/\s+/g, "-");
@@ -360,24 +332,24 @@
           sectionTitle.textContent = translations[lang].sectionTitles[category];
         }
       });
-      
+
       // Update control buttons
       document.querySelectorAll(".controls button").forEach(button => {
-        const isFullscreen = button.textContent === "Fullscreen" || 
-                           button.textContent === "Tela Cheia" || 
-                           button.textContent === "Pantalla Completa" || 
+        const isFullscreen = button.textContent === "Fullscreen" ||
+                           button.textContent === "Tela Cheia" ||
+                           button.textContent === "Pantalla Completa" ||
                            button.textContent === "Plein Écran";
-        
+
         if (isFullscreen) {
           button.textContent = translations[lang].controls.fullscreen;
         } else {
           button.textContent = translations[lang].controls.minimize;
         }
       });
-      
+
       // Store language preference with safe storage
       safeStorage.setItem("novaagg-lang", lang);
-      
+
       // Update HTML lang attribute
       document.documentElement.lang = lang;
     }
@@ -393,7 +365,7 @@
     menuToggle.addEventListener("click", () => {
       sidebar.classList.toggle("active");
       document.body.classList.toggle("sidebar-open");
-      
+
       // Update aria-expanded state
       const isExpanded = sidebar.classList.contains("active");
       menuToggle.setAttribute("aria-expanded", isExpanded);
@@ -407,11 +379,11 @@
           document.body.classList.remove("sidebar-open");
           menuToggle.setAttribute("aria-expanded", "false");
         }
-        
+
         // Update active state for all links
         navLinks.forEach(nav => nav.classList.remove("active"));
         link.classList.add("active");
-        
+
         // Update aria-current for accessibility
         navLinks.forEach(nav => nav.removeAttribute("aria-current"));
         link.setAttribute("aria-current", "page");
@@ -423,7 +395,7 @@
       const frame = document.createElement("div");
       frame.className = "frame";
       frame.setAttribute("data-category", category);
-      
+
       // Accessible controls
       const controls = document.createElement("div");
       controls.className = "controls";
@@ -458,22 +430,6 @@
       controls.appendChild(btnFull);
       controls.appendChild(btnMin);
 
-      // Optimized thumbnail with loading state
-      const thumb = document.createElement("img");
-      thumb.className = "thumbnail skeleton";
-      thumb.src = site.thumb || getDefaultThumb(site.title);
-      thumb.alt = `${site.title} thumbnail`;
-      thumb.loading = "lazy"; // Native lazy loading
-      thumb.width = 300;
-      thumb.height = 150;
-      
-      // Remove skeleton class when image loads
-      thumb.onload = () => thumb.classList.remove("skeleton");
-      thumb.onerror = () => {
-        thumb.src = getDefaultThumb(site.title);
-        thumb.classList.remove("skeleton");
-      };
-
       // Implement lazy loading for iframe
       const iframe = document.createElement("iframe");
       iframe.dataset.src = site.url; // Store URL but don't load yet
@@ -486,7 +442,7 @@
       const siteTitle = document.createElement("div");
       siteTitle.className = "site-title";
       siteTitle.textContent = site.title;
-      
+
       // Add description as tooltip
       if (site.description) {
         siteTitle.setAttribute("title", site.description);
@@ -495,7 +451,6 @@
 
       // Assemble the frame
       frame.appendChild(controls);
-      frame.appendChild(thumb);
       frame.appendChild(iframe);
       frame.appendChild(siteTitle);
 
@@ -506,7 +461,7 @@
     function generateContent() {
       // Hide loading spinner when content is ready
       loading.style.display = "none";
-      
+
       // Create sections with proper ARIA roles
       Object.entries(categories).forEach(([category, sites]) => {
         const anchorId = category.toLowerCase().replace(/\s+/g, "-");
@@ -556,37 +511,37 @@
           if (entry.isIntersecting) {
             const frame = entry.target;
             const iframe = frame.querySelector('iframe');
-            
+
             // Load iframe when visible
             if (iframe && iframe.dataset.src && !iframe.src) {
               iframe.src = iframe.dataset.src;
             }
-            
+
             // Stop observing once loaded
             lazyLoadObserver.unobserve(frame);
           }
         });
-      }, { 
+      }, {
         rootMargin: '100px', // Load a bit before they come into view
-        threshold: 0.1 
+        threshold: 0.1
       });
-      
+
       // Observe all frames
       document.querySelectorAll('.frame').forEach(frame => {
         lazyLoadObserver.observe(frame);
       });
-      
+
       // Active section highlighting
       const sectionObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting && entry.intersectionRatio > 0.3) {
             const sectionId = entry.target.querySelector('.section-title').id;
-            
+
             // Update active navigation
             document.querySelectorAll('.nav-icon').forEach(link => {
               const isActive = link.getAttribute('href') === `#${sectionId}`;
               link.classList.toggle('active', isActive);
-              
+
               if (isActive) {
                 link.setAttribute('aria-current', 'page');
               } else {
@@ -595,11 +550,11 @@
             });
           }
         });
-      }, { 
+      }, {
         threshold: [0.1, 0.3, 0.5],
-        rootMargin: '-100px 0px -100px 0px' 
+        rootMargin: '-100px 0px -100px 0px'
       });
-      
+
       // Observe all sections
       document.querySelectorAll('section').forEach(section => {
         sectionObserver.observe(section);
@@ -609,7 +564,7 @@
     // Scroll to top button visibility with optimized handling
     const handleScroll = debounce(() => {
       const scrollPosition = window.scrollY;
-      
+
       // Toggle scroll button visibility
       if (scrollPosition > 300) {
         scrollTop.classList.add("visible");
@@ -630,14 +585,14 @@
 
     // Improved overlay handler with keyboard support
     overlay.addEventListener("click", closeFullscreen);
-    
+
     // Keyboard handler for fullscreen mode (ESC key)
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
         closeFullscreen();
       }
     });
-    
+
     function closeFullscreen() {
       const fullscreenFrame = document.querySelector(".frame.fullscreen");
       if (fullscreenFrame) {
@@ -651,7 +606,7 @@
     if (savedLang && translations[savedLang]) {
       currentLang = savedLang;
     }
-    
+
     // Initialize page with error handling
     document.addEventListener("DOMContentLoaded", () => {
       try {
@@ -659,10 +614,10 @@
         const firstNav = document.querySelector(".nav-icon");
         firstNav.classList.add("active");
         firstNav.setAttribute('aria-current', 'page');
-        
+
         // Apply saved or default language
         changeLanguage(currentLang);
-        
+
         // Generate content
         setTimeout(generateContent, 500);
       } catch (error) {
@@ -678,13 +633,13 @@
         `;
       }
     });
-    
+
     // Handle device theme changes
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
       // Could be used to toggle between light/dark themes
       // Not implemented in this version
     });
-    
+
     // Cleanup event listeners on unload to prevent memory leaks
     window.addEventListener("beforeunload", () => {
       window.removeEventListener("scroll", handleScroll);
