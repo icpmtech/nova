@@ -34,50 +34,78 @@
     }
   </script>
 
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome for Icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
   <link rel="stylesheet" href="app.css">
 </head>
 <body>
-  <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">☰</button>
+  <button class="menu-toggle btn btn-primary" id="menuToggle" aria-label="Toggle Menu">
+    <i class="fas fa-bars"></i>
+  </button>
 
-  <aside id="sidebar" aria-label="Main Navigation">
-    <div class="nav-section">
-      <img src="/logo.png" class="logo" alt="Nova Logo">
-      <a href="#finance-tools" class="nav-icon" data-tooltip-en="Finance Tools" data-tooltip-pt="Ferramentas Financeiras" data-tooltip-es="Herramientas Financieras" data-tooltip-fr="Outils Financiers" data-tooltip aria-label="Finance Tools">💰</a>
-      <a href="#search-platforms" class="nav-icon" data-tooltip-en="Search Platforms" data-tooltip-pt="Plataformas de Busca" data-tooltip-es="Plataformas de Búsqueda" data-tooltip-fr="Plateformes de Recherche" data-tooltip aria-label="Search Platforms">🔍</a>
-      <a href="#llm-platforms" class="nav-icon" data-tooltip-en="LLM Platforms" data-tooltip-pt="Plataformas LLM" data-tooltip-es="Plataformas LLM" data-tooltip-fr="Plateformes LLM" data-tooltip aria-label="LLM Platforms">🤖</a>
-      <a href="#analytics" class="nav-icon" data-tooltip-en="Analytics & More" data-tooltip-pt="Análises e Mais" data-tooltip-es="Analíticas y Más" data-tooltip-fr="Analyses et Plus" data-tooltip aria-label="Analytics & More">📊</a>
+  <aside id="sidebar" class="bg-dark text-white" aria-label="Main Navigation">
+    <div class="nav-section p-3">
+      <img src="/logo.png" class="logo img-fluid mb-3" alt="Nova Logo">
+      <a href="#finance-tools" class="nav-icon text-white" data-tooltip-en="Finance Tools" data-tooltip-pt="Ferramentas Financeiras" data-tooltip-es="Herramientas Financieras" data-tooltip-fr="Outils Financiers" data-tooltip aria-label="Finance Tools">
+        <i class="fas fa-coins"></i>
+      </a>
+      <a href="#search-platforms" class="nav-icon text-white" data-tooltip-en="Search Platforms" data-tooltip-pt="Plataformas de Busca" data-tooltip-es="Plataformas de Búsqueda" data-tooltip-fr="Plateformes de Recherche" data-tooltip aria-label="Search Platforms">
+        <i class="fas fa-search"></i>
+      </a>
+      <a href="#llm-platforms" class="nav-icon text-white" data-tooltip-en="LLM Platforms" data-tooltip-pt="Plataformas LLM" data-tooltip-es="Plataformas LLM" data-tooltip-fr="Plateformes LLM" data-tooltip aria-label="LLM Platforms">
+        <i class="fas fa-robot"></i>
+      </a>
+      <a href="#analytics" class="nav-icon text-white" data-tooltip-en="Analytics & More" data-tooltip-pt="Análises e Mais" data-tooltip-es="Analíticas y Más" data-tooltip-fr="Analyses et Plus" data-tooltip aria-label="Analytics & More">
+        <i class="fas fa-chart-bar"></i>
+      </a>
     </div>
-    <div class="nav-section">
-      <a href="#" class="nav-icon" data-tooltip-en="Profile" data-tooltip-pt="Perfil" data-tooltip-es="Perfil" data-tooltip-fr="Profil" data-tooltip aria-label="Profile">👤</a>
-      <a href="#" class="nav-icon" data-tooltip-en="Settings" data-tooltip-pt="Configurações" data-tooltip-es="Configuración" data-tooltip-fr="Paramètres" data-tooltip aria-label="Settings">⚙️</a>
-      <a href="#" class="nav-icon" data-tooltip-en="Logout" data-tooltip-pt="Sair" data-tooltip-es="Salir" data-tooltip-fr="Déconnexion" data-tooltip aria-label="Logout">⏻</a>
+    <div class="nav-section p-3">
+      <a href="#" class="nav-icon text-white" data-tooltip-en="Profile" data-tooltip-pt="Perfil" data-tooltip-es="Perfil" data-tooltip-fr="Profil" data-tooltip aria-label="Profile">
+        <i class="fas fa-user"></i>
+      </a>
+      <a href="#" class="nav-icon text-white" data-tooltip-en="Settings" data-tooltip-pt="Configurações" data-tooltip-es="Configuración" data-tooltip-fr="Paramètres" data-tooltip aria-label="Settings">
+        <i class="fas fa-cog"></i>
+      </a>
+      <a href="#" class="nav-icon text-white" data-tooltip-en="Logout" data-tooltip-pt="Sair" data-tooltip-es="Salir" data-tooltip-fr="Déconnexion" data-tooltip aria-label="Logout">
+        <i class="fas fa-sign-out-alt"></i>
+      </a>
     </div>
   </aside>
 
-  <main id="main-content">
-    <header>
-      <h1 id="main-title">Nova Aggregator</h1>
-      <p id="subtitle">Explora os projetos Nova de forma visual e rápida</p>
+  <main id="main-content" class="container mt-4">
+    <header class="text-center mb-4">
+      <h1 id="main-title" class="display-4">Nova Aggregator</h1>
+      <p id="subtitle" class="lead">Explora os projetos Nova de forma visual e rápida</p>
 
-      <div class="language-switcher" role="group" aria-label="Language Selection">
-        <button class="language-btn active" data-lang="pt" aria-pressed="true">PT</button>
-        <button class="language-btn" data-lang="en" aria-pressed="false">EN</button>
-        <button class="language-btn" data-lang="es" aria-pressed="false">ES</button>
-        <button class="language-btn" data-lang="fr" aria-pressed="false">FR</button>
+      <div class="language-switcher btn-group btn-group-toggle mb-3" role="group" aria-label="Language Selection">
+        <button class="btn btn-outline-primary language-btn active" data-lang="pt" aria-pressed="true">PT</button>
+        <button class="btn btn-outline-primary language-btn" data-lang="en" aria-pressed="false">EN</button>
+        <button class="btn btn-outline-primary language-btn" data-lang="es" aria-pressed="false">ES</button>
+        <button class="btn btn-outline-primary language-btn" data-lang="fr" aria-pressed="false">FR</button>
       </div>
     </header>
 
     <div id="content">
       <!-- Content will be dynamically generated -->
-      <div class="loading-container" id="loading">
-        <div class="loading-spinner" aria-label="Loading content"></div>
+      <div class="loading-container text-center" id="loading">
+        <div class="spinner-border text-primary" role="status" aria-label="Loading content">
+          <span class="sr-only">Loading...</span>
+        </div>
       </div>
     </div>
   </main>
 
-  <button class="scroll-top" id="scrollTop" aria-label="Scroll to top">↑</button>
+  <button class="scroll-top btn btn-primary btn-lg rounded-circle" id="scrollTop" aria-label="Scroll to top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
   <div class="overlay" id="overlay"></div>
 
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script>
     // Improved performance with data layer separation
     const translations = {
@@ -422,15 +450,16 @@
     // Optimized frame creation with lazy loading
     function createFrame(site, category) {
       const frame = document.createElement("div");
-      frame.className = "frame";
+      frame.className = "frame card mb-3";
       frame.setAttribute("data-category", category);
 
       // Accessible controls
       const controls = document.createElement("div");
-      controls.className = "controls";
+      controls.className = "controls card-header d-flex justify-content-between";
       controls.setAttribute("aria-label", "Frame controls");
 
       const btnFull = document.createElement("button");
+      btnFull.className = "btn btn-primary";
       btnFull.textContent = translations[currentLang].controls.fullscreen;
       btnFull.setAttribute("aria-label", `View ${site.title} in fullscreen`);
       btnFull.onclick = (e) => {
@@ -448,6 +477,7 @@
       };
 
       const btnMin = document.createElement("button");
+      btnMin.className = "btn btn-secondary";
       btnMin.textContent = translations[currentLang].controls.minimize;
       btnMin.setAttribute("aria-label", `Exit fullscreen for ${site.title}`);
       btnMin.onclick = (e) => {
@@ -464,13 +494,21 @@
       iframe.dataset.src = site.url; // Store URL but don't load yet
       iframe.loading = "lazy";
       iframe.title = site.title;
+      iframe.className = "card-img-top";
       iframe.setAttribute("sandbox", "allow-scripts allow-same-origin allow-forms");
       iframe.setAttribute("aria-label", `${site.title} content`);
 
       // Add site title and description
-      const siteTitle = document.createElement("div");
-      siteTitle.className = "site-title";
+      const cardBody = document.createElement("div");
+      cardBody.className = "card-body";
+
+      const siteTitle = document.createElement("h5");
+      siteTitle.className = "card-title";
       siteTitle.textContent = site.title;
+
+      const siteDescription = document.createElement("p");
+      siteDescription.className = "card-text";
+      siteDescription.textContent = site.description;
 
       // Add description as tooltip
       if (site.description) {
@@ -479,9 +517,11 @@
       }
 
       // Assemble the frame
+      cardBody.appendChild(siteTitle);
+      cardBody.appendChild(siteDescription);
       frame.appendChild(controls);
       frame.appendChild(iframe);
-      frame.appendChild(siteTitle);
+      frame.appendChild(cardBody);
 
       return frame;
     }
@@ -652,10 +692,10 @@
       } catch (error) {
         console.error("Initialization error:", error);
         loading.innerHTML = `
-          <div class="error-frame">
-            <div class="error-icon">❌</div>
+          <div class="error-frame text-center">
+            <div class="error-icon text-danger">❌</div>
             <p>${translations[currentLang]?.errors?.loading || "Failed to load content"}</p>
-            <button onclick="window.location.reload()" class="language-btn">
+            <button onclick="window.location.reload()" class="btn btn-primary">
               ${translations[currentLang]?.errors?.retry || "Retry"}
             </button>
           </div>
