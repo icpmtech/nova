@@ -7,141 +7,203 @@
   <style>
     :root {
       --color-primary: #00f7ff;
+      --color-primary-dark: #00c8cf;
       --color-bg: #0f0f0f;
       --color-bg-alt: #1a1a1a;
       --color-card: #1e1e1e;
       --color-text: #f0f0f0;
+      --color-text-muted: #b0b0b0;
       --color-border: #333;
+      --sidebar-width-mobile: 60px;
+      --sidebar-width-desktop: 64px;
+      --header-height: 70px;
+      --transition: all 0.3s ease;
     }
 
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
       scroll-behavior: smooth;
     }
 
     html, body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
       background: var(--color-bg);
       color: var(--color-text);
       height: 100%;
+      overflow-x: hidden;
     }
 
     body {
-      padding-left: 64px;
       display: flex;
       flex-direction: column;
       min-height: 100vh;
     }
 
+    /* Mobile-first sidebar */
     aside {
       position: fixed;
       top: 0;
       left: 0;
-      width: 64px;
+      width: var(--sidebar-width-mobile);
       height: 100vh;
       background: #0d0d0d;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       align-items: center;
-      padding: 20px 0;
+      padding: 1rem 0;
       z-index: 999;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+      transition: var(--transition);
     }
 
     .logo {
-      width: 40px;
-      height: 40px;
-      margin-bottom: 20px;
+      width: 36px;
+      height: 36px;
+      margin-bottom: 1.5rem;
+      border-radius: 8px;
+      transition: var(--transition);
     }
 
     .nav-section {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 20px;
+      gap: 1.5rem;
+      width: 100%;
     }
 
     .nav-icon {
-      width: 24px;
-      height: 24px;
-      color: #ccc;
+      width: 100%;
+      color: var(--color-text-muted);
       cursor: pointer;
       position: relative;
       text-decoration: none;
       font-size: 1.25rem;
-      transition: transform 0.3s;
+      display: flex;
+      justify-content: center;
+      padding: 0.5rem 0;
+      transition: var(--transition);
     }
 
     .nav-icon:hover {
-      transform: scale(1.2);
       color: var(--color-primary);
+      background: rgba(0, 247, 255, 0.05);
     }
 
-    .nav-icon:hover::after {
-      content: attr(data-tooltip);
+    .nav-icon.active {
+      color: var(--color-primary);
+      position: relative;
+    }
+
+    .nav-icon.active::before {
+      content: '';
       position: absolute;
-      left: 60px;
+      left: 0;
       top: 50%;
       transform: translateY(-50%);
-      background: #fff;
-      color: #000;
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-size: 0.75rem;
-      white-space: nowrap;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      width: 3px;
+      height: 60%;
+      background: var(--color-primary);
+      border-radius: 0 3px 3px 0;
     }
 
+    /* Tooltip for desktop */
+    @media (min-width: 768px) {
+      .nav-icon:hover::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        left: 60px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: #222;
+        color: var(--color-primary);
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        white-space: nowrap;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        z-index: 1000;
+      }
+    }
+
+    /* Main content area */
     main {
       flex: 1;
+      margin-left: var(--sidebar-width-mobile);
+      transition: var(--transition);
+      width: calc(100% - var(--sidebar-width-mobile));
     }
 
     header {
       text-align: center;
-      padding: 2rem 1rem;
-      background: #141414;
+      padding: 1.5rem 1rem;
+      background: linear-gradient(to right, #0a0a0a, #141414);
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      position: relative;
     }
 
     header h1 {
       margin: 0;
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
       color: var(--color-primary);
+      font-weight: 700;
+      letter-spacing: -0.5px;
     }
 
     header p {
       margin: 0.5rem 0 0;
-      font-size: 1rem;
-      color: #ccc;
+      font-size: 0.875rem;
+      color: var(--color-text-muted);
     }
 
     .section-title {
-      font-size: 1.4rem;
-      margin: 2.5rem 1rem 0.5rem;
+      font-size: 1.25rem;
+      margin: 2rem 1rem 1rem;
       border-left: 4px solid var(--color-primary);
       padding-left: 10px;
-    }
-
-    .container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 1.5rem;
-      padding: 1.5rem;
-    }
-
-    .frame {
-      background: var(--color-card);
-      border-radius: 16px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-      padding: 15px;
-      transition: transform 0.3s;
+      display: flex;
+      align-items: center;
       position: relative;
     }
 
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--color-border);
+      margin-left: 10px;
+    }
+
+    /* Responsive grid */
+    .container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      padding: 0.5rem;
+      transition: var(--transition);
+    }
+
+    /* Frame cards */
+    .frame {
+      background: var(--color-card);
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      padding: 12px;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--color-border);
+    }
+
     .frame:hover {
-      transform: translateY(-6px);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      border-color: var(--color-primary-dark);
     }
 
     .frame.fullscreen {
@@ -156,80 +218,381 @@
       border-radius: 0;
       display: flex;
       flex-direction: column;
-      justify-content: center;
     }
 
     .frame.fullscreen iframe {
-      height: 90vh;
+      height: calc(100vh - 60px);
     }
 
+    .frame.fullscreen .thumbnail,
+    .frame.fullscreen .site-title {
+      display: none;
+    }
+
+    /* Controls */
     .controls {
       position: absolute;
-      top: 10px;
-      right: 10px;
+      top: 12px;
+      right: 12px;
       display: flex;
       gap: 0.5rem;
+      z-index: 10;
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .frame:hover .controls {
+      opacity: 1;
     }
 
     .controls button {
-      background: var(--color-primary);
-      color: #000;
-      border: none;
-      border-radius: 4px;
+      background: rgba(0, 247, 255, 0.15);
+      color: var(--color-primary);
+      border: 1px solid var(--color-primary);
+      border-radius: 6px;
       padding: 0.3rem 0.6rem;
       cursor: pointer;
-      font-weight: 600;
+      font-weight: 500;
+      font-size: 0.75rem;
+      backdrop-filter: blur(5px);
+      transition: var(--transition);
+    }
+
+    .controls button:hover {
+      background: var(--color-primary);
+      color: #000;
+    }
+
+    .frame.fullscreen .controls {
+      opacity: 1;
+      top: 15px;
+      right: 15px;
     }
 
     iframe {
       width: 100%;
-      height: 300px;
+      height: 220px;
       border: none;
-      border-radius: 12px;
+      border-radius: 8px;
+      background: #111;
     }
 
     .thumbnail {
       width: 100%;
-      height: 150px;
+      height: 120px;
       object-fit: cover;
-      border-radius: 10px;
+      border-radius: 8px;
       margin-bottom: 10px;
-      border: 1px solid #444;
+      transition: var(--transition);
     }
 
     .site-title {
       text-align: center;
       font-weight: 600;
-      font-size: 1rem;
-      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      margin: 0.5rem 0;
+      color: var(--color-text);
+      transition: var(--transition);
+    }
+
+    /* Loading skeleton for frames */
+    .skeleton {
+      animation: pulse 1.5s infinite ease-in-out;
+      background: linear-gradient(90deg, var(--color-card) 0%, #252525 50%, var(--color-card) 100%);
+      background-size: 200% 100%;
+    }
+
+    @keyframes pulse {
+      0% { background-position: 0% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* Mobile menu toggle */
+    .menu-toggle {
+      display: none;
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.5);
+      border: none;
+      color: var(--color-text);
+      font-size: 1.5rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      backdrop-filter: blur(5px);
+    }
+
+    /* Language switcher */
+    .language-switcher {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      z-index: 10;
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .language-btn {
+      background: rgba(0, 0, 0, 0.3);
+      color: var(--color-text-muted);
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .language-btn:hover {
+      color: var(--color-primary);
+      border-color: var(--color-primary);
+    }
+
+    .language-btn.active {
+      background: rgba(0, 247, 255, 0.1);
+      color: var(--color-primary);
+      border-color: var(--color-primary);
+    }
+
+    /* Responsive design */
+    @media (min-width: 640px) {
+      .container {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 1rem;
+        gap: 1.25rem;
+      }
+      
+      .section-title {
+        font-size: 1.4rem;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      main {
+        margin-left: var(--sidebar-width-desktop);
+        width: calc(100% - var(--sidebar-width-desktop));
+      }
+      
+      .container {
+        grid-template-columns: repeat(3, 1fr);
+        padding: 1.5rem;
+      }
+      
+      iframe {
+        height: 250px;
+      }
+      
+      .thumbnail {
+        height: 140px;
+      }
+    }
+
+    @media (min-width: 1280px) {
+      .container {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    /* Mobile optimization */
+    @media (max-width: 639px) {
+      .menu-toggle {
+        display: flex;
+      }
+      
+      aside {
+        transform: translateX(-100%);
+      }
+      
+      aside.active {
+        transform: translateX(0);
+      }
+      
+      main {
+        margin-left: 0;
+        width: 100%;
+      }
+      
+      .sidebar-open main {
+        opacity: 0.7;
+        pointer-events: none;
+      }
+      
+      header {
+        padding: 1rem 0.5rem;
+      }
+
+      .language-switcher {
+        top: auto;
+        bottom: 10px;
+        right: 10px;
+      }
+      
+      .frame {
+        padding: 10px;
+      }
+      
+      iframe {
+        height: 180px;
+      }
+      
+      .thumbnail {
+        height: 100px;
+      }
+    }
+
+    /* Scroll to top button */
+    .scroll-top {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+      background: var(--color-primary);
+      color: #000;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      opacity: 0;
+      transition: var(--transition);
+      z-index: 99;
+      font-size: 1.25rem;
+      transform: translateY(80px);
+    }
+
+    .scroll-top.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Dark overlay for fullscreen mode */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 990;
+      display: none;
+    }
+
+    .overlay.active {
+      display: block;
     }
   </style>
 </head>
 <body>
-  <aside>
+  <button class="menu-toggle" id="menuToggle">☰</button>
+  
+  <aside id="sidebar">
     <div class="nav-section">
-      <img src="https://via.placeholder.com/40x40/00f7ff/ffffff?text=N" class="logo" alt="Nova Logo">
-      <a href="#finance-tools" class="nav-icon" data-tooltip="Finance Tools">💰</a>
-      <a href="#search-platforms" class="nav-icon" data-tooltip="Search Platforms">🔍</a>
-      <a href="#llm-platforms" class="nav-icon" data-tooltip="LLM Platforms">🤖</a>
-      <a href="#analytics" class="nav-icon" data-tooltip="Analytics & More">📊</a>
+      <img src="https://via.placeholder.com/40x40/00f7ff/000000?text=N" class="logo" alt="Nova Logo">
+      <a href="#finance-tools" class="nav-icon" data-tooltip-en="Finance Tools" data-tooltip-pt="Ferramentas Financeiras" data-tooltip-es="Herramientas Financieras" data-tooltip-fr="Outils Financiers" data-tooltip>💰</a>
+      <a href="#search-platforms" class="nav-icon" data-tooltip-en="Search Platforms" data-tooltip-pt="Plataformas de Busca" data-tooltip-es="Plataformas de Búsqueda" data-tooltip-fr="Plateformes de Recherche" data-tooltip>🔍</a>
+      <a href="#llm-platforms" class="nav-icon" data-tooltip-en="LLM Platforms" data-tooltip-pt="Plataformas LLM" data-tooltip-es="Plataformas LLM" data-tooltip-fr="Plateformes LLM" data-tooltip>🤖</a>
+      <a href="#analytics" class="nav-icon" data-tooltip-en="Analytics & More" data-tooltip-pt="Análises e Mais" data-tooltip-es="Analíticas y Más" data-tooltip-fr="Analyses et Plus" data-tooltip>📊</a>
     </div>
     <div class="nav-section">
-      <a href="#" class="nav-icon" data-tooltip="Profile">👤</a>
-      <a href="#" class="nav-icon" data-tooltip="Logout">⏻</a>
+      <a href="#" class="nav-icon" data-tooltip-en="Profile" data-tooltip-pt="Perfil" data-tooltip-es="Perfil" data-tooltip-fr="Profil" data-tooltip>👤</a>
+      <a href="#" class="nav-icon" data-tooltip-en="Settings" data-tooltip-pt="Configurações" data-tooltip-es="Configuración" data-tooltip-fr="Paramètres" data-tooltip>⚙️</a>
+      <a href="#" class="nav-icon" data-tooltip-en="Logout" data-tooltip-pt="Sair" data-tooltip-es="Salir" data-tooltip-fr="Déconnexion" data-tooltip>⏻</a>
     </div>
   </aside>
+  
   <main>
     <header>
-      <h1>Nova Aggregator</h1>
-      <p>Explora os projetos Nova de forma visual e rápida</p>
+      <h1 id="main-title">Nova Aggregator</h1>
+      <p id="subtitle">Explora os projetos Nova de forma visual e rápida</p>
+      
+      <div class="language-switcher">
+        <button class="language-btn active" data-lang="pt">PT</button>
+        <button class="language-btn" data-lang="en">EN</button>
+        <button class="language-btn" data-lang="es">ES</button>
+        <button class="language-btn" data-lang="fr">FR</button>
+      </div>
     </header>
     <div id="content"></div>
   </main>
+  
+  <div class="scroll-top" id="scrollTop">↑</div>
+  <div class="overlay" id="overlay"></div>
 
   <script>
-    const defaultThumb = 'https://via.placeholder.com/300x150/333333/ffffff?text=Nova+Project';
+    // Language translations
+    const translations = {
+      en: {
+        mainTitle: "Nova Aggregator",
+        subtitle: "Explore Nova projects visually and quickly",
+        sectionTitles: {
+          "Finance Tools": "Finance Tools",
+          "Search Platforms": "Search Platforms",
+          "LLM Platforms": "LLM Platforms",
+          "Analytics & More": "Analytics & More"
+        },
+        controls: {
+          fullscreen: "Fullscreen",
+          minimize: "Minimize"
+        }
+      },
+      pt: {
+        mainTitle: "Nova Aggregator",
+        subtitle: "Explora os projetos Nova de forma visual e rápida",
+        sectionTitles: {
+          "Finance Tools": "Ferramentas Financeiras",
+          "Search Platforms": "Plataformas de Busca",
+          "LLM Platforms": "Plataformas LLM",
+          "Analytics & More": "Análises e Mais"
+        },
+        controls: {
+          fullscreen: "Tela Cheia",
+          minimize: "Minimizar"
+        }
+      },
+      es: {
+        mainTitle: "Nova Aggregator",
+        subtitle: "Explora los proyectos Nova de forma visual y rápida",
+        sectionTitles: {
+          "Finance Tools": "Herramientas Financieras",
+          "Search Platforms": "Plataformas de Búsqueda",
+          "LLM Platforms": "Plataformas LLM",
+          "Analytics & More": "Analíticas y Más"
+        },
+        controls: {
+          fullscreen: "Pantalla Completa",
+          minimize: "Minimizar"
+        }
+      },
+      fr: {
+        mainTitle: "Nova Aggregator",
+        subtitle: "Explorez les projets Nova visuellement et rapidement",
+        sectionTitles: {
+          "Finance Tools": "Outils Financiers",
+          "Search Platforms": "Plateformes de Recherche",
+          "LLM Platforms": "Plateformes LLM",
+          "Analytics & More": "Analyses et Plus"
+        },
+        controls: {
+          fullscreen: "Plein Écran",
+          minimize: "Réduire"
+        }
+      }
+    };
 
+    // Default thumbnail with dynamic text
+    const getDefaultThumb = (title) => {
+      const sanitizedTitle = title.replace(/\s+/g, '+');
+      return `https://via.placeholder.com/300x150/222222/00f7ff?text=${sanitizedTitle}`;
+    };
+
+    // Categories and sites data
     const categories = {
       "Finance Tools": [
         { title: "Nova Charts", url: "https://nova-charts.netlify.app/" },
@@ -262,8 +625,100 @@
       ]
     };
 
+    // DOM elements
     const content = document.getElementById("content");
+    const sidebar = document.getElementById("sidebar");
+    const menuToggle = document.getElementById("menuToggle");
+    const scrollTop = document.getElementById("scrollTop");
+    const overlay = document.getElementById("overlay");
+    const navLinks = document.querySelectorAll(".nav-icon");
+    const langButtons = document.querySelectorAll(".language-btn");
+    
+    // Current language
+    let currentLang = "pt";
 
+    // Function to update language tooltips
+    function updateTooltips(lang) {
+      navLinks.forEach(link => {
+        const tooltipAttr = `data-tooltip-${lang}`;
+        if (link.hasAttribute(tooltipAttr)) {
+          link.setAttribute("data-tooltip", link.getAttribute(tooltipAttr));
+        }
+      });
+    }
+
+    // Function to change language
+    function changeLanguage(lang) {
+      currentLang = lang;
+      
+      // Update active button
+      langButtons.forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.lang === lang);
+      });
+      
+      // Update header text
+      document.getElementById("main-title").textContent = translations[lang].mainTitle;
+      document.getElementById("subtitle").textContent = translations[lang].subtitle;
+      
+      // Update tooltips
+      updateTooltips(lang);
+      
+      // Update section titles
+      Object.keys(categories).forEach(category => {
+        const sectionId = category.toLowerCase().replace(/\s+/g, "-");
+        const sectionTitle = document.getElementById(sectionId);
+        if (sectionTitle) {
+          sectionTitle.textContent = translations[lang].sectionTitles[category];
+        }
+      });
+      
+      // Update control buttons
+      document.querySelectorAll(".controls button").forEach(button => {
+        if (button.textContent === "Fullscreen" || 
+            button.textContent === "Tela Cheia" || 
+            button.textContent === "Pantalla Completa" || 
+            button.textContent === "Plein Écran") {
+          button.textContent = translations[lang].controls.fullscreen;
+        } else {
+          button.textContent = translations[lang].controls.minimize;
+        }
+      });
+      
+      // Store language preference
+      localStorage.setItem("novaagg-lang", lang);
+      
+      // Update HTML lang attribute
+      document.documentElement.lang = lang;
+    }
+
+    // Language switcher event listeners
+    langButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        changeLanguage(btn.dataset.lang);
+      });
+    });
+
+    // Mobile menu toggle
+    menuToggle.addEventListener("click", () => {
+      sidebar.classList.toggle("active");
+      document.body.classList.toggle("sidebar-open");
+    });
+
+    // Close sidebar when clicking a navigation link (mobile)
+    navLinks.forEach(link => {
+      link.addEventListener("click", () => {
+        if (window.innerWidth < 640) {
+          sidebar.classList.remove("active");
+          document.body.classList.remove("sidebar-open");
+        }
+        
+        // Add active class to clicked link and remove from others
+        navLinks.forEach(nav => nav.classList.remove("active"));
+        link.classList.add("active");
+      });
+    });
+
+    // Generate content from categories data
     Object.entries(categories).forEach(([category, sites]) => {
       const anchorId = category.toLowerCase().replace(/\s+/g, "-");
       const section = document.createElement("section");
@@ -271,7 +726,7 @@
       const title = document.createElement("h2");
       title.className = "section-title";
       title.id = anchorId;
-      title.textContent = category;
+      title.textContent = category; // Will be updated by changeLanguage
 
       const container = document.createElement("div");
       container.className = "container";
@@ -284,23 +739,33 @@
         controls.className = "controls";
 
         const btnFull = document.createElement("button");
-        btnFull.textContent = "Fullscreen";
-        btnFull.onclick = () => frame.classList.add("fullscreen");
+        btnFull.textContent = "Fullscreen"; // Will be updated by changeLanguage
+        btnFull.onclick = () => {
+          frame.classList.add("fullscreen");
+          overlay.classList.add("active");
+        };
 
         const btnMin = document.createElement("button");
-        btnMin.textContent = "Minimize";
-        btnMin.onclick = () => frame.classList.remove("fullscreen");
+        btnMin.textContent = "Minimize"; // Will be updated by changeLanguage
+        btnMin.onclick = () => {
+          frame.classList.remove("fullscreen");
+          overlay.classList.remove("active");
+        };
 
         controls.appendChild(btnFull);
         controls.appendChild(btnMin);
 
         const thumb = document.createElement("img");
-        thumb.className = "thumbnail";
-        thumb.src = site.thumb || defaultThumb;
+        thumb.className = "thumbnail skeleton";
+        thumb.src = site.thumb || getDefaultThumb(site.title);
         thumb.alt = site.title;
+        // Remove skeleton class when image loads
+        thumb.onload = () => thumb.classList.remove("skeleton");
 
         const iframe = document.createElement("iframe");
         iframe.src = site.url;
+        iframe.loading = "lazy"; // Lazy load iframes for better performance
+        iframe.title = site.title;
 
         const siteTitle = document.createElement("div");
         siteTitle.className = "site-title";
@@ -317,6 +782,95 @@
       section.appendChild(title);
       section.appendChild(container);
       content.appendChild(section);
+    });
+
+    // Scroll to top button visibility logic
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 300) {
+        scrollTop.classList.add("visible");
+      } else {
+        scrollTop.classList.remove("visible");
+      }
+    });
+
+    // Scroll to top button click handler
+    scrollTop.addEventListener("click", () => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    });
+
+    // Set active navigation based on scroll position
+    window.addEventListener("scroll", () => {
+      const scrollPosition = window.scrollY;
+      
+      // Find the current section
+      document.querySelectorAll("section").forEach(section => {
+        const sectionTop = section.offsetTop - 100;
+        const sectionHeight = section.offsetHeight;
+        const sectionId = section.querySelector(".section-title").id;
+        
+        if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+          // Set active class on the corresponding nav link
+          document.querySelectorAll(".nav-icon").forEach(link => {
+            link.classList.remove("active");
+            if (link.getAttribute("href") === `#${sectionId}`) {
+              link.classList.add("active");
+            }
+          });
+        }
+      });
+    });
+
+    // Close overlay when clicking outside the fullscreen frame
+    overlay.addEventListener("click", () => {
+      const fullscreenFrame = document.querySelector(".frame.fullscreen");
+      if (fullscreenFrame) {
+        fullscreenFrame.classList.remove("fullscreen");
+        overlay.classList.remove("active");
+      }
+    });
+
+    // Improve iframe performance by pausing iframes that are not visible
+    const observeFrames = () => {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          const iframe = entry.target.querySelector('iframe');
+          if (iframe) {
+            if (entry.isIntersecting) {
+              // Resume iframe when visible (reload src)
+              const src = iframe.src;
+              iframe.src = src;
+            } else if (!document.querySelector('.frame.fullscreen')) {
+              // Pause iframe when not visible (except fullscreen mode)
+              iframe.src = "about:blank";
+            }
+          }
+        });
+      }, { threshold: 0.1 });
+      
+      document.querySelectorAll('.frame').forEach(frame => {
+        observer.observe(frame);
+      });
+    };
+    
+    // Check for saved language preference
+    const savedLang = localStorage.getItem("novaagg-lang");
+    if (savedLang && translations[savedLang]) {
+      currentLang = savedLang;
+    }
+    
+    // Initialize page
+    document.addEventListener("DOMContentLoaded", () => {
+      // Set active first nav item
+      document.querySelector(".nav-icon").classList.add("active");
+      
+      // Apply saved or default language
+      changeLanguage(currentLang);
+      
+      // Initialize performance optimizations
+      observeFrames();
     });
   </script>
 </body>
