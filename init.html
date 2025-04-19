@@ -1,536 +1,162 @@
-<!DOCTYPE html>
-<html lang="pt">
+<!DOCTYPE html><html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <meta name="description" content="Nova Hub - Explore Nova projects visually and quickly">
-  <title>Nova Hub</title>
-
-  <!-- PWA Manifest & Theme -->
-  <link rel="manifest" href="/manifest.json" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Nova Hub - Explore Nova projects visualmente e rapidamente" />
+  <title>Nova Hub - Authentication & Messaging</title>  <!-- Manifest & Theme -->  <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#00FFFF" />
-  <link rel="apple-touch-icon" href="/icons/icon-192.png" />
-
-  <!-- SEO Meta Tags -->
-  <meta name="keywords" content="Nova Hub, Nova projects, finance tools, search platforms, LLM platforms, analytics">
-  <meta name="author" content="pedro martins & cantinhode.net">
-  <meta property="og:title" content="Nova Hub & cantinhode.net">
-  <meta property="og:description" content="Explore Nova projects visually and quickly">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://nova-hub.netlify.app/">
-  <meta property="og:image" content="https://nova-hub.netlify.app/logo.png">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Nova Hub">
-  <meta name="twitter:description" content="Explore Nova projects visually and quickly">
-  <meta name="twitter:image" content="https://nova-hub.netlify.app/logo.png">
-
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8M25SCL0G0"></script>
-  <script>
+  <link rel="apple-touch-icon" href="/icons/icon-192.png" />  <!-- SEO Meta Tags -->  <meta name="keywords" content="Nova Hub, Nova projects, finance tools, search platforms, LLM platforms, analytics" />
+  <meta name="author" content="Pedro Martins & cantinhode.net" />
+  <meta property="og:title" content="Nova Hub & cantinhode.net" />
+  <meta property="og:description" content="Explore Nova projects visualmente e rapidamente" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://nova-hub.netlify.app/" />
+  <meta property="og:image" content="https://nova-hub.netlify.app/logo.png" />  <!-- Google Analytics -->  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8M25SCL0G0"></script>  <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}  
+    function gtag(){ dataLayer.push(arguments); }
     gtag('js', new Date());
     gtag('config', 'G-8M25SCL0G0');
-  </script>
-
-  <!-- Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Nova Hub",
-    "url": "https://nova-hub.netlify.app/",
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": "https://nova-hub.netlify.app/?search={search_term_string}",
-      "query-input": "required name=search_term_string"
-    }
-  }
-  </script>
-
-  <!-- Main Stylesheet -->
-
-<link rel="stylesheet" href="app.css">
-  <!-- Custom Links Panel & Toggle Styles -->
-  <style>
-    .link-panel {
-      position: fixed; top: 0; right: 0;
-      width: 280px; height: 100%;
-      background: #f9f9f9; border-left: 1px solid #ccc;
-      padding: 16px; box-shadow: -2px 0 5px rgba(0,0,0,0.1);
-      overflow-y: auto; z-index: 1000;
-      transform: translateX(0); transition: transform 0.3s ease;
-    }
-    .link-panel.hidden { transform: translateX(100%); }
-    .link-toggle {
-      position: fixed; top: 20px; right: 20px; z-index: 1100;
-      background: #00cccc; border: none;
-      padding: 8px 12px; color: #fff; font-size: 0.9rem;
-      border-radius: 4px; cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    }
-    .link-panel h2 { margin-top: 0; font-size: 1.2rem; }
-    .link-panel form { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
-    .link-panel input { padding: 8px; font-size: 0.9rem; border: 1px solid #aaa; border-radius: 4px; }
-    .link-panel button.form-add {
-      padding: 8px; font-size: 0.9rem; border: none;
-      background: #00cccc; color: #fff; border-radius: 4px; cursor: pointer;
-    }
-    .link-panel ul { list-style: none; padding: 0; }
-    .link-panel li {
-      display: flex; justify-content: space-between;
-      align-items: center; margin-bottom: 8px;
-    }
-    .link-panel li a {
-      flex-grow: 1; text-decoration: none;
-      color: #007acc; margin-right: 8px;
-    }
-    .link-panel li button {
-      background: none; border: none; cursor: pointer;
-      font-size: 1rem; color: #888;
-    }
-  </style>
-</head>
+  </script>  <!-- Firebase SDKs -->  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-messaging-compat.js"></script>  <!-- Font Awesome -->  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-pVUj8b+0aY6XQj..." crossorigin="anonymous" referrerpolicy="no-referrer" />  <style>
+    :root { --primary-color:#00FFFF; --secondary-color:#0088FF; --dark-color:#1a1a2e; --light-color:#f5f5f5; --success-color:#2ecc71; --error-color:#e74c3c; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(135deg,var(--dark-color),#16213e);color:var(--light-color);min-height:100vh;display:flex;justify-content:center;align-items:center;}
+    .auth-container{width:100%;max-width:400px;padding:2rem;background-color:rgba(26,26,46,0.8);border-radius:10px;box-shadow:0 10px 25px rgba(0,0,0,0.5);backdrop-filter:blur(10px);margin:1rem;}
+    .logo-container{text-align:center;margin-bottom:2rem;}
+    .logo{width:100px;height:auto;margin-bottom:1rem;}
+    h1{color:var(--primary-color);text-align:center;margin-bottom:0.5rem;}
+    .subtitle{text-align:center;color:#ccc;margin-bottom:2rem;}
+    .form-group{margin-bottom:1.5rem;}
+    label{display:block;margin-bottom:0.5rem;color:#ccc;}
+    input{width:100%;padding:0.8rem;border:1px solid #333;border-radius:5px;background-color:rgba(255,255,255,0.1);color:white;font-size:1rem;transition:all 0.3s;}
+    input:focus{outline:none;border-color:var(--primary-color);box-shadow:0 0 0 2px rgba(0,255,255,0.2);}
+    button,.google-btn{display:flex;align-items:center;justify-content:center;width:100%;padding:0.8rem;border:none;border-radius:5px;font-size:1rem;font-weight:bold;cursor:pointer;transition:all 0.3s;}
+    button{background:linear-gradient(135deg,var(--primary-color),var(--secondary-color));color:var(--dark-color);}
+    button:hover{background:linear-gradient(135deg,var(--secondary-color),var(--primary-color));transform:translateY(-2px);}
+    .google-btn{background-color:#4285F4;color:white;margin-top:1rem;}
+    .google-btn:hover{background-color:#357ae8;transform:translateY(-2px);}
+    .test-btn{display:block;width:100%;padding:0.8rem;background:var(--secondary-color);color:var(--dark-color);border:none;border-radius:5px;font-size:1rem;font-weight:bold;cursor:pointer;margin-top:1rem;transition:all 0.3s;}
+    .test-btn:hover{background:var(--primary-color);transform:translateY(-2px);}
+    .form-footer{text-align:center;margin-top:1.5rem;}
+    .form-footer button,.form-footer a{color:var(--primary-color);background:none;border:none;text-decoration:none;cursor:pointer;font-size:1rem;}
+    .form-footer button:hover,.form-footer a:hover{color:var(--secondary-color);text-decoration:underline;}
+    .language-switcher{display:flex;justify-content:center;margin-top:1.5rem;}
+    .language-btn{padding:0.4rem 0.8rem;margin:0 0.25rem;border-radius:4px;background-color:rgba(255,255,255,0.1);color:#ccc;border:1px solid #333;cursor:pointer;transition:all 0.3s;}
+    .language-btn.active{background-color:var(--primary-color);color:var(--dark-color);border-color:var(--primary-color);}
+    .alert{padding:0.8rem;margin:1rem 0;border-radius:5px;text-align:center;}
+    .alert-error{background-color:rgba(231,76,60,0.2);border:1px solid var(--error-color);color:var(--error-color);}
+    .alert-success{background-color:rgba(46,204,113,0.2);border:1px solid var(--success-color);color:var(--success-color);}
+    .hide{display:none;}
+  </style></head>
 <body>
-  <!-- Mobile menu toggle -->
-  <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">☰</button>
-
-  <!-- Sidebar Navigation -->
-  <aside id="sidebar" aria-label="Main Navigation">
-    <!-- ... your nav icons ... -->
-  </aside>
-
-  <!-- Main Content -->
-  <main id="main-content">
-    <header>
-      <h1 id="main-title">Nova Hub</h1>
-      <p id="subtitle">Explora os projetos Nova de forma visual e rápida</p>
-      <div class="language-switcher" role="group" aria-label="Language Selection">
-        <button class="language-btn active" data-lang="pt" aria-pressed="true">PT</button>
-        <button class="language-btn" data-lang="en" aria-pressed="false">EN</button>
-        <button class="language-btn" data-lang="es" aria-pressed="false">ES</button>
-        <button class="language-btn" data-lang="fr" aria-pressed="false">FR</button>
-      </div>
-    </header>
-    <div id="content">
-      <div class="loading-container" id="loading">
-        <div class="loading-spinner" aria-label="Loading content"></div>
-      </div>
+  <div class="auth-container">
+    <div class="logo-container">
+      <img src="/logo.png" alt="Nova Logo" class="logo" />
+      <h1>Nova Hub</h1>
+      <p class="subtitle" id="subtitle"></p>
     </div>
-  </main>
+    <div id="alertContainer"></div><!-- Login Form -->
+<form id="loginForm">
+  <div class="form-group">
+    <label for="loginEmail" id="emailLabel"></label>
+    <input type="email" id="loginEmail" required />
+  </div>
+  <div class="form-group">
+    <label for="loginPassword" id="passwordLabel"></label>
+    <input type="password" id="loginPassword" required />
+  </div>
+  <button type="submit" id="loginButton"></button>
+  <button type="button" id="googleLoginButton" class="google-btn">
+    <i class="fab fa-google fa-lg" style="margin-right:0.5rem;"></i>
+    <span id="googleBtnText"></span>
+  </button>
+  <div class="form-footer">
+    <p id="noAccountText"></p>
+    <button type="button" class="toggle-forms" id="showRegister"></button>
+  </div>
+</form>
 
-  <!-- Scroll to top & overlay -->
-  <button class="scroll-top" id="scrollTop" aria-label="Scroll to top">↑</button>
-  <div class="overlay" id="overlay"></div>
+<!-- Register Form -->
+<form id="registerForm" class="hide">
+  <div class="form-group">
+    <label for="registerName" id="nameLabel"></label>
+    <input type="text" id="registerName" required />
+  </div>
+  <div class="form-group">
+    <label for="registerEmail" id="regEmailLabel"></label>
+    <input type="email" id="registerEmail" required />
+  </div>
+  <div class="form-group">
+    <label for="registerPassword" id="regPasswordLabel"></label>
+    <input type="password" id="registerPassword" required minlength="6" />
+  </div>
+  <div class="form-group">
+    <label for="confirmPassword" id="confirmPasswordLabel"></label>
+    <input type="password" id="confirmPassword" required minlength="6" />
+  </div>
+  <button type="submit" id="registerButton"></button>
+  <div class="form-footer">
+    <p id="hasAccountText"></p>
+    <button type="button" class="toggle-forms" id="showLogin"></button>
+  </div>
+</form>
 
-  <!-- Toggle Links Panel Button -->
-  <button id="link-toggle" class="link-toggle">Links</button>
+<!-- Notification Test Buttons -->
+<button id="testNotifBtn" class="test-btn">Teste Local</button>
+<button id="testVCBtn" class="test-btn">Abrir Cloud Messaging</button>
 
-  <!-- Custom Links Panel -->
-  <aside id="link-panel" class="link-panel" aria-label="Custom Links Panel">
-    <h2>Your Links</h2>
-    <form id="link-form">
-      <input type="text" id="link-title" placeholder="Title" required />
-      <input type="url"  id="link-url"   placeholder="URL"   required />
-      <button type="submit" class="form-add">Add</button>
-    </form>
-    <ul id="link-list"></ul>
-  </aside>
+<div class="language-switcher" role="group" aria-label="Language Selection">
+  <button class="language-btn" data-lang="pt" aria-pressed="true">PT</button>
+  <button class="language-btn" data-lang="en">EN</button>
+  <button class="language-btn" data-lang="es">ES</button>
+  <button class="language-btn" data-lang="fr">FR</button>
+</div>
 
-  
-
-  <!-- CRUD Panel & Toggle Logic -->
-  <script>
-    const linkStorageKey = 'custom-links';
-    const safeStorage = {
-      data: {},
-      getItem(key) {
-        try { return localStorage.getItem(key); }
-        catch { return this.data[key] || null; }
-      },
-      setItem(key, value) {
-        try { localStorage.setItem(key, value); }
-        catch { this.data[key] = value; }
-      }
+  </div>  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBhxtjdc14dv39mr_x_WuXouZrpMyGXpuk",
+      authDomain: "novahub-8f4b0.firebaseapp.com",
+      projectId: "novahub-8f4b0",
+      storageBucket: "novahub-8f4b0.appspot.com",
+      messagingSenderId: "619675546300",
+      appId: "1:619675546300:web:7be9b40b4a5282772616b9",
+      measurementId: "G-G36L184ZND"
     };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const messaging = firebase.messaging();
+    const VAPID_PUBLIC_KEY = 'BMo8pdaQwOLW_xWSaweJaDExXI7RNjoMtLiNOGRlf7_ets3LACVsEg9MeoPEtxdOr925mzuyFsbpwX5nojLf8CE';
 
-    // CRUD functions
-    function loadLinks() {
-      const raw = safeStorage.getItem(linkStorageKey);
-      return raw ? JSON.parse(raw) : [];
-    }
-    function saveLinks(links) {
-      safeStorage.setItem(linkStorageKey, JSON.stringify(links));
-    }
-    function renderLinks() {
-      const list = document.getElementById('link-list');
-      list.innerHTML = '';
-      loadLinks().forEach((link, i) => {
-        const li = document.createElement('li');
-        const a = document.createElement('a');
-        a.href = link.url;
-        a.textContent = link.title;
-        a.target = '_blank';
-        const edit = document.createElement('button');
-        edit.textContent = '✏️';
-        edit.onclick = () => editLink(i);
-        const del = document.createElement('button');
-        del.textContent = '🗑️';
-        del.onclick = () => deleteLink(i);
-        li.append(a, edit, del);
-        list.appendChild(li);
-      });
-    }
-    function addLink(title, url) {
-      const links = loadLinks();
-      links.push({ title, url });
-      saveLinks(links);
-      renderLinks();
-    }
-    function editLink(i) {
-      const links = loadLinks(), ln = links[i];
-      const nt = prompt('Edit title:', ln.title);
-      const nu = prompt('Edit URL:',   ln.url);
-      if (nt && nu) {
-        links[i] = { title: nt, url: nu };
-        saveLinks(links);
-        renderLinks();
-      }
-    }
-    function deleteLink(i) {
-      const links = loadLinks();
-      if (confirm(`Delete "${links[i].title}"?`)) {
-        links.splice(i, 1);
-        saveLinks(links);
-        renderLinks();
-      }
+    function initMessaging() {
+      Notification.requestPermission()
+        .then(permission => {
+          if (permission === 'granted') return messaging.getToken({ vapidKey: VAPID_PUBLIC_KEY });
+          throw new Error('Permissão de notificações negada');
+        })
+        .then(token => console.log('FCM Token:', token))
+        .catch(err => console.error('Erro FCM:', err));
     }
 
-    // Form handling & toggle logic
-    document.getElementById('link-form').addEventListener('submit', e => {
-      e.preventDefault();
-      addLink(
-        document.getElementById('link-title').value.trim(),
-        document.getElementById('link-url').value.trim()
-      );
-      document.getElementById('link-title').value = '';
-      document.getElementById('link-url').value   = '';
+    messaging.onMessage(payload => {
+      const { title, body } = payload.notification;
+      if (Notification.permission === 'granted') new Notification(title, { body });
     });
 
-    document.addEventListener('DOMContentLoaded', () => {
-      renderLinks();
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/firebase-messaging-sw.js')
+        .then(reg => messaging.useServiceWorker(reg))
+        .catch(console.error);
+    }
 
-      const toggleBtn = document.getElementById('link-toggle');
-      const panel     = document.getElementById('link-panel');
-
-      // Toggle visibility
-      toggleBtn.addEventListener('click', e => {
-        e.stopPropagation();
-        panel.classList.toggle('hidden');
-      });
-
-      // Close on outside click
-      document.addEventListener('click', e => {
-        if (!panel.contains(e.target) && !toggleBtn.contains(e.target)) {
-          panel.classList.add('hidden');
-        }
-      });
-
-      // Close on Escape
-      document.addEventListener('keydown', e => {
-        if (e.key === 'Escape') {
-          panel.classList.add('hidden');
-        }
+    document.getElementById('testNotifBtn').addEventListener('click', () => {
+      navigator.serviceWorker.ready.then(reg => {
+        reg.showNotification('Teste Local', { body: 'Notificação disparada localmente.', icon: '/icons/icon-192.png' });
       });
     });
-  </script>
 
-  <!-- Translations, Categories & Core Page Logic -->
-  <script>
-    const translations = {
-      en: {
-        mainTitle: "Nova Hub",
-        subtitle : "Explore Nova projects visually and quickly",
-        sectionTitles : {
-          "Finance Tools": "Finance Tools",
-          "Search Platforms": "Search Platforms",
-          "LLM Platforms" : "LLM Platforms",
-          "Analytics & More": "Analytics & More"
-        },
-        controls: { fullscreen: "Fullscreen", minimize: "Minimize" },
-        errors:   { loading: "Failed to load content", retry: "Retry" }
-      },
-      pt: {
-        mainTitle: "Nova Hub",
-        subtitle: "Explora os projetos Nova de forma visual e rápida",
-        sectionTitles: {
-          "Finance Tools": "Ferramentas Financeiras",
-          "Search Platforms": "Plataformas de Busca",
-          "LLM Platforms": "Plataformas LLM",
-          "Analytics & More": "Análises e Mais"
-        },
-        controls: { fullscreen: "Tela Cheia", minimize: "Minimizar" },
-        errors:   { loading: "Falha ao carregar conteúdo", retry: "Tentar novamente" }
-      },
-      es: {
-        mainTitle: "Nova Hub",
-        subtitle: "Explora los proyectos Nova de forma visual y rápida",
-        sectionTitles: {
-          "Finance Tools": "Herramientas Financieras",
-          "Search Platforms": "Plataformas de Búsqueda",
-          "LLM Platforms": "Plataformas LLM",
-          "Analytics & More": "Analíticas y Más"
-        },
-        controls: { fullscreen: "Pantalla Completa", minimize: "Minimizar" },
-        errors:   { loading: "Error al cargar contenido", retry: "Reintentar" }
-      },
-      fr: {
-        mainTitle: "Nova Hub",
-        subtitle: "Explorez les projets Nova visuellement et rapidement",
-        sectionTitles: {
-          "Finance Tools": "Outils Financiers",
-          "Search Platforms": "Plateformes de Recherche",
-          "LLM Platforms": "Plateformes LLM",
-          "Analytics & More": "Analyses et Plus"
-        },
-        controls: { fullscreen: "Plein Écran", minimize: "Réduire" },
-        errors:   { loading: "Échec du chargement du contenu", retry: "Réessayer" }
-      }
-    };
-
-    const categories = {
-      "Finance Tools": [
-        { title: "Nova Charts", url: "https://nova-charts.netlify.app/", description: "Interactive financial charts and analytics" },
-        { title: "Nova Finance Hub", url: "https://nova-finance-hub.netlify.app/", description: "Comprehensive financial management tools" },
-        { title: "Market Wallet", url: "https://market-wallet.netlify.app/", description: "Track and manage your investment portfolio" },
-        { title: "Agent Finance Demo", url: "https://agent-finance-demo.netlify.app/", description: "AI-powered financial assistant" }
-      ],
-      "Search Platforms": [
-        { title: "Nova Search Dividends - All", url: "https://nova-search-dividends.netlify.app/all.html", description: "Complete dividend information search" },
-        { title: "Nova Search Dividends", url: "https://nova-search-dividends.netlify.app/", description: "Dividend-focused search platform" },
-        { title: "Nova Search Stock", url: "https://nova-search-stock.netlify.app/", description: "Stock information search engine" },
-        { title: "NovaSearch", url: "https://novasearch.app/", description: "Main search platform for Nova ecosystem" },
-        { title: "NovaSearch Hub", url: "https://novasearch.app/hubsearch", description: "Centralized search hub for all Nova resources" }
-      ],
-      "LLM Platforms": [
-        { title: "ChatGPT", url: "https://chat.openai.com", description: "OpenAI's conversational AI" },
-        { title: "Google Gemini", url: "https://gemini.google.com", description: "Google's multimodal AI assistant" },
-        { title: "Claude AI", url: "https://claude.ai", description: "Anthropic's helpful AI assistant" },
-        { title: "Microsoft Copilot", url: "https://copilot.microsoft.com", description: "Microsoft's AI companion" },
-        { title: "Perplexity AI", url: "https://perplexity.ai", description: "AI-powered search and answers" },
-        { title: "Chat Cantinho", url: "https://chat-cantinho.vercel.app/", description: "Custom chat interface for Nova ecosystem" }
-      ],
-      "Analytics & More": [
-        { title: "Market Analytics Hub", url: "https://marketanalyticshubapp.azurewebsites.net/", description: "Advanced market analytics and insights" },
-        { title: "Cantinho de Net", url: "https://cantinhode.net/", description: "Community platform for Nova users" },
-        { title: "Example Site", url: "https://example.com", description: "Demo site for testing purposes" },
-        { title: "Wikipedia", url: "https://wikipedia.org", description: "Free online encyclopedia" },
-        { title: "OpenAI", url: "https://openai.com", description: "AI research and deployment" },
-        { title: "GitHub", url: "https://github.com", description: "Code hosting platform" }
-      ]
-    };
-
-    // DOM references & core logic
-    const contentEl = document.getElementById("content"),
-          sidebarEl = document.getElementById("sidebar"),
-          menuToggle = document.getElementById("menuToggle"),
-          scrollTop = document.getElementById("scrollTop"),
-          overlay   = document.getElementById("overlay"),
-          loading   = document.getElementById("loading"),
-          navLinks  = document.querySelectorAll(".nav-icon"),
-          langButtons = document.querySelectorAll(".language-btn");
-
-    let currentLang = localStorage.getItem("novaagg-lang") || "pt";
-
-    function updateTooltips(lang) {
-      navLinks.forEach(link => {
-        const attr = `data-tooltip-${lang}`;
-        if (link.hasAttribute(attr)) {
-          link.setAttribute("data-tooltip", link.getAttribute(attr));
-          link.setAttribute("aria-label", link.getAttribute(attr));
-        }
-      });
-    }
-
-    function changeLanguage(lang) {
-      if (lang === currentLang) return;
-      currentLang = lang;
-      langButtons.forEach(btn => {
-        const active = btn.dataset.lang === lang;
-        btn.classList.toggle("active", active);
-        btn.setAttribute("aria-pressed", active);
-      });
-      const mt = document.getElementById("main-title"),
-            st = document.getElementById("subtitle");
-      mt.style.opacity = st.style.opacity = "0";
-      setTimeout(() => {
-        mt.textContent = translations[lang].mainTitle;
-        st.textContent = translations[lang].subtitle;
-        mt.style.opacity = st.style.opacity = "1";
-      }, 200);
-      updateTooltips(lang);
-      document.querySelectorAll(".controls button").forEach(b => {
-        const isFull = ["Fullscreen","Tela Cheia","Pantalla Completa","Plein Écran"]
-          .includes(b.textContent);
-        b.textContent = isFull
-          ? translations[lang].controls.fullscreen
-          : translations[lang].controls.minimize;
-      });
-      localStorage.setItem("novaagg-lang", lang);
-      document.documentElement.lang = lang;
-    }
-
-    langButtons.forEach(btn =>
-      btn.addEventListener("click", () => changeLanguage(btn.dataset.lang))
-    );
-
-    menuToggle.addEventListener("click", () => {
-      sidebarEl.classList.toggle("active");
-      document.body.classList.toggle("sidebar-open");
-      menuToggle.setAttribute("aria-expanded", sidebarEl.classList.contains("active"));
+    document.getElementById('testVCBtn').addEventListener('click', () => {
+      window.open('https://console.firebase.google.com/project/novahub-8f4b0/cloud-messaging', '_blank');
     });
 
-    function createFrame(site, category) {
-      const frame = document.createElement("div");
-      frame.className = "frame";
-      frame.dataset.category = category;
-
-      // controls
-      const ctr = document.createElement("div");
-      ctr.className = "controls";
-      ctr.setAttribute("aria-label","Frame controls");
-      const bFull = document.createElement("button");
-      bFull.textContent = translations[currentLang].controls.fullscreen;
-      bFull.setAttribute("aria-label", `Fullscreen ${site.title}`);
-      bFull.onclick = e => {
-        e.preventDefault();
-        frame.classList.add("fullscreen");
-        overlay.classList.add("active");
-        const ifr = frame.querySelector("iframe");
-        if (ifr && ifr.dataset.src && !ifr.src) ifr.src = ifr.dataset.src;
-        frame.setAttribute("tabindex","-1");
-        frame.focus();
-      };
-      const bMin = document.createElement("button");
-      bMin.textContent = translations[currentLang].controls.minimize;
-      bMin.setAttribute("aria-label", `Close fullscreen ${site.title}`);
-      bMin.onclick = e => {
-        e.preventDefault();
-        frame.classList.remove("fullscreen");
-        overlay.classList.remove("active");
-      };
-      ctr.append(bFull, bMin);
-
-      // iframe
-      const ifr = document.createElement("iframe");
-      ifr.dataset.src = site.url;
-      ifr.loading = "lazy";
-      ifr.title   = site.title;
-      ifr.setAttribute("sandbox","allow-scripts allow-same-origin allow-forms");
-      ifr.setAttribute("aria-label",`${site.title} content`);
-
-      // title
-      const tdiv = document.createElement("div");
-      tdiv.className = "site-title";
-      tdiv.textContent = site.title;
-      if (site.description) {
-        tdiv.title = site.description;
-        tdiv.setAttribute("aria-label", `${site.title}: ${site.description}`);
-      }
-
-      frame.append(ctr, ifr, tdiv);
-      return frame;
-    }
-
-    function generateContent() {
-      loading.style.display = "none";
-      Object.entries(categories).forEach(([cat, sites]) => {
-        const id = cat.toLowerCase().replace(/\s+/g,"-");
-        const sec = document.createElement("section");
-        sec.setAttribute("aria-labelledby", id);
-        const h2 = document.createElement("h2");
-        h2.id = id;
-        h2.className = "section-title";
-        h2.textContent = translations[currentLang].sectionTitles[cat];
-        const container = document.createElement("div");
-        container.className = "container";
-        container.setAttribute("role","list");
-        container.setAttribute("aria-label", translations[currentLang].sectionTitles[cat]);
-        sites.forEach(site => {
-          const f = createFrame(site, cat);
-          f.setAttribute("role","listitem");
-          container.append(f);
-        });
-        sec.append(h2, container);
-        contentEl.append(sec);
-      });
-      initObservers();
-    }
-
-    function debounce(fn, wait) {
-      let t;
-      return (...a) => {
-        clearTimeout(t);
-        t = setTimeout(() => fn.apply(this, a), wait);
-      };
-    }
-
-    function initObservers() {
-      // lazy load
-      const lazyObs = new IntersectionObserver(entries => {
-        entries.forEach(ent => {
-          if (ent.isIntersecting) {
-            const f = ent.target;
-            const ifr = f.querySelector("iframe");
-            if (ifr && ifr.dataset.src && !ifr.src) ifr.src = ifr.dataset.src;
-            lazyObs.unobserve(f);
-          }
-        });
-      }, { rootMargin:"100px", threshold:0.1 });
-      document.querySelectorAll(".frame").forEach(f => lazyObs.observe(f));
-
-      // section highlight
-      const secObs = new IntersectionObserver(entries => {
-        entries.forEach(ent => {
-          if (ent.isIntersecting && ent.intersectionRatio > 0.3) {
-            const sid = ent.target.querySelector(".section-title").id;
-            document.querySelectorAll(".nav-icon").forEach(n => {
-              const act = n.getAttribute("href") === `#${sid}`;
-              n.classList.toggle("active", act);
-              if (act) n.setAttribute("aria-current","page");
-              else      n.removeAttribute("aria-current");
-            });
-          }
-        });
-      }, { threshold:[0.1,0.3,0.5], rootMargin:"-100px 0 -100px 0" });
-      document.querySelectorAll("section").forEach(s => secObs.observe(s));
-    }
-
-    const handleScroll = debounce(() => {
-      scrollTop.classList.toggle("visible", window.scrollY > 300);
-    }, 100);
-    window.addEventListener("scroll", handleScroll);
-    scrollTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
-    overlay.addEventListener("click", () => {
-      document.querySelector(".frame.fullscreen")?.classList.remove("fullscreen");
-      overlay.classList.remove("active");
-    });
-    document.addEventListener("keydown", e => {
-      if (e.key === "Escape") {
-        document.querySelector(".frame.fullscreen")?.classList.remove("fullscreen");
-        overlay.classList.remove("active");
-      }
-    });
-
-    document.addEventListener("DOMContentLoaded", () => {
-      changeLanguage(currentLang);
-      generateContent();
-    });
-
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/service-worker.js")
-      .then(() => console.log("Service Worker registado!"));
-    }
-  </script>
-</body>
+    // ... resto da lógica de autenticação e traduções
+  </script></body>
 </html>
