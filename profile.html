@@ -63,6 +63,38 @@
   </style>
 </head>
 <body>
+   <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">☰</button>
+
+  <aside id="sidebar" aria-label="Main Navigation">
+    <div class="nav-section">
+      <img src="/logo.png" class="logo" alt="Nova Logo">
+      <a href="#finance-tools" class="nav-icon" data-tooltip-en="Finance Tools" data-tooltip-pt="Ferramentas Financeiras" data-tooltip-es="Herramientas Financieras" data-tooltip-fr="Outils Financiers" data-tooltip aria-label="Finance Tools">💰</a>
+      <a href="#search-platforms" class="nav-icon" data-tooltip-en="Search Platforms" data-tooltip-pt="Plataformas de Busca" data-tooltip-es="Plataformas de Búsqueda" data-tooltip-fr="Plateformes de Recherche" data-tooltip aria-label="Search Platforms">🔍</a>
+      <a href="#llm-platforms" class="nav-icon" data-tooltip-en="LLM Platforms" data-tooltip-pt="Plataformas LLM" data-tooltip-es="Plataformas LLM" data-tooltip-fr="Plateformes LLM" data-tooltip aria-label="LLM Platforms">🤖</a>
+      <a href="#analytics" class="nav-icon" data-tooltip-en="Analytics & More" data-tooltip-pt="Análises e Mais" data-tooltip-es="Analíticas y Más" data-tooltip-fr="Analyses et Plus" data-tooltip aria-label="Analytics & More">📊</a>
+    </div>
+    <div class="nav-section">
+      <a href="profile.html" class="nav-icon" data-tooltip-en="Profile" data-tooltip-pt="Perfil" data-tooltip-es="Perfil" data-tooltip-fr="Profil" data-tooltip aria-label="Profile">👤</a>
+      <a href="#" class="nav-icon" data-tooltip-en="Settings" data-tooltip-pt="Configurações" data-tooltip-es="Configuración" data-tooltip-fr="Paramètres" data-tooltip aria-label="Settings">⚙️</a>
+      <a href="#" class="nav-icon" data-tooltip-en="Logout" data-tooltip-pt="Sair" data-tooltip-es="Salir" data-tooltip-fr="Déconnexion" data-tooltip aria-label="Logout">⏻</a>
+    </div>
+  </aside>
+
+  <main id="main-content">
+    <header>
+      <h1 id="main-title">Nova Hub</h1>
+      <p id="subtitle">Explora os projetos Nova de forma visual e rápida</p>
+
+      <div class="language-switcher" role="group" aria-label="Language Selection">
+        <button class="language-btn active" data-lang="pt" aria-pressed="true">PT</button>
+        <button class="language-btn" data-lang="en" aria-pressed="false">EN</button>
+        <button class="language-btn" data-lang="es" aria-pressed="false">ES</button>
+        <button class="language-btn" data-lang="fr" aria-pressed="false">FR</button>
+      </div>
+    </header>
+
+    <div id="content">
+ 
   <div class="profile-container">
     <img id="profileImage" class="profile-photo" src="" alt="Foto de Perfil" />
     <h2 id="profileName">Nome</h2>
@@ -83,7 +115,7 @@
     <button class="language-btn" onclick="logout()" style="margin-top:1.5rem;">Sair</button>
     <button class="language-btn" onclick="goHome()" style="margin-top:1rem;">Voltar ao Início</button>
   </div>
-
+  </div>
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
