@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -591,6 +592,8 @@
         
         if (user.photoURL) {
           profileImage.src = user.photoURL;
+          // Add a timestamp to force image reload and prevent caching
+          profileImage.src = user.photoURL + '?t=' + new Date().getTime();
         } else {
           profileImage.src = "/default-avatar.png";
         }
@@ -725,37 +728,41 @@
       const submitBtn = editForm.querySelector('button[type="submit"]');
       toggleButtonLoading(submitBtn, true);
       
-      let photoURL = user.photoURL;
-
       try {
         // Show profile image loading state
         if (file) {
           profileImage.classList.add("loading");
-          showToast("Enviando imagem...", "info");
+          showLoading("Enviando imagem...");
           
           // Create a reference with a unique name
-          const imageRef = storage.ref().child(`profileImages/${user.uid}_${Date.now()}`);
-          await imageRef.put(file);
-          photoURL = await imageRef.getDownloadURL();
+          const timestamp = Date.now();
+          const imageRef = storage.ref().child(`profileImages/${user.uid}_${timestamp}`);
           
-          showToast("Imagem enviada com sucesso!", "success");
+          // Upload the file
+          await imageRef.put(file);
+          
+          // Get download URL with cache busting
+          const downloadURL = await imageRef.getDownloadURL();
+          
+          // Update user profile with new image URL
+          await user.updateProfile({
+            photoURL: downloadURL
+          });
+          
+          // Update UI with cache busting
+          profileImage.src = downloadURL + '?t=' + timestamp;
+          showToast("Imagem atualizada com sucesso!", "success");
         }
 
-        // Update user profile
-        const updateData = {};
-        if (newName) updateData.displayName = newName;
-        if (photoURL) updateData.photoURL = photoURL;
-
-        if (Object.keys(updateData).length > 0) {
-          showToast("Atualizando perfil...", "info");
-          await user.updateProfile(updateData);
-        }
-
-        // Update UI
-        if (newName) profileName.textContent = newName;
-        if (photoURL) {
-          profileImage.src = photoURL;
-          profileImage.classList.remove("loading");
+        // Update name if provided
+        if (newName) {
+          await user.updateProfile({
+            displayName: newName
+          });
+          
+          // Update UI
+          profileName.textContent = newName;
+          showToast("Nome atualizado com sucesso!", "success");
         }
 
         // Clear form
@@ -764,16 +771,23 @@
         preview.innerHTML = '';
         fileInputLabel.textContent = "Selecionar imagem";
 
-        showToast("Perfil atualizado com sucesso!", "success");
       } catch (err) {
         console.error("Erro ao atualizar perfil:", err);
         showToast(`Erro: ${err.message}`, "error");
-        profileImage.classList.remove("loading");
       } finally {
-        // Restore button state
+        // Clean up
+        profileImage.classList.remove("loading");
+        hideLoading();
         toggleButtonLoading(submitBtn, false);
       }
     });
+
+    // Ensure image loads correctly by adding error handler
+    profileImage.onerror = function() {
+      console.error("Error loading profile image");
+      profileImage.src = "/default-avatar.png";
+      showToast("Erro ao carregar imagem de perfil", "error");
+    };
   </script>
 </body>
 </html>
