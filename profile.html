@@ -4,16 +4,81 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Perfil - Nova Hub</title>
-<link rel="stylesheet" href="app.css">
+
   <style>
     body {
       background: #1a1a2e;
       color: #f5f5f5;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       display: flex;
-      justify-content: center;
-      align-items: center;
       min-height: 100vh;
+      margin: 0;
+    }
+
+    /* Sidebar styles */
+    #sidebar {
+      background: rgba(0, 0, 0, 0.5);
+      width: 70px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1rem 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 10;
+    }
+
+    .nav-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .logo {
+      width: 50px;
+      margin-bottom: 1rem;
+    }
+
+    .nav-icon {
+      color: #fff;
+      font-size: 1.5rem;
+      text-decoration: none;
+      position: relative;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: background 0.3s;
+    }
+
+    .nav-icon:hover {
+      background: rgba(0, 255, 255, 0.2);
+    }
+
+    /* Main content styles */
+    #main-content {
+      margin-left: 70px;
+      width: calc(100% - 70px);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    #content {
+      width: 100%;
+      display: flex;
+      justify-content: center;
     }
 
     .profile-container {
@@ -42,10 +107,18 @@
       background-color: rgba(255,255,255,0.05);
       color: #fff;
       width: 100%;
+      box-sizing: border-box;
+    }
+
+    label {
+      display: block;
+      margin-top: 1rem;
+      text-align: left;
     }
 
     #preview img {
-      max-width: 100%;
+      max-width: 100px;
+      max-height: 100px;
       border-radius: 50%;
       margin-top: 1rem;
     }
@@ -59,11 +132,65 @@
       color: #1a1a2e;
       font-weight: bold;
       cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .language-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .language-switcher {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      margin: 1rem 0;
+    }
+
+    .language-btn.active {
+      box-shadow: 0 0 8px rgba(0, 255, 255, 0.8);
+    }
+
+    /* Menu toggle for mobile */
+    .menu-toggle {
+      display: none;
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      z-index: 20;
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 0.5rem;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+      }
+
+      #sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+      }
+
+      #sidebar.active {
+        transform: translateX(0);
+      }
+
+      #main-content {
+        margin-left: 0;
+        width: 100%;
+        padding: 1rem;
+      }
     }
   </style>
 </head>
 <body>
-   <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">☰</button>
+  <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">☰</button>
 
   <aside id="sidebar" aria-label="Main Navigation">
     <div class="nav-section">
@@ -74,7 +201,7 @@
       <a href="#analytics" class="nav-icon" data-tooltip-en="Analytics & More" data-tooltip-pt="Análises e Mais" data-tooltip-es="Analíticas y Más" data-tooltip-fr="Analyses et Plus" data-tooltip aria-label="Analytics & More">📊</a>
     </div>
     <div class="nav-section">
-      <a href="profile.html" class="nav-icon" data-tooltip-en="Profile" data-tooltip-pt="Perfil" data-tooltip-es="Perfil" data-tooltip-fr="Profil" data-tooltip aria-label="Profile">👤</a>
+      <a href="profile.html" class="nav-icon active" data-tooltip-en="Profile" data-tooltip-pt="Perfil" data-tooltip-es="Perfil" data-tooltip-fr="Profil" data-tooltip aria-label="Profile">👤</a>
       <a href="#" class="nav-icon" data-tooltip-en="Settings" data-tooltip-pt="Configurações" data-tooltip-es="Configuración" data-tooltip-fr="Paramètres" data-tooltip aria-label="Settings">⚙️</a>
       <a href="#" class="nav-icon" data-tooltip-en="Logout" data-tooltip-pt="Sair" data-tooltip-es="Salir" data-tooltip-fr="Déconnexion" data-tooltip aria-label="Logout">⏻</a>
     </div>
@@ -83,7 +210,7 @@
   <main id="main-content">
     <header>
       <h1 id="main-title">Nova Hub</h1>
-      <p id="subtitle">Explora os projetos Nova de forma visual e rápida</p>
+      <p id="subtitle">Perfil de Usuário</p>
 
       <div class="language-switcher" role="group" aria-label="Language Selection">
         <button class="language-btn active" data-lang="pt" aria-pressed="true">PT</button>
@@ -94,75 +221,131 @@
     </header>
 
     <div id="content">
- 
-  <div class="profile-container">
-    <img id="profileImage" class="profile-photo" src="" alt="Foto de Perfil" />
-    <h2 id="profileName">Nome</h2>
-    <p id="profileEmail">Email</p>
+      <div class="profile-container">
+        <img id="profileImage" class="profile-photo" src="/default-avatar.png" alt="Foto de Perfil" />
+        <h2 id="profileName">Nome</h2>
+        <p id="profileEmail">Email</p>
 
-    <form id="editForm" style="margin-top:1.5rem">
-      <label for="newName">Novo Nome:</label>
-      <input type="text" id="newName" placeholder="Atualizar nome" />
+        <form id="editForm" style="margin-top:1.5rem">
+          <label for="newName">Novo Nome:</label>
+          <input type="text" id="newName" placeholder="Atualizar nome" />
 
-      <label for="newPhoto">Nova Foto:</label>
-      <input type="file" id="newPhoto" accept="image/*" />
+          <label for="newPhoto">Nova Foto:</label>
+          <input type="file" id="newPhoto" accept="image/*" />
 
-      <div id="preview" style="margin-top:1rem;"></div>
+          <div id="preview"></div>
 
-      <button type="submit" class="language-btn" style="margin-top:1rem;">Guardar Alterações</button>
-    </form>
+          <button type="submit" class="language-btn" style="margin-top:1.5rem;">Guardar Alterações</button>
+        </form>
 
-    <button class="language-btn" onclick="logout()" style="margin-top:1.5rem;">Sair</button>
-    <button class="language-btn" onclick="goHome()" style="margin-top:1rem;">Voltar ao Início</button>
-  </div>
-  </div>
+        <button class="language-btn" id="logoutBtn" style="margin-top:1.5rem;">Sair</button>
+        <button class="language-btn" id="homeBtn" style="margin-top:1rem;">Voltar ao Início</button>
+      </div>
+    </div>
+  </main>
+
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
 
   <script>
-    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    // Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyBhxtjdc14dv39mr_x_WuXouZrpMyGXpuk",
       authDomain: "novahub-8f4b0.firebaseapp.com",
       projectId: "novahub-8f4b0",
-      storageBucket: "novahub-8f4b0.firebasestorage.app",
+      storageBucket: "novahub-8f4b0.appspot.com", // Fixed storage bucket URL
       messagingSenderId: "619675546300",
       appId: "1:619675546300:web:7be9b40b4a5282772616b9",
       measurementId: "G-G36L184ZND"
     };
 
+    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const storage = firebase.storage();
 
+    // Check authentication state
     auth.onAuthStateChanged(user => {
       if (user) {
         document.getElementById("profileName").textContent = user.displayName || "Anónimo";
         document.getElementById("profileEmail").textContent = user.email;
-        document.getElementById("profileImage").src = user.photoURL || "/default-avatar.png";
+        
+        if (user.photoURL) {
+          document.getElementById("profileImage").src = user.photoURL;
+        } else {
+          document.getElementById("profileImage").src = "/default-avatar.png";
+        }
+      } else {
+        // Redirect to login if not authenticated
+        window.location.href = "login.html";
       }
     });
 
-    function logout() {
+    // Mobile menu toggle
+    document.getElementById("menuToggle").addEventListener("click", () => {
+      document.getElementById("sidebar").classList.toggle("active");
+    });
+
+    // Language switcher functionality
+    document.querySelectorAll(".language-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        // Remove active class from all buttons
+        document.querySelectorAll(".language-btn").forEach(b => {
+          b.classList.remove("active");
+          b.setAttribute("aria-pressed", "false");
+        });
+        
+        // Add active class to clicked button
+        btn.classList.add("active");
+        btn.setAttribute("aria-pressed", "true");
+        
+        // Here you would add logic to change language
+        const lang = btn.getAttribute("data-lang");
+        // TODO: Implement language change functionality
+      });
+    });
+
+    // Logout functionality
+    document.getElementById("logoutBtn").addEventListener("click", () => {
       auth.signOut().then(() => {
         window.location.href = "login.html";
+      }).catch(error => {
+        console.error("Error signing out:", error);
+        alert("Erro ao sair: " + error.message);
       });
-    }
+    });
 
-    function goHome() {
+    // Home button
+    document.getElementById("homeBtn").addEventListener("click", () => {
       window.location.href = "index.html";
-    }
+    });
 
+    // Profile edit form
     const editForm = document.getElementById("editForm");
     const newNameInput = document.getElementById("newName");
     const newPhotoInput = document.getElementById("newPhoto");
     const preview = document.getElementById("preview");
 
+    // Preview photo before upload
     newPhotoInput.addEventListener("change", () => {
       const file = newPhotoInput.files[0];
       if (file) {
+        // Check if file is an image
+        if (!file.type.startsWith('image/')) {
+          alert("Por favor, selecione um arquivo de imagem válido.");
+          newPhotoInput.value = '';
+          return;
+        }
+        
+        // Check file size (limit to 2MB)
+        if (file.size > 2 * 1024 * 1024) {
+          alert("A imagem deve ter no máximo 2MB.");
+          newPhotoInput.value = '';
+          return;
+        }
+        
         const reader = new FileReader();
         reader.onload = (e) => {
           preview.innerHTML = `<img src="${e.target.result}" alt="Pré-visualização" />`;
@@ -171,6 +354,7 @@
       }
     });
 
+    // Form submission
     editForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       const user = auth.currentUser;
@@ -180,25 +364,44 @@
       const file = newPhotoInput.files[0];
       let photoURL = user.photoURL;
 
+      // Show loading state
+      const submitBtn = editForm.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn.textContent;
+      submitBtn.textContent = "Atualizando...";
+      submitBtn.disabled = true;
+
       try {
         if (file) {
+          // Create a reference with a unique name
           const imageRef = storage.ref().child(`profileImages/${user.uid}_${Date.now()}`);
           await imageRef.put(file);
           photoURL = await imageRef.getDownloadURL();
         }
 
-        await user.updateProfile({
-          displayName: newName || user.displayName,
-          photoURL: photoURL
-        });
+        // Update user profile
+        const updateData = {};
+        if (newName) updateData.displayName = newName;
+        if (photoURL) updateData.photoURL = photoURL;
+
+        await user.updateProfile(updateData);
+
+        // Update UI
+        if (newName) document.getElementById("profileName").textContent = newName;
+        if (photoURL) document.getElementById("profileImage").src = photoURL;
+
+        // Clear form
+        newNameInput.value = '';
+        newPhotoInput.value = '';
+        preview.innerHTML = '';
 
         alert("Perfil atualizado com sucesso!");
-        // Apenas atualiza visualmente sem redirecionar
-        document.getElementById("profileName").textContent = newName || user.displayName;
-        if (photoURL) document.getElementById("profileImage").src = photoURL;
       } catch (err) {
         console.error("Erro ao atualizar perfil:", err);
         alert("Erro: " + err.message);
+      } finally {
+        // Restore button state
+        submitBtn.textContent = originalBtnText;
+        submitBtn.disabled = false;
       }
     });
   </script>
