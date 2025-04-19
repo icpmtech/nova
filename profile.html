@@ -89,6 +89,7 @@
       max-width: 400px;
       width: 100%;
       text-align: center;
+      position: relative;
     }
 
     .profile-photo {
@@ -97,6 +98,7 @@
       border-radius: 50%;
       object-fit: cover;
       margin-bottom: 1rem;
+      border: 3px solid rgba(0, 255, 255, 0.5);
     }
 
     input[type="text"], input[type="file"] {
@@ -110,6 +112,39 @@
       box-sizing: border-box;
     }
 
+    input[type="file"] {
+      cursor: pointer;
+    }
+
+    .file-input-wrapper {
+      position: relative;
+      margin-top: 0.5rem;
+    }
+
+    .file-input-label {
+      display: block;
+      background: rgba(0, 255, 255, 0.1);
+      border: 1px dashed rgba(0, 255, 255, 0.5);
+      padding: 0.8rem;
+      border-radius: 5px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    .file-input-label:hover {
+      background: rgba(0, 255, 255, 0.2);
+    }
+
+    input[type="file"] {
+      opacity: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
     label {
       display: block;
       margin-top: 1rem;
@@ -121,6 +156,12 @@
       max-height: 100px;
       border-radius: 50%;
       margin-top: 1rem;
+      border: 2px solid rgba(0, 255, 255, 0.5);
+      transition: transform 0.3s;
+    }
+
+    #preview img:hover {
+      transform: scale(1.1);
     }
 
     .language-btn {
@@ -132,11 +173,18 @@
       color: #1a1a2e;
       font-weight: bold;
       cursor: pointer;
-      transition: transform 0.2s;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
     }
 
     .language-btn:hover {
       transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 255, 255, 0.3);
+    }
+
+    .language-btn:active {
+      transform: translateY(0);
     }
 
     .language-switcher {
@@ -166,6 +214,149 @@
       cursor: pointer;
     }
 
+    /* Toast notification system */
+    .toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 300px;
+    }
+
+    .toast {
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+      border-radius: 6px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+      margin-bottom: 10px;
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateX(100%);
+      min-width: 280px;
+      max-width: 300px;
+      color: #1a1a2e;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .toast.success {
+      background: linear-gradient(135deg, #00FFAA, #00CCFF);
+    }
+
+    .toast.error {
+      background: linear-gradient(135deg, #FF6B6B, #FF0066);
+    }
+
+    .toast.info {
+      background: linear-gradient(135deg, #00BFFF, #1E90FF);
+    }
+
+    .toast-icon {
+      margin-right: 10px;
+      font-size: 1.2rem;
+    }
+
+    .toast-content {
+      flex: 1;
+    }
+
+    .toast-close {
+      background: transparent;
+      border: none;
+      color: rgba(0, 0, 0, 0.5);
+      cursor: pointer;
+      font-size: 1.2rem;
+      padding: 0;
+      margin-left: 8px;
+      transition: color 0.3s;
+    }
+
+    .toast-close:hover {
+      color: rgba(0, 0, 0, 0.8);
+    }
+
+    /* Loading spinner and overlay */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+    }
+
+    .loading-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .loading-spinner {
+      width: 60px;
+      height: 60px;
+      border: 5px solid rgba(0, 255, 255, 0.2);
+      border-radius: 50%;
+      border-top: 5px solid #00FFFF;
+      animation: spin 1s linear infinite;
+    }
+
+    .loading-text {
+      color: #00FFFF;
+      font-size: 1rem;
+      margin-top: 1rem;
+      text-align: center;
+    }
+
+    .loading-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Inline loading indicator for buttons */
+    .btn-loader {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(26, 26, 46, 0.3);
+      border-radius: 50%;
+      border-top: 2px solid #1a1a2e;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      margin-right: 8px;
+      vertical-align: middle;
+      display: none;
+    }
+
+    /* Animation for loading spinners */
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; }
+      50% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+
+    /* Profile image loading state */
+    .profile-photo.loading {
+      animation: pulse 1.5s infinite;
+    }
+
     /* Responsive design */
     @media (max-width: 768px) {
       .menu-toggle {
@@ -185,6 +376,17 @@
         margin-left: 0;
         width: 100%;
         padding: 1rem;
+      }
+
+      .toast-container {
+        left: 20px;
+        right: 20px;
+        max-width: calc(100% - 40px);
+      }
+
+      .toast {
+        min-width: auto;
+        max-width: 100%;
       }
     }
   </style>
@@ -223,26 +425,48 @@
     <div id="content">
       <div class="profile-container">
         <img id="profileImage" class="profile-photo" src="/default-avatar.png" alt="Foto de Perfil" />
-        <h2 id="profileName">Nome</h2>
-        <p id="profileEmail">Email</p>
+        <h2 id="profileName">Carregando...</h2>
+        <p id="profileEmail">Carregando...</p>
 
         <form id="editForm" style="margin-top:1.5rem">
           <label for="newName">Novo Nome:</label>
           <input type="text" id="newName" placeholder="Atualizar nome" />
 
           <label for="newPhoto">Nova Foto:</label>
-          <input type="file" id="newPhoto" accept="image/*" />
+          <div class="file-input-wrapper">
+            <label for="newPhoto" class="file-input-label">
+              <span>Selecionar imagem</span>
+            </label>
+            <input type="file" id="newPhoto" accept="image/*" />
+          </div>
 
           <div id="preview"></div>
 
-          <button type="submit" class="language-btn" style="margin-top:1.5rem;">Guardar Alterações</button>
+          <button type="submit" class="language-btn" style="margin-top:1.5rem;">
+            <span class="btn-loader"></span>
+            <span class="btn-text">Guardar Alterações</span>
+          </button>
         </form>
 
-        <button class="language-btn" id="logoutBtn" style="margin-top:1.5rem;">Sair</button>
+        <button class="language-btn" id="logoutBtn" style="margin-top:1.5rem;">
+          <span class="btn-loader"></span>
+          <span class="btn-text">Sair</span>
+        </button>
         <button class="language-btn" id="homeBtn" style="margin-top:1rem;">Voltar ao Início</button>
       </div>
     </div>
   </main>
+
+  <!-- Toast notification container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Loading overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-container">
+      <div class="loading-spinner"></div>
+      <div class="loading-text" id="loadingText">Carregando...</div>
+    </div>
+  </div>
 
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -255,7 +479,7 @@
       apiKey: "AIzaSyBhxtjdc14dv39mr_x_WuXouZrpMyGXpuk",
       authDomain: "novahub-8f4b0.firebaseapp.com",
       projectId: "novahub-8f4b0",
-      storageBucket: "novahub-8f4b0.appspot.com", // Fixed storage bucket URL
+      storageBucket: "novahub-8f4b0.appspot.com",
       messagingSenderId: "619675546300",
       appId: "1:619675546300:web:7be9b40b4a5282772616b9",
       measurementId: "G-G36L184ZND"
@@ -266,20 +490,121 @@
     const auth = firebase.auth();
     const storage = firebase.storage();
 
+    // DOM elements
+    const profileImage = document.getElementById("profileImage");
+    const profileName = document.getElementById("profileName");
+    const profileEmail = document.getElementById("profileEmail");
+    const loadingOverlay = document.getElementById("loadingOverlay");
+    const loadingText = document.getElementById("loadingText");
+    const fileInputLabel = document.querySelector(".file-input-label span");
+
+    // Show loading spinner with custom message
+    function showLoading(message = "Carregando...") {
+      loadingText.textContent = message;
+      loadingOverlay.classList.add("active");
+    }
+
+    // Hide loading spinner
+    function hideLoading() {
+      loadingOverlay.classList.remove("active");
+    }
+
+    // Show toast notification
+    function showToast(message, type = "info", duration = 5000) {
+      const toastContainer = document.getElementById("toastContainer");
+      
+      // Create toast element
+      const toast = document.createElement("div");
+      toast.className = `toast ${type}`;
+      
+      // Different icons for different toast types
+      let icon = "ℹ️";
+      if (type === "success") icon = "✅";
+      if (type === "error") icon = "❌";
+      
+      toast.innerHTML = `
+        <span class="toast-icon">${icon}</span>
+        <div class="toast-content">${message}</div>
+        <button class="toast-close">×</button>
+      `;
+      
+      // Add to container
+      toastContainer.appendChild(toast);
+      
+      // Show with animation
+      setTimeout(() => {
+        toast.classList.add("show");
+      }, 10);
+      
+      // Set auto close timer
+      const closeTimeout = setTimeout(() => {
+        closeToast(toast);
+      }, duration);
+      
+      // Close button event
+      const closeBtn = toast.querySelector(".toast-close");
+      closeBtn.addEventListener("click", () => {
+        clearTimeout(closeTimeout);
+        closeToast(toast);
+      });
+    }
+
+    // Close toast with animation
+    function closeToast(toast) {
+      toast.classList.remove("show");
+      
+      // Remove from DOM after animation
+      setTimeout(() => {
+        if (toast.parentElement) {
+          toast.parentElement.removeChild(toast);
+        }
+      }, 300);
+    }
+
+    // Toggle button loading state
+    function toggleButtonLoading(button, isLoading) {
+      const loader = button.querySelector(".btn-loader");
+      const text = button.querySelector(".btn-text");
+      
+      if (isLoading) {
+        loader.style.display = "inline-block";
+        button.disabled = true;
+        button.style.opacity = "0.8";
+        button.style.cursor = "wait";
+      } else {
+        loader.style.display = "none";
+        button.disabled = false;
+        button.style.opacity = "1";
+        button.style.cursor = "pointer";
+      }
+    }
+
+    // Show initial loading
+    showLoading("Carregando perfil...");
+
     // Check authentication state
     auth.onAuthStateChanged(user => {
       if (user) {
-        document.getElementById("profileName").textContent = user.displayName || "Anónimo";
-        document.getElementById("profileEmail").textContent = user.email;
+        // Update profile info
+        profileName.textContent = user.displayName || "Anónimo";
+        profileEmail.textContent = user.email;
         
         if (user.photoURL) {
-          document.getElementById("profileImage").src = user.photoURL;
+          profileImage.src = user.photoURL;
         } else {
-          document.getElementById("profileImage").src = "/default-avatar.png";
+          profileImage.src = "/default-avatar.png";
         }
+        
+        // Hide loading and show success toast
+        hideLoading();
+        showToast("Perfil carregado com sucesso!", "success", 3000);
       } else {
         // Redirect to login if not authenticated
-        window.location.href = "login.html";
+        hideLoading();
+        showToast("Sessão expirada. Redirecionando para login...", "info", 2000);
+        setTimeout(() => {
+          window.location.href = "login.html";
+        }, 2000);
       }
     });
 
@@ -303,23 +628,37 @@
         
         // Here you would add logic to change language
         const lang = btn.getAttribute("data-lang");
+        showToast(`Idioma alterado para ${lang.toUpperCase()}`, "info");
         // TODO: Implement language change functionality
       });
     });
 
     // Logout functionality
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      auth.signOut().then(() => {
-        window.location.href = "login.html";
-      }).catch(error => {
+    const logoutBtn = document.getElementById("logoutBtn");
+    logoutBtn.addEventListener("click", async () => {
+      try {
+        toggleButtonLoading(logoutBtn, true);
+        showToast("Encerrando sessão...", "info");
+        
+        await auth.signOut();
+        
+        showToast("Sessão encerrada com sucesso!", "success");
+        setTimeout(() => {
+          window.location.href = "login.html";
+        }, 1500);
+      } catch (error) {
         console.error("Error signing out:", error);
-        alert("Erro ao sair: " + error.message);
-      });
+        toggleButtonLoading(logoutBtn, false);
+        showToast(`Erro ao sair: ${error.message}`, "error");
+      }
     });
 
     // Home button
     document.getElementById("homeBtn").addEventListener("click", () => {
-      window.location.href = "index.html";
+      showToast("Redirecionando para página inicial...", "info");
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 800);
     });
 
     // Profile edit form
@@ -328,29 +667,39 @@
     const newPhotoInput = document.getElementById("newPhoto");
     const preview = document.getElementById("preview");
 
-    // Preview photo before upload
+    // Update file input label when file is selected
     newPhotoInput.addEventListener("change", () => {
       const file = newPhotoInput.files[0];
       if (file) {
         // Check if file is an image
         if (!file.type.startsWith('image/')) {
-          alert("Por favor, selecione um arquivo de imagem válido.");
+          showToast("Por favor, selecione um arquivo de imagem válido.", "error");
           newPhotoInput.value = '';
+          fileInputLabel.textContent = "Selecionar imagem";
           return;
         }
         
         // Check file size (limit to 2MB)
         if (file.size > 2 * 1024 * 1024) {
-          alert("A imagem deve ter no máximo 2MB.");
+          showToast("A imagem deve ter no máximo 2MB.", "error");
           newPhotoInput.value = '';
+          fileInputLabel.textContent = "Selecionar imagem";
           return;
         }
         
+        // Update label with file name
+        fileInputLabel.textContent = file.name.length > 20 
+          ? file.name.substring(0, 17) + "..." 
+          : file.name;
+        
+        // Show preview
         const reader = new FileReader();
         reader.onload = (e) => {
           preview.innerHTML = `<img src="${e.target.result}" alt="Pré-visualização" />`;
         };
         reader.readAsDataURL(file);
+      } else {
+        fileInputLabel.textContent = "Selecionar imagem";
       }
     });
 
@@ -358,24 +707,38 @@
     editForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       const user = auth.currentUser;
-      if (!user) return;
+      if (!user) {
+        showToast("Sessão expirada. Recarregue a página.", "error");
+        return;
+      }
 
       const newName = newNameInput.value.trim();
       const file = newPhotoInput.files[0];
+      
+      // Check if there are changes
+      if (!newName && !file) {
+        showToast("Nenhuma alteração detectada.", "info");
+        return;
+      }
+      
+      // Show loading on button
+      const submitBtn = editForm.querySelector('button[type="submit"]');
+      toggleButtonLoading(submitBtn, true);
+      
       let photoURL = user.photoURL;
 
-      // Show loading state
-      const submitBtn = editForm.querySelector('button[type="submit"]');
-      const originalBtnText = submitBtn.textContent;
-      submitBtn.textContent = "Atualizando...";
-      submitBtn.disabled = true;
-
       try {
+        // Show profile image loading state
         if (file) {
+          profileImage.classList.add("loading");
+          showToast("Enviando imagem...", "info");
+          
           // Create a reference with a unique name
           const imageRef = storage.ref().child(`profileImages/${user.uid}_${Date.now()}`);
           await imageRef.put(file);
           photoURL = await imageRef.getDownloadURL();
+          
+          showToast("Imagem enviada com sucesso!", "success");
         }
 
         // Update user profile
@@ -383,25 +746,32 @@
         if (newName) updateData.displayName = newName;
         if (photoURL) updateData.photoURL = photoURL;
 
-        await user.updateProfile(updateData);
+        if (Object.keys(updateData).length > 0) {
+          showToast("Atualizando perfil...", "info");
+          await user.updateProfile(updateData);
+        }
 
         // Update UI
-        if (newName) document.getElementById("profileName").textContent = newName;
-        if (photoURL) document.getElementById("profileImage").src = photoURL;
+        if (newName) profileName.textContent = newName;
+        if (photoURL) {
+          profileImage.src = photoURL;
+          profileImage.classList.remove("loading");
+        }
 
         // Clear form
         newNameInput.value = '';
         newPhotoInput.value = '';
         preview.innerHTML = '';
+        fileInputLabel.textContent = "Selecionar imagem";
 
-        alert("Perfil atualizado com sucesso!");
+        showToast("Perfil atualizado com sucesso!", "success");
       } catch (err) {
         console.error("Erro ao atualizar perfil:", err);
-        alert("Erro: " + err.message);
+        showToast(`Erro: ${err.message}`, "error");
+        profileImage.classList.remove("loading");
       } finally {
         // Restore button state
-        submitBtn.textContent = originalBtnText;
-        submitBtn.disabled = false;
+        toggleButtonLoading(submitBtn, false);
       }
     });
   </script>
