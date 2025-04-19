@@ -1,162 +1,661 @@
+
 <!DOCTYPE html><html lang="pt">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Nova Hub - Explore Nova projects visualmente e rapidamente" />
-  <title>Nova Hub - Authentication & Messaging</title>  <!-- Manifest & Theme -->  <link rel="manifest" href="/manifest.json" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Nova Hub - Explore Nova projects visually and quickly">
+  <title>Nova Hub</title>
+  <!-- PWA Manifest & Icons -->
+  <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#00FFFF" />
-  <link rel="apple-touch-icon" href="/icons/icon-192.png" />  <!-- SEO Meta Tags -->  <meta name="keywords" content="Nova Hub, Nova projects, finance tools, search platforms, LLM platforms, analytics" />
-  <meta name="author" content="Pedro Martins & cantinhode.net" />
-  <meta property="og:title" content="Nova Hub & cantinhode.net" />
-  <meta property="og:description" content="Explore Nova projects visualmente e rapidamente" />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://nova-hub.netlify.app/" />
-  <meta property="og:image" content="https://nova-hub.netlify.app/logo.png" />  <!-- Google Analytics -->  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8M25SCL0G0"></script>  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){ dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-8M25SCL0G0');
-  </script>  <!-- Firebase SDKs -->  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-messaging-compat.js"></script>  <!-- Font Awesome -->  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-pVUj8b+0aY6XQj..." crossorigin="anonymous" referrerpolicy="no-referrer" />  <style>
-    :root { --primary-color:#00FFFF; --secondary-color:#0088FF; --dark-color:#1a1a2e; --light-color:#f5f5f5; --success-color:#2ecc71; --error-color:#e74c3c; }
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(135deg,var(--dark-color),#16213e);color:var(--light-color);min-height:100vh;display:flex;justify-content:center;align-items:center;}
-    .auth-container{width:100%;max-width:400px;padding:2rem;background-color:rgba(26,26,46,0.8);border-radius:10px;box-shadow:0 10px 25px rgba(0,0,0,0.5);backdrop-filter:blur(10px);margin:1rem;}
-    .logo-container{text-align:center;margin-bottom:2rem;}
-    .logo{width:100px;height:auto;margin-bottom:1rem;}
-    h1{color:var(--primary-color);text-align:center;margin-bottom:0.5rem;}
-    .subtitle{text-align:center;color:#ccc;margin-bottom:2rem;}
-    .form-group{margin-bottom:1.5rem;}
-    label{display:block;margin-bottom:0.5rem;color:#ccc;}
-    input{width:100%;padding:0.8rem;border:1px solid #333;border-radius:5px;background-color:rgba(255,255,255,0.1);color:white;font-size:1rem;transition:all 0.3s;}
-    input:focus{outline:none;border-color:var(--primary-color);box-shadow:0 0 0 2px rgba(0,255,255,0.2);}
-    button,.google-btn{display:flex;align-items:center;justify-content:center;width:100%;padding:0.8rem;border:none;border-radius:5px;font-size:1rem;font-weight:bold;cursor:pointer;transition:all 0.3s;}
-    button{background:linear-gradient(135deg,var(--primary-color),var(--secondary-color));color:var(--dark-color);}
-    button:hover{background:linear-gradient(135deg,var(--secondary-color),var(--primary-color));transform:translateY(-2px);}
-    .google-btn{background-color:#4285F4;color:white;margin-top:1rem;}
-    .google-btn:hover{background-color:#357ae8;transform:translateY(-2px);}
-    .test-btn{display:block;width:100%;padding:0.8rem;background:var(--secondary-color);color:var(--dark-color);border:none;border-radius:5px;font-size:1rem;font-weight:bold;cursor:pointer;margin-top:1rem;transition:all 0.3s;}
-    .test-btn:hover{background:var(--primary-color);transform:translateY(-2px);}
-    .form-footer{text-align:center;margin-top:1.5rem;}
-    .form-footer button,.form-footer a{color:var(--primary-color);background:none;border:none;text-decoration:none;cursor:pointer;font-size:1rem;}
-    .form-footer button:hover,.form-footer a:hover{color:var(--secondary-color);text-decoration:underline;}
-    .language-switcher{display:flex;justify-content:center;margin-top:1.5rem;}
-    .language-btn{padding:0.4rem 0.8rem;margin:0 0.25rem;border-radius:4px;background-color:rgba(255,255,255,0.1);color:#ccc;border:1px solid #333;cursor:pointer;transition:all 0.3s;}
-    .language-btn.active{background-color:var(--primary-color);color:var(--dark-color);border-color:var(--primary-color);}
-    .alert{padding:0.8rem;margin:1rem 0;border-radius:5px;text-align:center;}
-    .alert-error{background-color:rgba(231,76,60,0.2);border:1px solid var(--error-color);color:var(--error-color);}
-    .alert-success{background-color:rgba(46,204,113,0.2);border:1px solid var(--success-color);color:var(--success-color);}
-    .hide{display:none;}
-  </style></head>
+  <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+  <!-- SEO & Social -->
+  <meta name="keywords" content="Nova Hub, finance tools, search, LLM, analytics">
+  <meta name="author" content="pedro martins & cantinhode.net">
+  <meta property="og:title" content="Nova Hub">
+  <meta property="og:description" content="Explore Nova projects visually and quickly">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://nova-hub.netlify.app/">
+  <meta property="og:image" content="https://nova-hub.netlify.app/logo.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- Unified CSS -->
+  <style>
+    :root {
+      --color-primary:#00d6de;--color-primary-light:#66f2f7;--color-primary-dark:#00a8af;
+      --color-bg:#0f0f0f;--color-bg-alt:#1a1a1a;--color-card:#1e1e1e;
+      --color-text:#f0f0f0;--color-text-muted:#b0b0b0;--color-border:#333;
+      --sidebar-width-mobile:60px;--sidebar-width-desktop:64px;
+      --border-radius-md:8px;--border-radius-lg:12px;
+      --space-sm:.5rem;--space-md:1rem;--space-lg:1.5rem;
+      --font-family-base:'Segoe UI',system-ui,sans-serif;
+      --font-family-heading:'Segoe UI',system-ui,sans-serif;
+      --font-size-md:1rem;--font-size-lg:1.25rem;--font-size-xl:1.5rem;
+      --line-height-normal:1.5;
+      --transition-speed:0.3s;
+    }
+    *,html,body{margin:0;padding:0;box-sizing:border-box;scroll-behavior:smooth;}
+    html,body{height:100%;background:var(--color-bg);color:var(--color-text);
+      font-family:var(--font-family-base);font-size:var(--font-size-md);line-height:var(--line-height-normal);
+      display:flex;flex-direction:column;overflow-x:hidden;}
+    h1,h2{margin-bottom:var(--space-md);font-family:var(--font-family-heading);}
+    :focus-visible{outline:2px solid var(--color-primary);outline-offset:2px;}
+    button:focus{outline:2px solid var(--color-primary);outline-offset:2px;}
+    
+    /* Menu Toggle Button */
+    .menu-toggle{position:fixed;top:10px;left:10px;z-index:1000;
+      background:var(--color-primary);color:var(--color-bg);border:none;
+      border-radius:var(--border-radius-md);width:40px;height:40px;
+      display:none;align-items:center;justify-content:center;cursor:pointer;}
+    
+    /* Sidebar */
+    aside#sidebar{position:fixed;top:0;left:0;width:var(--sidebar-width-mobile);height:100vh;
+      background:var(--color-bg-alt);display:flex;flex-direction:column;justify-content:space-between;
+      align-items:center;padding:var(--space-lg) 0;z-index:999;
+      transition:transform var(--transition-speed) ease;}
+    .logo{width:36px;height:36px;margin-bottom:var(--space-lg);border-radius:var(--border-radius-md);}
+    .nav-section{display:flex;flex-direction:column;align-items:center;gap:var(--space-lg);width:100%;}
+    .nav-icon{width:100%;height:40px;font-size:var(--font-size-xl);display:flex;justify-content:center;
+      align-items:center;color:var(--color-text-muted);text-decoration:none;position:relative;cursor:pointer;
+      transition:color var(--transition-speed), background var(--transition-speed);}
+    .nav-icon:hover{color:var(--color-primary);background:rgba(0,214,222,0.1);}
+    .nav-icon.active{color:var(--color-primary);} 
+    .nav-icon.active::before{
+      content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);
+      width:3px;height:60%;background:var(--color-primary);}
+    
+    @media(min-width:640px){
+      .nav-icon:hover::after{content:attr(data-tooltip);
+        position:absolute;left:60px;top:50%;transform:translateY(-50%);
+        background:var(--color-card);color:var(--color-primary);
+        padding:2px 8px;border-radius:4px;font-size:.75rem;white-space:nowrap;
+        box-shadow:0 2px 5px rgba(0,0,0,0.3);z-index:1000;}
+    }
+    
+    /* Main & Header */
+    main{flex:1;margin-left:var(--sidebar-width-mobile);overflow:auto;
+      transition:margin-left var(--transition-speed) ease;}
+    header{text-align:center;padding:var(--space-lg) var(--space-md);
+      background:linear-gradient(to right,var(--color-bg-alt),#141414);}
+    header h1, header p{transition:opacity var(--transition-speed) ease;}
+    header h1{margin:0;font-size:clamp(var(--font-size-lg),4vw,var(--font-size-xl));}
+    header p{margin-top:4px;font-size:.875rem;color:var(--color-text-muted);}
+    
+    .language-switcher{margin-top:var(--space-sm);display:flex;gap:4px;justify-content:center;}
+    .language-btn{background:none;border:1px solid var(--color-text-muted);border-radius:4px;padding:2px 6px;
+      color:var(--color-text);cursor:pointer;transition:var(--transition-speed);}
+    .language-btn:hover{border-color:var(--color-primary-light);color:var(--color-primary-light);}
+    .language-btn.active{border-color:var(--color-primary);color:var(--color-primary);}
+    
+    /* Sections */
+    .section-title{display:flex;align-items:center;margin:var(--space-lg) var(--space-md) var(--space-md);
+      border-left:4px solid var(--color-primary);padding-left:8px;font-size:var(--font-size-lg);}
+    .container{display:grid;gap:var(--space-md);padding:var(--space-md);grid-template-columns:1fr;}
+    
+    /* Buttons */
+    button{cursor:pointer;transition:var(--transition-speed);}
+    #content > button, .container > button{
+      background:var(--color-bg-alt);color:var(--color-primary);
+      border:1px solid var(--color-primary);border-radius:var(--border-radius-md);
+      padding:var(--space-sm) var(--space-md);margin:var(--space-md);
+      font-size:var(--font-size-md);cursor:pointer;
+      transition:background-color var(--transition-speed), transform var(--transition-speed);}
+    #content > button:hover, .container > button:hover{
+      background-color:rgba(0,214,222,0.1);transform:translateY(-2px);}
+    
+    /* Section Headers */
+    section h2{display:flex;align-items:center;gap:var(--space-sm);
+      margin:var(--space-lg) var(--space-md) var(--space-sm);
+      border-left:4px solid var(--color-primary);padding-left:var(--space-sm);
+      font-size:var(--font-size-lg);}
+    section h2 button{
+      background:none;border:none;color:var(--color-text-muted);
+      font-size:var(--font-size-md);cursor:pointer;padding:2px 4px;
+      border-radius:var(--border-radius-md);margin-left:4px;}
+    section h2 button:hover{color:var(--color-primary);background:rgba(0,214,222,0.1);}
+    
+    /* Frames */
+    .frame{background:var(--color-card);border-radius:var(--border-radius-lg);
+      box-shadow:0 4px 10px rgba(0,0,0,0.3);display:flex;flex-direction:column;
+      position:relative;padding:var(--space-sm);overflow:hidden;margin-bottom:var(--space-md);
+      height:200px;transition:transform var(--transition-speed), box-shadow var(--transition-speed);}
+    .frame:hover{transform:translateY(-4px);box-shadow:0 6px 14px rgba(0,0,0,0.4);}
+    .frame.fullscreen{
+      position:fixed;top:50%;left:50%;transform:translate(-50%, -50%);
+      width:90vw;height:90vh;z-index:1001;margin:0;}
+    .controls{
+      position:absolute;top:8px;right:8px;display:flex;gap:4px;opacity:0;
+      transition:opacity var(--transition-speed);}
+    .frame:hover .controls{opacity:1;}
+    .controls button{
+      background:rgba(0,214,222,0.2);border:none;border-radius:4px;
+      padding:2px 4px;cursor:pointer;color:var(--color-text);
+      transition:background var(--transition-speed);}
+    .controls button:hover{background:rgba(0,214,222,0.4);}
+    iframe{flex:1;border:none;border-radius:4px;background:#111;width:100%;}
+    .site-title{
+      font-size:var(--font-size-md);padding:var(--space-sm);
+      text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    
+    /* Overlay */
+    .overlay{
+      position:fixed;top:0;left:0;right:0;bottom:0;
+      background:rgba(0,0,0,0.8);z-index:1000;display:none;}
+    .overlay.active{display:block;}
+    
+    /* Loading & Scroll */
+    .loading-container{display:flex;justify-content:center;align-items:center;height:200px;}
+    .loading-spinner{width:40px;height:40px;border:4px solid rgba(0,214,222,0.2);
+      border-top-color:var(--color-primary);border-radius:50%;animation:spin 1s linear infinite;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+    .scroll-top{
+      position:fixed;bottom:16px;right:16px;background:var(--color-primary);
+      color:#000;border:none;border-radius:50%;width:40px;height:40px;cursor:pointer;
+      display:none;justify-content:center;align-items:center;opacity:0;
+      transition:opacity var(--transition-speed), transform var(--transition-speed);}
+    .scroll-top.visible{display:flex;opacity:1;}
+    .scroll-top:hover{transform:translateY(-4px);}
+    
+    /* Responsive Styles */
+    @media(max-width:639px){
+      .menu-toggle{display:flex;}
+      aside#sidebar{transform:translateX(-100%);}
+      aside#sidebar.active{transform:translateX(0);}
+      main{margin-left:0;}
+    }
+    
+    @media(min-width:640px){
+      .container{grid-template-columns:repeat(2,1fr);}
+    }
+    
+    @media(min-width:1024px){
+      main{margin-left:var(--sidebar-width-desktop);}
+      .container{grid-template-columns:repeat(3,1fr);}
+    }
+    
+    @media(min-width:1280px){
+      .container{grid-template-columns:repeat(4,1fr);}
+    }
+  </style>
+</head>
 <body>
-  <div class="auth-container">
-    <div class="logo-container">
-      <img src="/logo.png" alt="Nova Logo" class="logo" />
-      <h1>Nova Hub</h1>
-      <p class="subtitle" id="subtitle"></p>
+  <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">☰</button>
+  <aside id="sidebar" aria-label="Main Navigation">
+    <div class="nav-section">
+      <img src="/logo.png" class="logo" alt="Nova Logo">
+      <a href="#finance-tools" class="nav-icon active" data-tooltip="Ferramentas Financeiras" aria-label="Finance Tools">💰</a>
+      <a href="#search-platforms" class="nav-icon" data-tooltip="Plataformas de Busca" aria-label="Search Platforms">🔍</a>
+      <a href="#llm-platforms" class="nav-icon" data-tooltip="Plataformas LLM" aria-label="LLM Platforms">🤖</a>
+      <a href="#analytics" class="nav-icon" data-tooltip="Análises e Mais" aria-label="Analytics & More">📊</a>
     </div>
-    <div id="alertContainer"></div><!-- Login Form -->
-<form id="loginForm">
-  <div class="form-group">
-    <label for="loginEmail" id="emailLabel"></label>
-    <input type="email" id="loginEmail" required />
-  </div>
-  <div class="form-group">
-    <label for="loginPassword" id="passwordLabel"></label>
-    <input type="password" id="loginPassword" required />
-  </div>
-  <button type="submit" id="loginButton"></button>
-  <button type="button" id="googleLoginButton" class="google-btn">
-    <i class="fab fa-google fa-lg" style="margin-right:0.5rem;"></i>
-    <span id="googleBtnText"></span>
-  </button>
-  <div class="form-footer">
-    <p id="noAccountText"></p>
-    <button type="button" class="toggle-forms" id="showRegister"></button>
-  </div>
-</form>
-
-<!-- Register Form -->
-<form id="registerForm" class="hide">
-  <div class="form-group">
-    <label for="registerName" id="nameLabel"></label>
-    <input type="text" id="registerName" required />
-  </div>
-  <div class="form-group">
-    <label for="registerEmail" id="regEmailLabel"></label>
-    <input type="email" id="registerEmail" required />
-  </div>
-  <div class="form-group">
-    <label for="registerPassword" id="regPasswordLabel"></label>
-    <input type="password" id="registerPassword" required minlength="6" />
-  </div>
-  <div class="form-group">
-    <label for="confirmPassword" id="confirmPasswordLabel"></label>
-    <input type="password" id="confirmPassword" required minlength="6" />
-  </div>
-  <button type="submit" id="registerButton"></button>
-  <div class="form-footer">
-    <p id="hasAccountText"></p>
-    <button type="button" class="toggle-forms" id="showLogin"></button>
-  </div>
-</form>
-
-<!-- Notification Test Buttons -->
-<button id="testNotifBtn" class="test-btn">Teste Local</button>
-<button id="testVCBtn" class="test-btn">Abrir Cloud Messaging</button>
-
-<div class="language-switcher" role="group" aria-label="Language Selection">
-  <button class="language-btn" data-lang="pt" aria-pressed="true">PT</button>
-  <button class="language-btn" data-lang="en">EN</button>
-  <button class="language-btn" data-lang="es">ES</button>
-  <button class="language-btn" data-lang="fr">FR</button>
-</div>
-
-  </div>  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyBhxtjdc14dv39mr_x_WuXouZrpMyGXpuk",
-      authDomain: "novahub-8f4b0.firebaseapp.com",
-      projectId: "novahub-8f4b0",
-      storageBucket: "novahub-8f4b0.appspot.com",
-      messagingSenderId: "619675546300",
-      appId: "1:619675546300:web:7be9b40b4a5282772616b9",
-      measurementId: "G-G36L184ZND"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const messaging = firebase.messaging();
-    const VAPID_PUBLIC_KEY = 'BMo8pdaQwOLW_xWSaweJaDExXI7RNjoMtLiNOGRlf7_ets3LACVsEg9MeoPEtxdOr925mzuyFsbpwX5nojLf8CE';
-
-    function initMessaging() {
-      Notification.requestPermission()
-        .then(permission => {
-          if (permission === 'granted') return messaging.getToken({ vapidKey: VAPID_PUBLIC_KEY });
-          throw new Error('Permissão de notificações negada');
-        })
-        .then(token => console.log('FCM Token:', token))
-        .catch(err => console.error('Erro FCM:', err));
-    }
-
-    messaging.onMessage(payload => {
-      const { title, body } = payload.notification;
-      if (Notification.permission === 'granted') new Notification(title, { body });
-    });
-
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/firebase-messaging-sw.js')
-        .then(reg => messaging.useServiceWorker(reg))
-        .catch(console.error);
-    }
-
-    document.getElementById('testNotifBtn').addEventListener('click', () => {
-      navigator.serviceWorker.ready.then(reg => {
-        reg.showNotification('Teste Local', { body: 'Notificação disparada localmente.', icon: '/icons/icon-192.png' });
+    <div class="nav-section">
+      <a href="profile.html" class="nav-icon" data-tooltip="Perfil" aria-label="Profile">👤</a>
+      <a href="#settings" class="nav-icon" data-tooltip="Configurações" aria-label="Settings">⚙️</a>
+      <a href="#logout" class="nav-icon" data-tooltip="Sair" aria-label="Logout">⏻</a>
+    </div>
+  </aside>
+  <main>
+    <header>
+      <h1 id="main-title">Nova Hub</h1>
+      <p id="subtitle">Explora os projetos Nova de forma visual e rápida</p>
+      <div class="language-switcher" role="group" aria-label="Language Selection">
+        <button class="language-btn active" data-lang="pt">PT</button>
+        <button class="language-btn" data-lang="en">EN</button>
+        <button class="language-btn" data-lang="es">ES</button>
+        <button class="language-btn" data-lang="fr">FR</button>
+      </div>
+    </header>
+    <div id="content">
+      <div class="loading-container" id="loading"><div class="loading-spinner" aria-label="Loading"></div></div>
+    </div>
+    <button class="scroll-top" id="scrollTop" aria-label="Scroll to top">⬆️</button>
+  </main>
+  <div id="overlay" class="overlay"></div>
+  <script>
+    (function(){
+      const translations={
+        en:{
+          mainTitle:"Nova Hub",
+          subtitle:"Explore Nova projects visually and quickly",
+          sectionTitles:{
+            "Finance Tools":"Finance Tools",
+            "Search Platforms":"Search Platforms",
+            "LLM Platforms":"LLM Platforms",
+            "Analytics & More":"Analytics & More"
+          },
+          controls:{
+            fullscreen:"Fullscreen",
+            minimize:"Minimize"
+          },
+          errors:{
+            loading:"Failed to load content",
+            retry:"Retry"
+          }
+        },
+        pt:{
+          mainTitle:"Nova Hub",
+          subtitle:"Explora os projetos Nova de forma visual e rápida",
+          sectionTitles:{
+            "Finance Tools":"Ferramentas Financeiras",
+            "Search Platforms":"Plataformas de Busca",
+            "LLM Platforms":"Plataformas LLM",
+            "Analytics & More":"Análises e Mais"
+          },
+          controls:{
+            fullscreen:"Tela Cheia",
+            minimize:"Minimizar"
+          },
+          errors:{
+            loading:"Falha ao carregar conteúdo",
+            retry:"Tentar novamente"
+          }
+        },
+        es:{
+          mainTitle:"Nova Hub",
+          subtitle:"Explora los proyectos Nova de forma visual y rápida",
+          sectionTitles:{
+            "Finance Tools":"Herramientas Financieras",
+            "Search Platforms":"Plataformas de Búsqueda",
+            "LLM Platforms":"Plataformas LLM",
+            "Analytics & More":"Analíticas y Más"
+          },
+          controls:{
+            fullscreen:"Pantalla Completa",
+            minimize:"Minimizar"
+          },
+          errors:{
+            loading:"Error al cargar contenido",
+            retry:"Reintentar"
+          }
+        },
+        fr:{
+          mainTitle:"Nova Hub",
+          subtitle:"Explorez les projets Nova visuellement et rapidement",
+          sectionTitles:{
+            "Finance Tools":"Outils Financiers",
+            "Search Platforms":"Plateformes de Recherche",
+            "LLM Platforms":"Plateformes LLM",
+            "Analytics & More":"Analyses et Plus"
+          },
+          controls:{
+            fullscreen:"Plein Écran",
+            minimize:"Réduire"
+          },
+          errors:{
+            loading:"Échec du chargement du contenu",
+            retry:"Réessayer"
+          }
+        }
+      };
+      
+      // Initialize data from localStorage or use defaults
+      let categories = JSON.parse(localStorage.getItem('novaagg-categories')) || {
+        "Finance Tools": [
+          {title: "Nova Charts", url: "https://nova-charts.netlify.app/", description: "Interactive financial charts and analytics"}
+        ],
+        "Search Platforms": [],
+        "LLM Platforms": [],
+        "Analytics & More": []
+      };
+      
+      let visible = JSON.parse(localStorage.getItem('novaagg-visible')) || 
+        Object.keys(categories).reduce((a, k) => (a[k] = true, a), {});
+      
+      // Safe localStorage operations
+      const safe = {
+        get(k) {
+          try {
+            return localStorage.getItem(k);
+          } catch {
+            return null;
+          }
+        },
+        set(k, v) {
+          try {
+            localStorage.setItem(k, v);
+          } catch {
+            // Handle local storage errors silently
+          }
+        }
+      };
+      
+      // Save data functions
+      function save() {
+        safe.set('novaagg-categories', JSON.stringify(categories));
+      }
+      
+      // Category management functions
+      function addCategory() {
+        const n = prompt('New category:');
+        if (!n || categories[n]) return;
+        categories[n] = [];
+        visible[n] = true;
+        save();
+        safe.set('novaagg-visible', JSON.stringify(visible));
+        refresh();
+      }
+      
+      function editCategory(o) {
+        const n = prompt('Rename:', o);
+        if (!n || n === o) return;
+        categories[n] = categories[o];
+        delete categories[o];
+        visible[n] = visible[o];
+        delete visible[o];
+        save();
+        safe.set('novaagg-visible', JSON.stringify(visible));
+        refresh();
+      }
+      
+      function deleteCategory(n) {
+        if (!confirm(`Delete '${n}'?`)) return;
+        delete categories[n];
+        delete visible[n];
+        save();
+        safe.set('novaagg-visible', JSON.stringify(visible));
+        refresh();
+      }
+      
+      // Link management functions
+      function addLink(c) {
+        const t = prompt('Title:'), u = prompt('URL:');
+        if (!t || !u) return;
+        categories[c].push({title: t, url: u, description: ''});
+        save();
+        refresh();
+      }
+      
+      function editLink(c, i) {
+        const it = categories[c][i];
+        const t = prompt('Title:', it.title), u = prompt('URL:', it.url);
+        if (!t || !u) return;
+        categories[c][i] = {title: t, url: u, description: ''};
+        save();
+        refresh();
+      }
+      
+      function deleteLink(c, i) {
+        if (!confirm('Delete?')) return;
+        categories[c].splice(i, 1);
+        save();
+        refresh();
+      }
+      
+      // Toggle category visibility
+      function toggle(c) {
+        visible[c] = !visible[c];
+        safe.set('novaagg-visible', JSON.stringify(visible));
+        refresh();
+      }
+      
+      // Update tooltips for different languages
+      function updateTooltips(lang) {
+        document.querySelectorAll('.nav-icon').forEach(l => {
+          const a = `data-tooltip-${lang}`;
+          if (l.hasAttribute(a)) {
+            l.setAttribute('data-tooltip', l.getAttribute(a));
+            l.setAttribute('aria-label', l.getAttribute(a));
+          }
+        });
+      }
+      
+      // Language management
+      let lang = 'pt';
+      function changeLanguage(l) {
+        if (l === lang) return;
+        lang = l;
+        
+        // Update language buttons
+        document.querySelectorAll('.language-btn').forEach(b => {
+          const a = b.dataset.lang === l;
+          b.classList.toggle('active', a);
+          b.setAttribute('aria-pressed', a);
+        });
+        
+        // Update header content with animation
+        const mt = document.getElementById('main-title');
+        const st = document.getElementById('subtitle');
+        [mt, st].forEach(x => x.style.opacity = 0);
+        
+        setTimeout(() => {
+          mt.textContent = translations[l].mainTitle;
+          st.textContent = translations[l].subtitle;
+          [mt, st].forEach(x => x.style.opacity = 1);
+        }, 200);
+        
+        updateTooltips(l);
+        safe.set('novaagg-lang', l);
+        
+        // Update section titles if needed
+        document.querySelectorAll('section h2').forEach(h => {
+          const categoryName = h.textContent.replace(/[▼▶✏️🗑️]/g, '').trim();
+          if (translations[l].sectionTitles[categoryName]) {
+            const buttons = Array.from(h.querySelectorAll('button'));
+            h.innerHTML = '';
+            if (buttons[0]) h.appendChild(buttons[0]); // Toggle button
+            h.append(translations[l].sectionTitles[categoryName]);
+            buttons.slice(1).forEach(b => h.appendChild(b)); // Edit/delete buttons
+          }
+        });
+      }
+      
+      // Create frame element
+      function createFrame(s, c, i) {
+        const f = document.createElement('div');
+        f.className = 'frame';
+        
+        // Controls
+        const ctr = document.createElement('div');
+        ctr.className = 'controls';
+        
+        ['Fullscreen', 'Minimize', 'Edit', 'Delete'].forEach((t, j) => {
+          const b = document.createElement('button');
+          b.textContent = j < 2 ? 
+            (j === 0 ? '🔍' : '◻️') : 
+            (j === 2 ? '✏️' : '🗑️');
+          b.setAttribute('aria-label', j < 2 ?
+            translations[lang].controls[j ? 'minimize' : 'fullscreen'] :
+            (j === 2 ? 'Edit' : 'Delete'));
+          
+          b.onclick = e => {
+            e.preventDefault();
+            if (j === 0) {
+              f.classList.add('fullscreen');
+              document.getElementById('overlay').classList.add('active');
+              const ifr = f.querySelector('iframe');
+              if (ifr.dataset.src && !ifr.src) {
+                ifr.src = ifr.dataset.src;
+              }
+              f.focus();
+            } else if (j === 1) {
+              f.classList.remove('fullscreen');
+              document.getElementById('overlay').classList.remove('active');
+            } else if (j === 2) {
+              editLink(c, i);
+            } else {
+              deleteLink(c, i);
+            }
+          };
+          ctr.appendChild(b);
+        });
+        
+        f.appendChild(ctr);
+        
+        // Iframe
+        const ifr = document.createElement('iframe');
+        ifr.dataset.src = s.url;
+        ifr.loading = 'lazy';
+        ifr.title = s.title;
+        f.appendChild(ifr);
+        
+        // Site title
+        const st = document.createElement('div');
+        st.className = 'site-title';
+        st.textContent = s.title;
+        f.appendChild(st);
+        
+        return f;
+      }
+      
+      // Generate content
+      function generateContent() {
+        const ct = document.getElementById('content');
+        ct.innerHTML = '';
+        
+        // Add Category button
+        const ac = document.createElement('button');
+        ac.textContent = '＋ New Category';
+        ac.onclick = addCategory;
+        ct.appendChild(ac);
+        
+        // Generate sections for each category
+        Object.entries(categories).forEach(([c, arr]) => {
+          const sec = document.createElement('section');
+          
+          // Section header
+          const h2 = document.createElement('h2');
+          h2.id = c.toLowerCase().replace(/\s+/g, '-');
+          
+          // Toggle button
+          const tb = document.createElement('button');
+          tb.textContent = visible[c] ? '▼' : '▶';
+          tb.setAttribute('aria-label', visible[c] ? 'Collapse' : 'Expand');
+          tb.onclick = () => toggle(c);
+          h2.appendChild(tb);
+          
+          // Category name
+          h2.append(c);
+          
+          // Edit and delete buttons
+          ['✏️', '🗑️'].forEach((t, i) => {
+            const b = document.createElement('button');
+            b.textContent = t;
+            b.setAttribute('aria-label', i ? 'Delete category' : 'Edit category');
+            b.onclick = () => i ? deleteCategory(c) : editCategory(c);
+            h2.appendChild(b);
+          });
+          
+          sec.appendChild(h2);
+          
+          // Container for frames
+          const cont = document.createElement('div');
+          cont.className = 'container';
+          cont.style.display = visible[c] ? 'grid' : 'none';
+          
+          // Add frames
+          arr.forEach((s, i) => cont.appendChild(createFrame(s, c, i)));
+          
+          // Add link button
+          const al = document.createElement('button');
+          al.textContent = '+ Add Link';
+          al.onclick = () => addLink(c);
+          cont.appendChild(al);
+          
+          sec.appendChild(cont);
+          ct.appendChild(sec);
+        });
+        
+        document.getElementById('loading').style.display = 'none';
+        initObservers();
+      }
+      
+      // Helper function for debouncing
+      function debounce(fn, w) {
+        let t;
+        return (...a) => {
+          clearTimeout(t);
+          t = setTimeout(() => fn(...a), w);
+        };
+      }
+      
+      // Initialize observers for lazy loading and navigation
+      function initObservers() {
+        // Lazy load frames
+        const lo = new IntersectionObserver(es => {
+          es.forEach(e => {
+            if (e.isIntersecting) {
+              const ifr = e.target.querySelector('iframe');
+              if (ifr.dataset.src && !ifr.src) {
+                ifr.src = ifr.dataset.src;
+              }
+              lo.unobserve(e.target);
+            }
+          });
+        }, {rootMargin: '100px', threshold: 0.1});
+        
+        document.querySelectorAll('.frame').forEach(f => lo.observe(f));
+        
+        // Update active nav item on scroll
+        const so = new IntersectionObserver(es => {
+          es.forEach(e => {
+            if (e.isIntersecting && e.intersectionRatio > 0.3) {
+              const id = e.target.querySelector('h2').id;
+              document.querySelectorAll('.nav-icon').forEach(l => {
+                const a = l.getAttribute('href') === `#${id}`;
+                l.classList.toggle('active', a);
+              });
+            }
+          });
+        }, {threshold: [0.1, 0.3]});
+        
+        document.querySelectorAll('section').forEach(s => so.observe(s));
+      }
+      
+      // Refresh content
+      function refresh() {
+        generateContent();
+      }
+      
+      // Handle scroll for scroll-to-top button
+      const scrollHandler = debounce(() => {
+        document.getElementById('scrollTop').classList.toggle('visible', window.scrollY > 300);
+      }, 100);
+      
+      // Close fullscreen frames
+      function closeFull() {
+        const fullscreenFrame = document.querySelector('.frame.fullscreen');
+        if (fullscreenFrame) {
+          fullscreenFrame.classList.remove('fullscreen');
+        }
+        document.getElementById('overlay').classList.remove('active');
+      }
+      
+      // Event listeners
+      document.getElementById('overlay').addEventListener('click', closeFull);
+      document.addEventListener('keydown', e => e.key === 'Escape' && closeFull());
+      
+      // Set up scroll to top button
+      document.getElementById('scrollTop').addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       });
-    });
-
-    document.getElementById('testVCBtn').addEventListener('click', () => {
-      window.open('https://console.firebase.google.com/project/novahub-8f4b0/cloud-messaging', '_blank');
-    });
-
-    // ... resto da lógica de autenticação e traduções
-  </script></body>
+      
+      // Initialize on DOM load
+      document.addEventListener('DOMContentLoaded', () => {
+        // Set saved language if any
+        const sl = safe.get('novaagg-lang');
+        if (sl) {
+          changeLanguage(sl);
+        }
+        
+        // Set up language buttons
+        document.querySelectorAll('.language-btn').forEach(b => 
+          b.addEventListener('click', () => changeLanguage(b.dataset.lang))
+        );
+        
+        // Set up menu toggle
+        document.getElementById('menuToggle').addEventListener('click', () => {
+          document.getElementById('sidebar').classList.toggle('active');
+        });
+        
+        // Set up scroll event
+        window.addEventListener('scroll', scrollHandler);
+        
+        // Initial language setup
+        changeLanguage(lang);
+        
+        // Generate content with slight delay to allow animations
+        setTimeout(generateContent, 200);
+      });
+    })();
+  </script>
+</body>
 </html>
