@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <meta name="description" content="Nova Hub - Explore Nova projects visually and quickly">
   <title>Nova Hub</title>
 
@@ -28,7 +28,7 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-8M25SCL0G0"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag(){dataLayer.push(arguments);}  
     gtag('js', new Date());
     gtag('config', 'G-8M25SCL0G0');
   </script>
@@ -54,45 +54,45 @@
   <!-- Custom Links Panel & Toggle Styles -->
   <style>
     .link-panel {
-      position: fixed;
-      top: 0; right: 0;
+      position: fixed; top: 0; right: 0;
       width: 280px; height: 100%;
-      background: #f9f9f9;
-      border-left: 1px solid #ccc;
-      padding: 16px;
-      box-shadow: -2px 0 5px rgba(0,0,0,0.1);
-      overflow-y: auto;
-      z-index: 1000;
-      transform: translateX(0);
-      transition: transform 0.3s ease;
+      background: #f9f9f9; border-left: 1px solid #ccc;
+      padding: 16px; box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+      overflow-y: auto; z-index: 1000;
+      transform: translateX(0); transition: transform 0.3s ease;
     }
-    .link-panel.hidden {
-      transform: translateX(100%);
-    }
+    .link-panel.hidden { transform: translateX(100%); }
     .link-toggle {
-      position: fixed;
-      top: 20px; right: 20px;
-      z-index: 1100;
-      background: #00cccc;
-      border: none;
-      padding: 8px 12px;
-      color: #fff;
-      font-size: 0.9rem;
-      border-radius: 4px;
-      cursor: pointer;
+      position: fixed; top: 20px; right: 20px; z-index: 1100;
+      background: #00cccc; border: none;
+      padding: 8px 12px; color: #fff; font-size: 0.9rem;
+      border-radius: 4px; cursor: pointer;
       box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
     .link-panel h2 { margin-top: 0; font-size: 1.2rem; }
     .link-panel form { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
     .link-panel input { padding: 8px; font-size: 0.9rem; border: 1px solid #aaa; border-radius: 4px; }
-    .link-panel button.form-add { padding: 8px; font-size: 0.9rem; border: none; background: #00cccc; color: #fff; border-radius: 4px; cursor: pointer; }
+    .link-panel button.form-add {
+      padding: 8px; font-size: 0.9rem; border: none;
+      background: #00cccc; color: #fff; border-radius: 4px; cursor: pointer;
+    }
     .link-panel ul { list-style: none; padding: 0; }
-    .link-panel li { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-    .link-panel li a { flex-grow: 1; text-decoration: none; color: #007acc; margin-right: 8px; }
-    .link-panel li button { background: none; border: none; cursor: pointer; font-size: 1rem; color: #888; }
+    .link-panel li {
+      display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 8px;
+    }
+    .link-panel li a {
+      flex-grow: 1; text-decoration: none;
+      color: #007acc; margin-right: 8px;
+    }
+    .link-panel li button {
+      background: none; border: none; cursor: pointer;
+      font-size: 1rem; color: #888;
+    }
   </style>
 </head>
 <body>
+  <!-- Mobile menu toggle -->
   <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">☰</button>
 
   <!-- Sidebar Navigation -->
@@ -119,7 +119,7 @@
     </div>
   </main>
 
-  <!-- Scroll & Overlay -->
+  <!-- Scroll to top & overlay -->
   <button class="scroll-top" id="scrollTop" aria-label="Scroll to top">↑</button>
   <div class="overlay" id="overlay"></div>
 
@@ -131,7 +131,7 @@
     <h2>Your Links</h2>
     <form id="link-form">
       <input type="text" id="link-title" placeholder="Title" required />
-      <input type="url" id="link-url" placeholder="URL" required />
+      <input type="url"  id="link-url"   placeholder="URL"   required />
       <button type="submit" class="form-add">Add</button>
     </form>
     <ul id="link-list"></ul>
@@ -140,21 +140,28 @@
   <!-- Core JS -->
   <script src="app.js"></script>
 
-  <!-- CRUD Panel Logic & Toggle Handler -->
+  <!-- CRUD Panel & Toggle Logic -->
   <script>
     const linkStorageKey = 'custom-links';
     const safeStorage = {
-      data:{},
-      getItem(k){ try{ return localStorage.getItem(k) }catch{ return this.data[k]||null },
-      setItem(k,v){ try{ localStorage.setItem(k,v) }catch{ this.data[k]=v } }
+      data: {},
+      getItem(key) {
+        try { return localStorage.getItem(key); }
+        catch { return this.data[key] || null; }
+      },
+      setItem(key, value) {
+        try { localStorage.setItem(key, value); }
+        catch { this.data[key] = value; }
+      }
     };
 
+    // CRUD functions
     function loadLinks() {
-      const raw = (safeStorage || localStorage).getItem(linkStorageKey);
+      const raw = safeStorage.getItem(linkStorageKey);
       return raw ? JSON.parse(raw) : [];
     }
     function saveLinks(links) {
-      (safeStorage || localStorage).setItem(linkStorageKey, JSON.stringify(links));
+      safeStorage.setItem(linkStorageKey, JSON.stringify(links));
     }
     function renderLinks() {
       const list = document.getElementById('link-list');
@@ -162,11 +169,15 @@
       loadLinks().forEach((link, i) => {
         const li = document.createElement('li');
         const a = document.createElement('a');
-        a.href = link.url; a.textContent = link.title; a.target = '_blank';
+        a.href = link.url;
+        a.textContent = link.title;
+        a.target = '_blank';
         const edit = document.createElement('button');
-        edit.textContent = '✏️'; edit.onclick = () => editLink(i);
+        edit.textContent = '✏️';
+        edit.onclick = () => editLink(i);
         const del = document.createElement('button');
-        del.textContent = '🗑️'; del.onclick = () => deleteLink(i);
+        del.textContent = '🗑️';
+        del.onclick = () => deleteLink(i);
         li.append(a, edit, del);
         list.appendChild(li);
       });
@@ -179,8 +190,8 @@
     }
     function editLink(i) {
       const links = loadLinks(), ln = links[i];
-      const nt = prompt('Edit title:', ln.title),
-            nu = prompt('Edit URL:', ln.url);
+      const nt = prompt('Edit title:', ln.title);
+      const nu = prompt('Edit URL:',   ln.url);
       if (nt && nu) {
         links[i] = { title: nt, url: nu };
         saveLinks(links);
@@ -195,6 +206,8 @@
         renderLinks();
       }
     }
+
+    // Form handling & toggle logic
     document.getElementById('link-form').addEventListener('submit', e => {
       e.preventDefault();
       addLink(
@@ -202,32 +215,51 @@
         document.getElementById('link-url').value.trim()
       );
       document.getElementById('link-title').value = '';
-      document.getElementById('link-url').value = '';
+      document.getElementById('link-url').value   = '';
     });
 
     document.addEventListener('DOMContentLoaded', () => {
       renderLinks();
+
       const toggleBtn = document.getElementById('link-toggle');
-      const panel = document.getElementById('link-panel');
-      toggleBtn.addEventListener('click', () => panel.classList.toggle('hidden'));
+      const panel     = document.getElementById('link-panel');
+
+      // Toggle visibility
+      toggleBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        panel.classList.toggle('hidden');
+      });
+
+      // Close on outside click
+      document.addEventListener('click', e => {
+        if (!panel.contains(e.target) && !toggleBtn.contains(e.target)) {
+          panel.classList.add('hidden');
+        }
+      });
+
+      // Close on Escape
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+          panel.classList.add('hidden');
+        }
+      });
     });
   </script>
 
   <!-- Translations, Categories & Core Page Logic -->
   <script>
-    // Data layer
     const translations = {
       en: {
         mainTitle: "Nova Hub",
-        subtitle: "Explore Nova projects visually and quickly",
-        sectionTitles: {
+        subtitle : "Explore Nova projects visually and quickly",
+        sectionTitles : {
           "Finance Tools": "Finance Tools",
           "Search Platforms": "Search Platforms",
-          "LLM Platforms": "LLM Platforms",
+          "LLM Platforms" : "LLM Platforms",
           "Analytics & More": "Analytics & More"
         },
         controls: { fullscreen: "Fullscreen", minimize: "Minimize" },
-        errors: { loading: "Failed to load content", retry: "Retry" }
+        errors:   { loading: "Failed to load content", retry: "Retry" }
       },
       pt: {
         mainTitle: "Nova Hub",
@@ -239,7 +271,7 @@
           "Analytics & More": "Análises e Mais"
         },
         controls: { fullscreen: "Tela Cheia", minimize: "Minimizar" },
-        errors: { loading: "Falha ao carregar conteúdo", retry: "Tentar novamente" }
+        errors:   { loading: "Falha ao carregar conteúdo", retry: "Tentar novamente" }
       },
       es: {
         mainTitle: "Nova Hub",
@@ -251,7 +283,7 @@
           "Analytics & More": "Analíticas y Más"
         },
         controls: { fullscreen: "Pantalla Completa", minimize: "Minimizar" },
-        errors: { loading: "Error al cargar contenido", retry: "Reintentar" }
+        errors:   { loading: "Error al cargar contenido", retry: "Reintentar" }
       },
       fr: {
         mainTitle: "Nova Hub",
@@ -263,7 +295,7 @@
           "Analytics & More": "Analyses et Plus"
         },
         controls: { fullscreen: "Plein Écran", minimize: "Réduire" },
-        errors: { loading: "Échec du chargement du contenu", retry: "Réessayer" }
+        errors:   { loading: "Échec du chargement du contenu", retry: "Réessayer" }
       }
     };
 
@@ -299,14 +331,14 @@
       ]
     };
 
-    // DOM refs
+    // DOM references & core logic
     const contentEl = document.getElementById("content"),
           sidebarEl = document.getElementById("sidebar"),
           menuToggle = document.getElementById("menuToggle"),
           scrollTop = document.getElementById("scrollTop"),
-          overlay = document.getElementById("overlay"),
-          loading = document.getElementById("loading"),
-          navLinks = document.querySelectorAll(".nav-icon"),
+          overlay   = document.getElementById("overlay"),
+          loading   = document.getElementById("loading"),
+          navLinks  = document.querySelectorAll(".nav-icon"),
           langButtons = document.querySelectorAll(".language-btn");
 
     let currentLang = localStorage.getItem("novaagg-lang") || "pt";
@@ -325,9 +357,9 @@
       if (lang === currentLang) return;
       currentLang = lang;
       langButtons.forEach(btn => {
-        const isActive = btn.dataset.lang === lang;
-        btn.classList.toggle("active", isActive);
-        btn.setAttribute("aria-pressed", isActive);
+        const active = btn.dataset.lang === lang;
+        btn.classList.toggle("active", active);
+        btn.setAttribute("aria-pressed", active);
       });
       const mt = document.getElementById("main-title"),
             st = document.getElementById("subtitle");
@@ -339,14 +371,19 @@
       }, 200);
       updateTooltips(lang);
       document.querySelectorAll(".controls button").forEach(b => {
-        const isFull = ["Fullscreen","Tela Cheia","Pantalla Completa","Plein Écran"].includes(b.textContent);
-        b.textContent = isFull ? translations[lang].controls.fullscreen : translations[lang].controls.minimize;
+        const isFull = ["Fullscreen","Tela Cheia","Pantalla Completa","Plein Écran"]
+          .includes(b.textContent);
+        b.textContent = isFull
+          ? translations[lang].controls.fullscreen
+          : translations[lang].controls.minimize;
       });
       localStorage.setItem("novaagg-lang", lang);
       document.documentElement.lang = lang;
     }
 
-    langButtons.forEach(btn => btn.addEventListener("click", () => changeLanguage(btn.dataset.lang)));
+    langButtons.forEach(btn =>
+      btn.addEventListener("click", () => changeLanguage(btn.dataset.lang))
+    );
 
     menuToggle.addEventListener("click", () => {
       sidebarEl.classList.toggle("active");
@@ -359,14 +396,14 @@
       frame.className = "frame";
       frame.dataset.category = category;
 
-      const controls = document.createElement("div");
-      controls.className = "controls";
-      controls.setAttribute("aria-label", "Frame controls");
-
-      const btnFull = document.createElement("button");
-      btnFull.textContent = translations[currentLang].controls.fullscreen;
-      btnFull.setAttribute("aria-label", `View ${site.title} fullscreen`);
-      btnFull.onclick = e => {
+      // controls
+      const ctr = document.createElement("div");
+      ctr.className = "controls";
+      ctr.setAttribute("aria-label","Frame controls");
+      const bFull = document.createElement("button");
+      bFull.textContent = translations[currentLang].controls.fullscreen;
+      bFull.setAttribute("aria-label", `Fullscreen ${site.title}`);
+      bFull.onclick = e => {
         e.preventDefault();
         frame.classList.add("fullscreen");
         overlay.classList.add("active");
@@ -375,32 +412,34 @@
         frame.setAttribute("tabindex","-1");
         frame.focus();
       };
-      const btnMin = document.createElement("button");
-      btnMin.textContent = translations[currentLang].controls.minimize;
-      btnMin.setAttribute("aria-label", `Exit fullscreen ${site.title}`);
-      btnMin.onclick = e => {
+      const bMin = document.createElement("button");
+      bMin.textContent = translations[currentLang].controls.minimize;
+      bMin.setAttribute("aria-label", `Close fullscreen ${site.title}`);
+      bMin.onclick = e => {
         e.preventDefault();
         frame.classList.remove("fullscreen");
         overlay.classList.remove("active");
       };
-      controls.append(btnFull, btnMin);
+      ctr.append(bFull, bMin);
 
-      const iframe = document.createElement("iframe");
-      iframe.dataset.src = site.url;
-      iframe.loading = "lazy";
-      iframe.title = site.title;
-      iframe.setAttribute("sandbox","allow-scripts allow-same-origin allow-forms");
-      iframe.setAttribute("aria-label",`${site.title} content`);
+      // iframe
+      const ifr = document.createElement("iframe");
+      ifr.dataset.src = site.url;
+      ifr.loading = "lazy";
+      ifr.title   = site.title;
+      ifr.setAttribute("sandbox","allow-scripts allow-same-origin allow-forms");
+      ifr.setAttribute("aria-label",`${site.title} content`);
 
-      const titleDiv = document.createElement("div");
-      titleDiv.className = "site-title";
-      titleDiv.textContent = site.title;
+      // title
+      const tdiv = document.createElement("div");
+      tdiv.className = "site-title";
+      tdiv.textContent = site.title;
       if (site.description) {
-        titleDiv.title = site.description;
-        titleDiv.setAttribute("aria-label", `${site.title}: ${site.description}`);
+        tdiv.title = site.description;
+        tdiv.setAttribute("aria-label", `${site.title}: ${site.description}`);
       }
 
-      frame.append(controls, iframe, titleDiv);
+      frame.append(ctr, ifr, tdiv);
       return frame;
     }
 
@@ -408,8 +447,8 @@
       loading.style.display = "none";
       Object.entries(categories).forEach(([cat, sites]) => {
         const id = cat.toLowerCase().replace(/\s+/g,"-");
-        const section = document.createElement("section");
-        section.setAttribute("aria-labelledby", id);
+        const sec = document.createElement("section");
+        sec.setAttribute("aria-labelledby", id);
         const h2 = document.createElement("h2");
         h2.id = id;
         h2.className = "section-title";
@@ -423,8 +462,8 @@
           f.setAttribute("role","listitem");
           container.append(f);
         });
-        section.append(h2, container);
-        contentEl.append(section);
+        sec.append(h2, container);
+        contentEl.append(sec);
       });
       initObservers();
     }
@@ -433,11 +472,12 @@
       let t;
       return (...a) => {
         clearTimeout(t);
-        t = setTimeout(()=>fn.apply(this, a), wait);
+        t = setTimeout(() => fn.apply(this, a), wait);
       };
     }
 
     function initObservers() {
+      // lazy load
       const lazyObs = new IntersectionObserver(entries => {
         entries.forEach(ent => {
           if (ent.isIntersecting) {
@@ -447,39 +487,50 @@
             lazyObs.unobserve(f);
           }
         });
-      }, { rootMargin: "100px", threshold: 0.1 });
+      }, { rootMargin:"100px", threshold:0.1 });
       document.querySelectorAll(".frame").forEach(f => lazyObs.observe(f));
 
+      // section highlight
       const secObs = new IntersectionObserver(entries => {
         entries.forEach(ent => {
-          if (ent.isIntersecting && ent.intersectionRatio > .3) {
+          if (ent.isIntersecting && ent.intersectionRatio > 0.3) {
             const sid = ent.target.querySelector(".section-title").id;
             document.querySelectorAll(".nav-icon").forEach(n => {
-              const act = n.getAttribute("href")==`#${sid}`;
+              const act = n.getAttribute("href") === `#${sid}`;
               n.classList.toggle("active", act);
-              if(act) n.setAttribute("aria-current","page"); else n.removeAttribute("aria-current");
+              if (act) n.setAttribute("aria-current","page");
+              else      n.removeAttribute("aria-current");
             });
           }
         });
-      }, { threshold:[.1,.3,.5], rootMargin:"-100px 0px -100px 0px" });
-      document.querySelectorAll("section").forEach(s=>secObs.observe(s));
+      }, { threshold:[0.1,0.3,0.5], rootMargin:"-100px 0 -100px 0" });
+      document.querySelectorAll("section").forEach(s => secObs.observe(s));
     }
 
-    const handleScroll = debounce(()=>{
-      scrollTop.classList.toggle("visible", window.scrollY>300);
-    },100);
+    const handleScroll = debounce(() => {
+      scrollTop.classList.toggle("visible", window.scrollY > 300);
+    }, 100);
     window.addEventListener("scroll", handleScroll);
-    scrollTop.addEventListener("click", ()=>window.scrollTo({ top:0, behavior:"smooth" }));
-    overlay.addEventListener("click", ()=>{ document.querySelector(".frame.fullscreen")?.classList.remove("fullscreen"); overlay.classList.remove("active"); });
-    document.addEventListener("keydown", e=>{ if(e.key==="Escape"){ document.querySelector(".frame.fullscreen")?.classList.remove("fullscreen"); overlay.classList.remove("active"); } });
+    scrollTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+    overlay.addEventListener("click", () => {
+      document.querySelector(".frame.fullscreen")?.classList.remove("fullscreen");
+      overlay.classList.remove("active");
+    });
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape") {
+        document.querySelector(".frame.fullscreen")?.classList.remove("fullscreen");
+        overlay.classList.remove("active");
+      }
+    });
 
-    document.addEventListener("DOMContentLoaded", ()=>{
+    document.addEventListener("DOMContentLoaded", () => {
       changeLanguage(currentLang);
       generateContent();
     });
 
-    if('serviceWorker' in navigator){
-      navigator.serviceWorker.register('/service-worker.js').then(()=>console.log('Service Worker registado!'));
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/service-worker.js")
+      .then(() => console.log("Service Worker registado!"));
     }
   </script>
 </body>
