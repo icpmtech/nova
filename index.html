@@ -94,6 +94,85 @@
 
   <button class="scroll-top" id="scrollTop" aria-label="Scroll to top">↑</button>
   <div class="overlay" id="overlay"></div>
+  <script>
+  const logoutBtn = document.querySelector('[aria-label="Logout"]');
+  const profileBtn = document.querySelector('[aria-label="Profile"]');
+
+  const profileTranslations = {
+    pt: { title: "Perfil", name: "Nome", email: "Email", logout: "Sair", notLoggedIn: "Utilizador não autenticado.", edit: "Editar Perfil", photo: "Alterar Foto" },
+    en: { title: "Profile", name: "Name", email: "Email", logout: "Logout", notLoggedIn: "User not authenticated.", edit: "Edit Profile", photo: "Change Photo" },
+    es: { title: "Perfil", name: "Nombre", email: "Correo", logout: "Salir", notLoggedIn: "Usuario no autenticado.", edit: "Editar Perfil", photo: "Cambiar Foto" },
+    fr: { title: "Profil", name: "Nom", email: "Email", logout: "Déconnexion", notLoggedIn: "Utilisateur non authentifié.", edit: "Modifier le Profil", photo: "Changer la Photo" }
+  };
+
+  const profileSection = document.createElement('section');
+  profileSection.id = 'profile-section';
+  profileSection.classList.add('hide');
+  profileSection.innerHTML = `
+    <h2 id="profile-title"></h2>
+    <div id="profile-info"></div>
+    <div id="profile-actions" style="margin-top:1rem; text-align:center">
+      <button id="editProfile" class="language-btn"></button>
+      <button id="changePhoto" class="language-btn"></button>
+    </div>
+    <button id="logout" class="language-btn" style="margin-top:1.5rem"></button>
+  `;
+  document.getElementById('main-content').appendChild(profileSection);
+
+  profileBtn.addEventListener('click', () => {
+    document.querySelectorAll('section').forEach(s => s.classList.add('hide'));
+    profileSection.classList.remove('hide');
+
+    const user = firebase.auth().currentUser;
+    const profileInfo = document.getElementById('profile-info');
+    const t = profileTranslations[currentLang];
+
+    document.getElementById('profile-title').textContent = t.title;
+    document.getElementById('logout').textContent = t.logout;
+    document.getElementById('editProfile').textContent = t.edit;
+    document.getElementById('changePhoto').textContent = t.photo;
+
+    if (user) {
+      const photo = user.photoURL ? `<img src="${user.photoURL}" alt="${t.name}" class="profile-photo" style="width:80px;height:80px;border-radius:50%;margin-bottom:1rem">` : '';
+      profileInfo.innerHTML = `
+        <div style="text-align:center">${photo}</div>
+        <p><strong>${t.name}:</strong> ${user.displayName || 'Anónimo'}</p>
+        <p><strong>${t.email}:</strong> ${user.email}</p>
+      `;
+    } else {
+      profileInfo.innerHTML = `<p>${t.notLoggedIn}</p>`;
+    }
+  });
+
+  document.getElementById('logout').addEventListener('click', () => {
+    firebase.auth().signOut().then(() => {
+      window.location.href = 'login.html';
+    });
+  });
+
+  document.getElementById('editProfile').addEventListener('click', () => {
+    const newName = prompt("Novo nome / New name:");
+    if (newName) {
+      const user = firebase.auth().currentUser;
+      user.updateProfile({ displayName: newName })
+        .then(() => alert("Nome atualizado com sucesso!"))
+        .catch(err => alert("Erro ao atualizar nome: " + err.message));
+    }
+  });
+
+  document.getElementById('changePhoto').addEventListener('click', () => {
+    const newPhoto = prompt("URL da nova foto / New photo URL:");
+    if (newPhoto) {
+      const user = firebase.auth().currentUser;
+      user.updateProfile({ photoURL: newPhoto })
+        .then(() => {
+          alert("Foto atualizada!");
+          profileBtn.click(); // Recarrega a secção de perfil
+        })
+        .catch(err => alert("Erro ao atualizar foto: " + err.message));
+    }
+  });
+</script>
 <script src="app.js"></script>
 <script>
   if ('serviceWorker' in navigator) {
