@@ -1,9 +1,10 @@
-<!DOCTYPE html><html lang="pt">
+<!DOCTYPE html>
+<html lang="pt">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Perfil - Nova Hub</title>
-  <link rel="stylesheet" href="app.css" />
+
   <style>
     body {
       background: #1a1a2e;
@@ -14,6 +15,7 @@
       align-items: center;
       min-height: 100vh;
     }
+
     .profile-container {
       background: rgba(0, 0, 0, 0.3);
       padding: 2rem;
@@ -23,6 +25,7 @@
       width: 100%;
       text-align: center;
     }
+
     .profile-photo {
       width: 100px;
       height: 100px;
@@ -30,6 +33,23 @@
       object-fit: cover;
       margin-bottom: 1rem;
     }
+
+    input[type="text"], input[type="file"] {
+      margin-top: 0.5rem;
+      padding: 0.5rem;
+      border-radius: 5px;
+      border: 1px solid #444;
+      background-color: rgba(255,255,255,0.05);
+      color: #fff;
+      width: 100%;
+    }
+
+    #preview img {
+      max-width: 100%;
+      border-radius: 50%;
+      margin-top: 1rem;
+    }
+
     .language-btn {
       margin-top: 1rem;
       background: linear-gradient(135deg, #00FFFF, #0088FF);
@@ -47,30 +67,49 @@
     <img id="profileImage" class="profile-photo" src="" alt="Foto de Perfil" />
     <h2 id="profileName">Nome</h2>
     <p id="profileEmail">Email</p>
-    <button class="language-btn" onclick="logout()">Sair</button>
-  </div>  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>  <script>
+
+    <form id="editForm" style="margin-top:1.5rem">
+      <label for="newName">Novo Nome:</label>
+      <input type="text" id="newName" placeholder="Atualizar nome" />
+
+      <label for="newPhoto">Nova Foto:</label>
+      <input type="file" id="newPhoto" accept="image/*" />
+
+      <div id="preview" style="margin-top:1rem;"></div>
+
+      <button type="submit" class="language-btn" style="margin-top:1rem;">Guardar Alterações</button>
+    </form>
+
+    <button class="language-btn" onclick="logout()" style="margin-top:1.5rem;">Sair</button>
+    <button class="language-btn" onclick="goHome()" style="margin-top:1rem;">Voltar ao Início</button>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+
+  <script>
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
     const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_AUTH_DOMAIN",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_STORAGE_BUCKET",
-      messagingSenderId: "YOUR_SENDER_ID",
-      appId: "YOUR_APP_ID"
+      apiKey: "AIzaSyBhxtjdc14dv39mr_x_WuXouZrpMyGXpuk",
+      authDomain: "novahub-8f4b0.firebaseapp.com",
+      projectId: "novahub-8f4b0",
+      storageBucket: "novahub-8f4b0.firebasestorage.app",
+      messagingSenderId: "619675546300",
+      appId: "1:619675546300:web:7be9b40b4a5282772616b9",
+      measurementId: "G-G36L184ZND"
     };
+
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
+    const storage = firebase.storage();
 
     auth.onAuthStateChanged(user => {
       if (user) {
         document.getElementById("profileName").textContent = user.displayName || "Anónimo";
         document.getElementById("profileEmail").textContent = user.email;
-        if (user.photoURL) {
-          document.getElementById("profileImage").src = user.photoURL;
-        } else {
-          document.getElementById("profileImage").src = "/default-avatar.png";
-        }
-      } else {
-        window.location.href = "login.html";
+        document.getElementById("profileImage").src = user.photoURL || "/default-avatar.png";
       }
     });
 
@@ -79,5 +118,57 @@
         window.location.href = "login.html";
       });
     }
-  </script></body>
+
+    function goHome() {
+      window.location.href = "index.html";
+    }
+
+    const editForm = document.getElementById("editForm");
+    const newNameInput = document.getElementById("newName");
+    const newPhotoInput = document.getElementById("newPhoto");
+    const preview = document.getElementById("preview");
+
+    newPhotoInput.addEventListener("change", () => {
+      const file = newPhotoInput.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          preview.innerHTML = `<img src="${e.target.result}" alt="Pré-visualização" />`;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    editForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const user = auth.currentUser;
+      if (!user) return;
+
+      const newName = newNameInput.value.trim();
+      const file = newPhotoInput.files[0];
+      let photoURL = user.photoURL;
+
+      try {
+        if (file) {
+          const imageRef = storage.ref().child(`profileImages/${user.uid}_${Date.now()}`);
+          await imageRef.put(file);
+          photoURL = await imageRef.getDownloadURL();
+        }
+
+        await user.updateProfile({
+          displayName: newName || user.displayName,
+          photoURL: photoURL
+        });
+
+        alert("Perfil atualizado com sucesso!");
+        // Apenas atualiza visualmente sem redirecionar
+        document.getElementById("profileName").textContent = newName || user.displayName;
+        if (photoURL) document.getElementById("profileImage").src = photoURL;
+      } catch (err) {
+        console.error("Erro ao atualizar perfil:", err);
+        alert("Erro: " + err.message);
+      }
+    });
+  </script>
+</body>
 </html>
