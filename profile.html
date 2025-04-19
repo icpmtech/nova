@@ -1,22 +1,17 @@
-
-<!DOCTYPE html>
-<html lang="pt">
+<!DOCTYPE html><html lang="pt">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Perfil - Nova Hub</title>
-
   <style>
     body {
       background: #1a1a2e;
       color: #f5f5f5;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', sans-serif;
       display: flex;
       min-height: 100vh;
       margin: 0;
     }
-
-    /* Sidebar */
     #sidebar {
       background: rgba(0, 0, 0, 0.5);
       width: 70px;
@@ -28,30 +23,10 @@
       inset: 0;
       z-index: 10;
     }
-    .nav-section {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1.5rem;
-    }
+    .nav-section { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
     .logo { width: 50px; margin-bottom: 1rem; }
-
-    /* Nav icon tooltip */
-    .nav-icon {
-      position: relative;
-      width: 40px;
-      height: 40px;
-      font-size: 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      transition: background 0.3s;
-      color: #fff;
-    }
-    .nav-icon:hover {
-      background: rgba(0, 255, 255, 0.2);
-    }
+    .nav-icon { position: relative; width: 40px; height: 40px; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background 0.3s; color: #fff; }
+    .nav-icon:hover { background: rgba(0, 255, 255, 0.2); }
     .nav-icon[data-tooltip]:hover::after {
       content: attr(data-tooltip);
       position: absolute;
@@ -67,19 +42,8 @@
       pointer-events: none;
       z-index: 50;
     }
-
-    /* Main content */
-    #main-content {
-      margin-left: 70px;
-      width: calc(100% - 70px);
-      padding: 2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+    #main-content { margin-left: 70px; width: calc(100% - 70px); padding: 2rem; display: flex; flex-direction: column; align-items: center; }
     header { text-align: center; margin-bottom: 2rem; }
-    #content { width: 100%; display: flex; justify-content: center; }
-
     .profile-container {
       background: rgba(0, 0, 0, 0.3);
       padding: 2rem;
@@ -88,17 +52,8 @@
       max-width: 400px;
       width: 100%;
       text-align: center;
-      position: relative;
     }
-    .profile-photo {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-bottom: 1rem;
-      border: 3px solid rgba(0, 255, 255, 0.5);
-    }
-
+    .profile-photo { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 1rem; border: 3px solid rgba(0, 255, 255, 0.5); }
     input[type="text"] {
       margin-top: 0.5rem;
       padding: 0.5rem;
@@ -109,48 +64,6 @@
       width: 100%;
       box-sizing: border-box;
     }
-    .file-input-wrapper {
-      position: relative;
-      margin-top: 0.5rem;
-    }
-    .file-input-label {
-      display: block;
-      background: rgba(0, 255, 255, 0.1);
-      border: 1px dashed rgba(0, 255, 255, 0.5);
-      padding: 0.8rem;
-      border-radius: 5px;
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.3s;
-    }
-    .file-input-label:hover {
-      background: rgba(0, 255, 255, 0.2);
-    }
-    input[type="file"] {
-      opacity: 0;
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      cursor: pointer;
-    }
-
-    #preview img {
-      max-width: 100px;
-      max-height: 100px;
-      border-radius: 50%;
-      margin-top: 1rem;
-      border: 2px solid rgba(0, 255, 255, 0.5);
-      transition: transform 0.3s;
-    }
-    #preview img:hover { transform: scale(1.1); }
-
-    .language-switcher {
-      display: flex;
-      gap: 0.5rem;
-      justify-content: center;
-      margin: 1rem 0;
-    }
     .language-btn {
       background: linear-gradient(135deg, #00FFFF, #0088FF);
       border: none;
@@ -160,93 +73,33 @@
       font-weight: bold;
       cursor: pointer;
       transition: all 0.2s;
-      position: relative;
-      overflow: hidden;
+      margin-top: 1rem;
     }
     .language-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0, 255, 255, 0.3); }
     .language-btn:active { transform: translateY(0); }
     .language-btn.active { box-shadow: 0 0 8px rgba(0, 255, 255, 0.8); }
-
-    /* Buttons loader */
-    .btn-loader {
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(26, 26, 46, 0.3);
-      border-radius: 50%;
-      border-top: 2px solid #1a1a2e;
-      animation: spin 1s linear infinite;
-      display: none;
-      margin-right: 8px;
-      vertical-align: middle;
-    }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-    /* Toasts */
-    .toast-container {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 1000;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      max-width: 300px;
-    }
-    .toast {
-      display: flex;
-      align-items: center;
-      padding: 12px 15px;
-      border-radius: 6px;
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
-      opacity: 0;
-      transform: translateX(100%);
-      min-width: 280px;
-      transition: all 0.3s ease;
-      color: #1a1a2e;
-    }
+    .btn-loader { display: none; margin-right: 8px; vertical-align: middle; }
+    .toast-container { position: fixed; top: 20px; right: 20px; z-index: 1000; display: flex; flex-direction: column; gap: 10px; max-width: 300px; }
+    .toast { display: flex; align-items: center; padding: 12px 15px; border-radius: 6px; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4); opacity: 0; transform: translateX(100%); transition: all 0.3s ease; color: #1a1a2e; }
     .toast.show { opacity: 1; transform: translateX(0); }
     .toast.success { background: linear-gradient(135deg, #00FFAA, #00CCFF); }
-    .toast.error   { background: linear-gradient(135deg, #FF6B6B, #FF0066); }
-    .toast.info    { background: linear-gradient(135deg, #00BFFF, #1E90FF); }
-    .toast-icon    { margin-right: 10px; font-size: 1.2rem; }
-    .toast-close   { background: transparent; border: none; cursor: pointer; margin-left: 8px; font-size: 1.2rem; color: rgba(0,0,0,0.5); transition: color 0.3s; }
+    .toast.error { background: linear-gradient(135deg, #FF6B6B, #FF0066); }
+    .toast.info { background: linear-gradient(135deg, #00BFFF, #1E90FF); }
+    .toast-icon { margin-right: 10px; font-size: 1.2rem; }
+    .toast-close { background: transparent; border: none; cursor: pointer; margin-left: 8px; font-size: 1.2rem; color: rgba(0,0,0,0.5); transition: color 0.3s; }
     .toast-close:hover { color: rgba(0,0,0,0.8); }
-
-    /* Loading overlay */
-    .loading-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.7);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      visibility: hidden;
-      opacity: 0;
-      transition: all 0.3s;
-    }
+    .loading-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); display: flex; justify-content: center; align-items: center; z-index: 1000; visibility: hidden; opacity: 0; transition: all 0.3s; }
     .loading-overlay.active { visibility: visible; opacity: 1; }
-    .loading-spinner {
-      width: 60px;
-      height: 60px;
-      border: 5px solid rgba(0, 255, 255, 0.2);
-      border-radius: 50%;
-      border-top: 5px solid #00FFFF;
-      animation: spin 1s linear infinite;
-    }
+    .loading-spinner { width: 60px; height: 60px; border: 5px solid rgba(0, 255, 255, 0.2); border-radius: 50%; border-top: 5px solid #00FFFF; animation: spin 1s linear infinite; }
     .loading-text { color: #00FFFF; font-size: 1rem; margin-top: 1rem; text-align: center; }
-    .loading-container { display: flex; flex-direction: column; align-items: center; }
-
-    /* Responsive */
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     @media (max-width: 768px) {
-      .menu-toggle { display: block; }
       #sidebar { transform: translateX(-100%); transition: transform 0.3s ease; }
       #sidebar.active { transform: translateX(0); }
       #main-content { margin-left: 0; width: 100%; padding: 1rem; }
       .toast-container { left: 20px; right: 20px; max-width: calc(100% - 40px); }
-      .toast { min-width: auto; max-width: 100%; }
+      .toast { max-width: 100%; }
     }
-
   </style>
 </head>
 <body>
@@ -254,47 +107,36 @@
   <aside id="sidebar" aria-label="Main Navigation">
     <div class="nav-section">
       <img src="/logo.png" class="logo" alt="Nova Logo">
-      <a href="#finance-tools" class="nav-icon" data-tooltip-pt="Ferramentas Financeiras" data-tooltip-en="Finance Tools" data-tooltip-es="Herramientas Financieras" data-tooltip-fr="Outils Financiers">💰</a>
-      <a href="#search-platforms" class="nav-icon" data-tooltip-pt="Plataformas de Busca" data-tooltip-en="Search Platforms" data-tooltip-es="Plataformas de Búsqueda" data-tooltip-fr="Plateformes de Recherche">🔍</a>
-      <a href="#llm-platforms" class="nav-icon" data-tooltip-pt="Plataformas LLM" data-tooltip-en="LLM Platforms" data-tooltip-es="Plataformas LLM" data-tooltip-fr="Plateformes LLM">🤖</a>
-      <a href="#analytics" class="nav-icon" data-tooltip-pt="Análises e Mais" data-tooltip-en="Analytics & More" data-tooltip-es="Analíticas y Más" data-tooltip-fr="Analyses et Plus">📊</a>
+      <a href="#finance-tools" class="nav-icon" data-tooltip-en="Finance Tools">💰</a>
+      <a href="#search-platforms" class="nav-icon" data-tooltip-en="Search Platforms">🔍</a>
+      <a href="#llm-platforms" class="nav-icon" data-tooltip-en="LLM Platforms">🤖</a>
+      <a href="#analytics" class="nav-icon" data-tooltip-en="Analytics & More">📊</a>
     </div>
     <div class="nav-section">
-      <a href="profile.html" class="nav-icon active" data-tooltip-pt="Perfil" data-tooltip-en="Profile" data-tooltip-es="Perfil" data-tooltip-fr="Profil">👤</a>
-      <a href="#" class="nav-icon" data-tooltip-pt="Configurações" data-tooltip-en="Settings" data-tooltip-es="Configuración" data-tooltip-fr="Paramètres">⚙️</a>
-      <a href="#" class="nav-icon" data-tooltip-pt="Sair" data-tooltip-en="Logout" data-tooltip-es="Salir" data-tooltip-fr="Déconnexion">⏻</a>
+      <a href="profile.html" class="nav-icon active" data-tooltip-en="Profile">👤</a>
+      <a href="#" class="nav-icon" data-tooltip-en="Settings">⚙️</a>
+      <a href="#" class="nav-icon" data-tooltip-en="Logout">⏻</a>
     </div>
   </aside>
   <main id="main-content">
     <header>
-      <h1 id="main-title">Nova Hub</h1>
-      <p id="subtitle">Perfil de Usuário</p>
-      <div class="language-switcher" role="group" aria-label="Language Selection">
-        <button class="language-btn active" data-lang="pt" aria-pressed="true">PT</button>
-        <button class="language-btn" data-lang="en" aria-pressed="false">EN</button>
-        <button class="language-btn" data-lang="es" aria-pressed="false">ES</button>
-        <button class="language-btn" data-lang="fr" aria-pressed="false">FR</button>
-      </div>
+      <h1>Nova Hub</h1>
+      <p>Perfil de Usuário</p>
     </header>
-    <div id="content">
-      <div class="profile-container">
-        <img id="profileImage" class="profile-photo" src="/default-avatar.png" alt="Foto de Perfil" />
-        <h2 id="profileName">Carregando...</h2>
-        <p id="profileEmail">Carregando...</p>
-        <form id="editForm">
-          <label for="newName">Novo Nome:</label>
-          <input type="text" id="newName" placeholder="Atualizar nome" />
-          <label for="newPhoto">Nova Foto:</label>
-          <div class="file-input-wrapper">
-            <label for="newPhoto" class="file-input-label"><span>Selecionar imagem</span></label>
-            <input type="file" id="newPhoto" accept="image/*" />
-          </div>
-          <div id="preview"></div>
-          <button type="submit" class="language-btn" style="margin-top:1.5rem;"><span class="btn-loader"></span><span class="btn-text">Guardar Alterações</span></button>
-        </form>
-        <button class="language-btn" id="logoutBtn"><span class="btn-loader"></span><span class="btn-text">Sair</span></button>
-        <button class="language-btn" id="homeBtn">Voltar ao Início</button>
-      </div>
+    <div class="profile-container">
+      <img id="profileImage" class="profile-photo" src="/default-avatar.png" alt="Foto de Perfil" />
+      <h2 id="profileName">Carregando...</h2>
+      <p id="profileEmail">Carregando...</p>
+      <form id="editForm">
+        <label for="newName">Novo Nome:</label>
+        <input type="text" id="newName" placeholder="Atualizar nome" />
+        <button type="submit" class="language-btn" id="submitBtn" disabled>
+          <span class="btn-loader"></span>
+          <span class="btn-text">Guardar Alterações</span>
+        </button>
+      </form>
+      <button class="language-btn" id="logoutBtn">Sair</button>
+      <button class="language-btn" id="homeBtn">Voltar ao Início</button>
     </div>
   </main>
   <div class="toast-container" id="toastContainer"></div>
@@ -304,145 +146,102 @@
       <div class="loading-text" id="loadingText">Carregando...</div>
     </div>
   </div>
-
-  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
   <script>
-    // Configuração Firebase
+    // Firebase init
     firebase.initializeApp({
       apiKey: "AIzaSyBhxtjdc14dv39mr_x_WuXouZrpMyGXpuk",
       authDomain: "novahub-8f4b0.firebaseapp.com",
       projectId: "novahub-8f4b0",
       storageBucket: "novahub-8f4b0.appspot.com",
       messagingSenderId: "619675546300",
-      appId: "1:619675546300:web:7be9b40b4a5282772616b9",
-      measurementId: "G-G36L184ZND"
+      appId: "1:619675546300:web:7be9b40b4a5282772616b9"
     });
-    const auth = firebase.auth();
-    const storage = firebase.storage();
+    const auth = firebase.auth();// DOM elements
+const profileName  = document.getElementById('profileName');
+const profileEmail = document.getElementById('profileEmail');
+const newNameInput = document.getElementById('newName');
+const submitBtn    = document.getElementById('submitBtn');
 
-    // Elementos DOM
-    const profileImage = document.getElementById("profileImage");
-    const profileName  = document.getElementById("profileName");
-    const profileEmail = document.getElementById("profileEmail");
-    const loadingOverlay= document.getElementById("loadingOverlay");
-    const loadingText   = document.getElementById("loadingText");
-    const fileInputLabel= document.querySelector(".file-input-label span");
-    const navIcons      = document.querySelectorAll('.nav-icon');
+// Prevent duplicate toasts
+const activeToasts = new Set();
+function showToast(msg, type='info', duration=3000) {
+  if (activeToasts.has(msg)) return;
+  activeToasts.add(msg);
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.innerHTML = `
+    <span class="toast-icon">${type==='success'? '✅': type==='error'? '❌':'ℹ️'}</span>
+    <div class="toast-content">${msg}</div>
+    <button class="toast-close">×</button>
+  `;
+  document.getElementById('toastContainer').append(toast);
+  setTimeout(() => toast.classList.add('show'), 10);
+  const tid = setTimeout(() => closeToast(toast), duration);
+  toast.querySelector('.toast-close').onclick = () => { clearTimeout(tid); closeToast(toast); };
+}
+function closeToast(toast) {
+  const msg = toast.querySelector('.toast-content')?.textContent;
+  toast.classList.remove('show');
+  setTimeout(() => { toast.remove(); if (msg) activeToasts.delete(msg); }, 300);
+}
 
-    // Mostrar/Ocultar carregamento
-    function showLoading(msg="Carregando...") { loadingText.textContent = msg; loadingOverlay.classList.add('active'); }
-    function hideLoading() { loadingOverlay.classList.remove('active'); }
+function toggleButtonLoading(btn, isLoading) {
+  const loader = btn.querySelector('.btn-loader');
+  if (isLoading) { loader.style.display = 'inline-block'; btn.disabled = true; btn.style.opacity = '0.5'; }
+  else { loader.style.display = 'none'; btn.disabled = false; btn.style.opacity = '1'; }
+}
 
-    // Toast
-    function showToast(message, type='info', duration=5000) {
-      const toast = document.createElement('div');
-      toast.className = `toast ${type}`;
-      let icon = type==='success'? '✅': type==='error'? '❌':'ℹ️';
-      toast.innerHTML = `<span class="toast-icon">${icon}</span><div class="toast-content">${message}</div><button class="toast-close">×</button>`;
-      document.getElementById('toastContainer').append(toast);
-      setTimeout(()=> toast.classList.add('show'), 10);
-      const timeout = setTimeout(()=> closeToast(toast), duration);
-      toast.querySelector('.toast-close').onclick = ()=> { clearTimeout(timeout); closeToast(toast); };
-    }
-    function closeToast(toast) { toast.classList.remove('show'); setTimeout(()=> toast.remove(), 300); }
+newNameInput.oninput = () => {
+  const hasText = newNameInput.value.trim().length > 0;
+  submitBtn.disabled = !hasText;
+  submitBtn.style.opacity = hasText ? '1' : '0.5';
+};
 
-    // Loading button
-    function toggleButtonLoading(btn, loading) {
-      const loader= btn.querySelector('.btn-loader');
-      if(loading){ loader.style.display='inline-block'; btn.disabled=true; btn.style.opacity='0.8'; btn.style.cursor='wait'; }
-      else     { loader.style.display='none'; btn.disabled=false; btn.style.opacity='1'; btn.style.cursor='pointer'; }
-    }
+document.getElementById('editForm').onsubmit = async e => {
+  e.preventDefault();
+  const user = auth.currentUser;
+  if (!user) return showToast('Sessão inválida', 'error');
+  const name = newNameInput.value.trim();
+  if (!name) return;
+  toggleButtonLoading(submitBtn, true);
+  try {
+    await user.updateProfile({ displayName: name });
+    profileName.textContent = name;
+    showToast('Nome atualizado!', 'success');
+    newNameInput.value = '';
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = '0.5';
+  } catch (err) {
+    showToast(`Erro: ${err.message}`, 'error');
+  } finally {
+    toggleButtonLoading(submitBtn, false);
+  }
+};
 
-    // Inicializar tooltips de acordo com idioma
-    function updateTooltips(lang) {
-      navIcons.forEach(icon => {
-        const key = 'tooltip' + lang.toUpperCase();
-        if(icon.dataset[key]) icon.setAttribute('data-tooltip', icon.dataset[key]);
-      });
-    }
+// Load profile
+auth.onAuthStateChanged(user => {
+  if (user) {
+    profileName.textContent = user.displayName || 'Anônimo';
+    profileEmail.textContent = user.email;
+  } else {
+    window.location.href = 'login.html';
+  }
+});
 
-    // Estado auth
-    showLoading('Carregando perfil...');
-    auth.onAuthStateChanged(user => {
-      if(user) {
-        profileName.textContent  = user.displayName|| 'Anónimo';
-        profileEmail.textContent = user.email;
-        profileImage.src = user.photoURL ? user.photoURL + '?t=' + Date.now() : '/default-avatar.png';
-        hideLoading(); showToast('Perfil carregado com sucesso!', 'success', 3000);
-      } else {
-        hideLoading(); showToast('Sessão expirada. Redirecionando...', 'info', 2000);
-        setTimeout(()=> location.href='login.html', 2000);
-      }
-    });
+document.getElementById('logoutBtn').onclick = async () => {
+  try {
+    await auth.signOut();
+    showToast('Sessão encerrada', 'success');
+    setTimeout(() => window.location.href = 'login.html', 1000);
+  } catch (err) {
+    showToast(`Erro: ${err.message}`, 'error');
+  }
+};
 
-    // Menu mobile
-    document.getElementById('menuToggle').onclick = ()=> document.getElementById('sidebar').classList.toggle('active');
+document.getElementById('homeBtn').onclick = () => window.location.href = 'index.html';
 
-    // Language switch
-    document.querySelectorAll('.language-btn').forEach(btn => {
-      btn.onclick = () => {
-        document.querySelectorAll('.language-btn').forEach(b=> { b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
-        btn.classList.add('active'); btn.setAttribute('aria-pressed','true');
-        const lang = btn.dataset.lang;
-        updateTooltips(lang);
-        showToast(`Idioma alterado para ${lang.toUpperCase()}`, 'info');
-        // TODO: carregar traduções reais
-      };
-    });
-    // Set default tooltips
-    updateTooltips('pt');
-
-    // Logout
-    document.getElementById('logoutBtn').onclick = async () => {
-      const btn = document.getElementById('logoutBtn'); toggleButtonLoading(btn, true); showToast('Encerrando sessão...', 'info');
-      try { await auth.signOut(); showToast('Sessão encerrada!', 'success'); setTimeout(()=> location.href='login.html', 1500); }
-      catch(err){ toggleButtonLoading(btn,false); showToast(`Erro ao sair: ${err.message}`, 'error'); }
-    };
-
-    // Home
-    document.getElementById('homeBtn').onclick = () => { showToast('Voltando ao início...', 'info'); setTimeout(()=> location.href='index.html', 800); };
-
-    // File preview & validation
-    const newPhoto= document.getElementById('newPhoto');
-    newPhoto.onchange = ()=> {
-      const file = newPhoto.files[0];
-      if(!file) { fileInputLabel.textContent='Selecionar imagem'; return; }
-      if(!file.type.startsWith('image/')) return showToast('Selecione uma imagem válida','error');
-      if(file.size > 2*1024*1024) return showToast('Máximo 2MB','error');
-      fileInputLabel.textContent = file.name.length>20 ? file.name.slice(0,17)+'...' : file.name;
-      const reader = new FileReader(); reader.onload = e=> document.getElementById('preview').innerHTML=`<img src="${e.target.result}" alt="Preview"/>`;
-      reader.readAsDataURL(file);
-    };
-
-    // Edit form
-    document.getElementById('editForm').onsubmit = async e=> {
-      e.preventDefault(); const user = auth.currentUser;
-      if(!user) return showToast('Sessão expirada','error');
-      const name= document.getElementById('newName').value.trim();
-      const file= newPhoto.files[0];
-      if(!name && !file) return showToast('Nenhuma alteração','info');
-      const btn= e.target.querySelector('button[type="submit"]'); toggleButtonLoading(btn,true);
-      try {
-        if(file) {
-          profileImage.classList.add('loading'); showLoading('Enviando imagem...');
-          const ref = storage.ref().child(`profileImages/${user.uid}_${Date.now()}`);
-          await ref.put(file);
-          const url = await ref.getDownloadURL();
-          await user.updateProfile({ photoURL: url });
-          profileImage.src = url+'?t='+Date.now(); showToast('Imagem atualizada!','success');
-        }
-        if(name) { await user.updateProfile({ displayName: name }); profileName.textContent= name; showToast('Nome atualizado!','success'); }
-        // reset
-        document.getElementById('newName').value=''; newPhoto.value=''; document.getElementById('preview').innerHTML=''; fileInputLabel.textContent='Selecionar imagem';
-      } catch(err) { showToast(`Erro: ${err.message}`,'error'); }
-      finally { profileImage.classList.remove('loading'); hideLoading(); toggleButtonLoading(btn,false); }
-    };
-
-    // Handle broken profile image
-    profileImage.onerror = ()=> { profileImage.src='/default-avatar.png'; showToast('Erro ao carregar imagem','error'); };
   </script>
 </body>
 </html>
