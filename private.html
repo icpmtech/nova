@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Nova Hub - Explore Nova projects visually and quickly">
+  <title>Nova Hub</title>
+
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#00FFFF" />
+  <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+
+  <!-- SEO Meta Tags -->
+  <meta name="keywords" content="Nova Hub, Nova projects, finance tools, search platforms, LLM platforms, analytics">
+  <meta name="author" content="pedro martins & cantinhode.net">
+  <meta property="og:title" content="Nova Hub & cantinhode.net">
+  <meta property="og:description" content="Explore Nova projects visually and quickly">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://nova-hub.netlify.app/">
+  <meta property="og:image" content="https://nova-hub.netlify.app/logo.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Nova Hub">
+  <meta name="twitter:description" content="Explore Nova projects visually and quickly">
+  <meta name="twitter:image" content="https://nova-hub.netlify.app/logo.png">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8M25SCL0G0"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-8M25SCL0G0');
+  </script>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+
+  <!-- Structured Data for SEO -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Nova Hub",
+      "url": "https://nova-hub.netlify.app/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://nova-hub.netlify.app/?search={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+  </script>
+
+  <link rel="stylesheet" href="app.css">
+  
+  <script>
+    // Firebase configuration
+    const firebaseConfig = {
+      // TODO: Replace with your Firebase project configuration
+      apiKey: "YOUR_API_KEY",
+      authDomain: "your-project-id.firebaseapp.com",
+      projectId: "your-project-id",
+      storageBucket: "your-project-id.appspot.com",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+    
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    
+    // Check authentication status
+    auth.onAuthStateChanged(user => {
+      if (!user) {
+        // Not logged in, redirect to login page
+        window.location.href = 'login.html';
+      } else {
+        // User is logged in, show content
+        document.getElementById('user-display-name').textContent = user.displayName || 'User';
+        document.getElementById('user-email').textContent = user.email;
+        
+        // Show the main content
+        document.getElementById('main-content').style.display = 'block';
+        document.getElementById('loading-screen').style.display = 'none';
+      }
+    });
+    
+    // Handle logout
+    function logout() {
+      auth.signOut()
+        .then(() => {
+          // Redirect to login page
+          window.location.href = 'login.html';
+        })
+        .catch(error => {
+          console.error('Logout error:', error);
+        });
+    }
+  </script>
+</head>
+<body>
+  <!-- Loading screen -->
+  <div id="loading-screen" style="display: flex; justify-content: center; align-items: center; height: 100vh; width: 100vw; position: fixed; top: 0; left: 0; background-color: #1a1a2e; z-index: 9999;">
+    <div style="text-align: center;">
+      <img src="/logo.png" alt="Nova Logo" style="width: 100px; height: auto; margin-bottom: 20px;">
+      <div class="loading-spinner" aria-label="Loading content"></div>
+      <p style="color: #ccc; margin-top: 20px;">Verificando autenticação...</p>
+    </div>
+  </div>
+
+  <!-- Main content (hidden initially) -->
+  <div id="main-content" style="display: none;">
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">☰</button>
+
+    <aside id="sidebar" aria-label="Main Navigation">
+      <div class="nav-section">
+        <img src="/logo.png" class="logo" alt="Nova Logo">
+        <a href="#finance-tools" class="nav-icon" data-tooltip-en="Finance Tools" data-tooltip-pt="Ferramentas Financeiras" data-tooltip-es="Herramientas Financieras" data-tooltip-fr="Outils Financiers" data-tooltip aria-label="Finance Tools">💰</a>
+        <a href="#search-platforms" class="nav-icon" data-tooltip-en="Search Platforms" data-tooltip-pt="Plataformas de Busca" data-tooltip-es="Plataformas de Búsqueda" data-tooltip-fr="Plateformes de Recherche" data-tooltip aria-label="Search Platforms">🔍</a>
+        <a href="#llm-platforms" class="nav-icon" data-tooltip-en="LLM Platforms" data-tooltip-pt="Plataformas LLM" data-tooltip-es="Plataformas LLM" data-tooltip-fr="Plateformes LLM" data-tooltip aria-label="LLM Platforms">🤖</a>
+        <a href="#analytics" class="nav-icon" data-tooltip-en="Analytics & More" data-tooltip-pt="Análises e Mais" data-tooltip-es="Analíticas y Más" data-tooltip-fr="Analyses et Plus" data-tooltip aria-label="Analytics & More">📊</a>
+      </div>
+      <div class="nav-section">
+        <a href="#profile" class="nav-icon" data-tooltip-en="Profile" data-tooltip-pt="Perfil" data-tooltip-es="Perfil" data-tooltip-fr="Profil" data-tooltip aria-label="Profile">👤</a>
+        <a href="#settings" class="nav-icon" data-tooltip-en="Settings" data-tooltip-pt="Configurações" data-tooltip-es="Configuración" data-tooltip-fr="Paramètres" data-tooltip aria-label="Settings">⚙️</a>
+        <a href="#" onclick="logout()" class="nav-icon" data-tooltip-en="Logout" data-tooltip-pt="Sair" data-tooltip-es="Salir" data-tooltip-fr="Déconnexion" data-tooltip aria-label="Logout">⏻</a>
+      </div>
+    </aside>
+
+    <main id="main-content-area">
+      <header>
+        <h1 id="main-title">Nova Hub</h1>
+        <p id="subtitle">Explora os projetos Nova de forma visual e rápida</p>
+
+        <div class="user-info">
+          <span id="user-display-name">User</span>
+          <span id="user-email">user@example.com</span>
+        </div>
+
+        <div class="language-switcher" role="group" aria-label="Language Selection">
+          <button class="language-btn active" data-lang="pt" aria-pressed="true">PT</button>
+          <button class="language-btn" data-lang="en" aria-pressed="false">EN</button>
+          <button class="language-btn" data-lang="es" aria-pressed="false">ES</button>
+          <button class="language-btn" data-lang="fr" aria-pressed="false">FR</button>
+        </div>
+      </header>
+
+      <div id="content">
+        <!-- Content will be dynamically generated -->
+        <div class="loading-container" id="loading">
+          <div class="loading-spinner" aria-label="Loading content"></div>
+        </div>
+      </div>
+    </main>
+
+    <button class="scroll-top" id="scrollTop" aria-label="Scroll to top">↑</button>
+    <div class="overlay" id="overlay"></div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then(function () {
+          console.log('Service Worker registado!');
+        });
+    }
+  </script>
+</body>
+</html>
