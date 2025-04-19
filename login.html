@@ -1,93 +1,551 @@
+
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login - Nova Hub</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
-  <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Nova Hub - Explore Nova projects visually and quickly">
+  <title>Nova Hub - Authentication</title>
+
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#00FFFF" />
+  <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+
+  <!-- SEO Meta Tags -->
+  <meta name="keywords" content="Nova Hub, Nova projects, finance tools, search platforms, LLM platforms, analytics">
+  <meta name="author" content="pedro martins & cantinhode.net">
+  <meta property="og:title" content="Nova Hub & cantinhode.net">
+  <meta property="og:description" content="Explore Nova projects visually and quickly">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://nova-hub.netlify.app/">
+  <meta property="og:image" content="https://nova-hub.netlify.app/logo.png">
+  
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8M25SCL0G0"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-8M25SCL0G0');
+  </script>
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  
   <style>
+    :root {
+      --primary-color: #00FFFF;
+      --secondary-color: #0088FF;
+      --dark-color: #1a1a2e;
+      --light-color: #f5f5f5;
+      --success-color: #2ecc71;
+      --error-color: #e74c3c;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
     body {
-      background-color: #0d0d0d;
-      color: #ffffff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, var(--dark-color), #16213e);
+      color: var(--light-color);
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      font-family: sans-serif;
     }
-    .login-box {
-      background: #1a1a1a;
-      padding: 2rem;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0,255,255,0.3);
-      text-align: center;
+    
+    .auth-container {
+      width: 100%;
       max-width: 400px;
+      padding: 2rem;
+      background-color: rgba(26, 26, 46, 0.8);
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      margin: 1rem;
     }
-    .btn-primary {
-      background-color: #00ffff;
+    
+    .logo-container {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .logo {
+      width: 100px;
+      height: auto;
+      margin-bottom: 1rem;
+    }
+    
+    h1 {
+      color: var(--primary-color);
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+    
+    .subtitle {
+      text-align: center;
+      color: #ccc;
+      margin-bottom: 2rem;
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #ccc;
+    }
+    
+    input {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid #333;
+      border-radius: 5px;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+    
+    input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(0, 255, 255, 0.2);
+    }
+    
+    button {
+      display: block;
+      width: 100%;
+      padding: 0.8rem;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: var(--dark-color);
       border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
     }
-    .btn-primary:hover {
-      background-color: #00cccc;
+    
+    button:hover {
+      background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+      transform: translateY(-2px);
     }
-    .btn-secondary {
-      margin-top: 1rem;
+    
+    .form-footer {
+      text-align: center;
+      margin-top: 1.5rem;
     }
-    .guest-warning {
-      font-size: 0.9rem;
-      color: #ffcc00;
-      margin-top: 1rem;
+    
+    .form-footer a {
+      color: var(--primary-color);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    
+    .form-footer a:hover {
+      color: var(--secondary-color);
+      text-decoration: underline;
+    }
+    
+    .language-switcher {
+      display: flex;
+      justify-content: center;
+      margin-top: 1.5rem;
+    }
+    
+    .language-btn {
+      padding: 0.4rem 0.8rem;
+      margin: 0 0.25rem;
+      border-radius: 4px;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #ccc;
+      border: 1px solid #333;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .language-btn.active {
+      background-color: var(--primary-color);
+      color: var(--dark-color);
+      border-color: var(--primary-color);
+    }
+    
+    .alert {
+      padding: 0.8rem;
+      margin: 1rem 0;
+      border-radius: 5px;
+      text-align: center;
+    }
+    
+    .alert-error {
+      background-color: rgba(231, 76, 60, 0.2);
+      border: 1px solid var(--error-color);
+      color: var(--error-color);
+    }
+    
+    .alert-success {
+      background-color: rgba(46, 204, 113, 0.2);
+      border: 1px solid var(--success-color);
+      color: var(--success-color);
+    }
+    
+    .toggle-forms {
+      background: none;
+      color: var(--primary-color);
+      border: none;
+      padding: 0;
+      font-size: 1rem;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    
+    .hide {
+      display: none;
     }
   </style>
 </head>
 <body>
-  <div class="login-box">
-    <h2>Bem-vindo ao Nova Hub</h2>
-    <p>Inicia sessão para continuar</p>
-    <button id="loginBtn" class="btn btn-primary">Iniciar Sessão</button>
-    <br />
-    <button id="registerBtn" class="btn btn-primary mt-3">Criar Conta</button>
-    <br />
-    <a href="index.html?guest=true" class="btn btn-secondary mt-3">Continuar como Convidado</a>
-    <div class="guest-warning">
-      Atenção: algumas funcionalidades podem estar limitadas no modo convidado.
+  <div class="auth-container">
+    <div class="logo-container">
+      <img src="/logo.png" alt="Nova Logo" class="logo">
+      <h1>Nova Hub</h1>
+      <p class="subtitle" id="subtitle">Explora os projetos Nova de forma visual e rápida</p>
+    </div>
+    
+    <div id="alertContainer"></div>
+    
+    <!-- Login Form -->
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="loginEmail" id="emailLabel">Email</label>
+        <input type="email" id="loginEmail" required>
+      </div>
+      <div class="form-group">
+        <label for="loginPassword" id="passwordLabel">Senha</label>
+        <input type="password" id="loginPassword" required>
+      </div>
+      <button type="submit" id="loginButton">Entrar</button>
+      
+      <div class="form-footer">
+        <p id="noAccountText">Ainda não tem conta?</p>
+        <button type="button" class="toggle-forms" id="showRegister">Registrar</button>
+      </div>
+    </form>
+    
+    <!-- Register Form -->
+    <form id="registerForm" class="hide">
+      <div class="form-group">
+        <label for="registerName" id="nameLabel">Nome</label>
+        <input type="text" id="registerName" required>
+      </div>
+      <div class="form-group">
+        <label for="registerEmail" id="regEmailLabel">Email</label>
+        <input type="email" id="registerEmail" required>
+      </div>
+      <div class="form-group">
+        <label for="registerPassword" id="regPasswordLabel">Senha</label>
+        <input type="password" id="registerPassword" required minlength="6">
+      </div>
+      <div class="form-group">
+        <label for="confirmPassword" id="confirmPasswordLabel">Confirmar Senha</label>
+        <input type="password" id="confirmPassword" required minlength="6">
+      </div>
+      <button type="submit" id="registerButton">Registrar</button>
+      
+      <div class="form-footer">
+        <p id="hasAccountText">Já tem conta?</p>
+        <button type="button" class="toggle-forms" id="showLogin">Entrar</button>
+      </div>
+    </form>
+    
+    <div class="language-switcher" role="group" aria-label="Language Selection">
+      <button class="language-btn active" data-lang="pt" aria-pressed="true">PT</button>
+      <button class="language-btn" data-lang="en" aria-pressed="false">EN</button>
+      <button class="language-btn" data-lang="es" aria-pressed="false">ES</button>
+      <button class="language-btn" data-lang="fr" aria-pressed="false">FR</button>
     </div>
   </div>
-
+  
   <script>
-    let auth0 = null;
-
-    async function configureClient() {
-      auth0 = await createAuth0Client({
-        domain: "dev-t72hy4qhy68mjz53.us.auth0.com",
-        client_id: "SlfOOEYc6bzI8onYrFR4zFl1QZpBcCXJ",
-        cacheLocation: "localstorage"
-      });
-    }
-
-    async function login() {
-      await auth0.loginWithRedirect({
-        authorizationParams: {
-          redirect_uri: window.location.origin + "/index.html"
-        }
-      });
-    }
-
-    async function register() {
-      await auth0.loginWithRedirect({
-        authorizationParams: {
-          screen_hint: "signup",
-          redirect_uri: window.location.origin + "/index.html"
-        }
-      });
-    }
-
-    document.addEventListener("DOMContentLoaded", async () => {
-      await configureClient();
-      document.getElementById("loginBtn").addEventListener("click", login);
-      document.getElementById("registerBtn").addEventListener("click", register);
+    // Firebase configuration
+    const firebaseConfig = {
+      // TODO: Replace with your Firebase project configuration
+      apiKey: "YOUR_API_KEY",
+      authDomain: "your-project-id.firebaseapp.com",
+      projectId: "your-project-id",
+      storageBucket: "your-project-id.appspot.com",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+    
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    
+    // Form elements
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const showRegisterBtn = document.getElementById('showRegister');
+    const showLoginBtn = document.getElementById('showLogin');
+    const alertContainer = document.getElementById('alertContainer');
+    
+    // UI text translations
+    const translations = {
+      pt: {
+        subtitle: "Explora os projetos Nova de forma visual e rápida",
+        emailLabel: "Email",
+        passwordLabel: "Senha",
+        nameLabel: "Nome",
+        confirmPasswordLabel: "Confirmar Senha",
+        loginButton: "Entrar",
+        registerButton: "Registrar",
+        noAccountText: "Ainda não tem conta?",
+        hasAccountText: "Já tem conta?",
+        passwordMismatch: "As senhas não coincidem",
+        registrationSuccess: "Conta criada com sucesso! Faça login para continuar.",
+        registrationError: "Erro ao criar conta: ",
+        loginError: "Erro ao fazer login: ",
+        emailInUse: "Email já está em uso",
+        invalidEmail: "Email inválido",
+        weakPassword: "Senha muito fraca (mínimo 6 caracteres)",
+        userNotFound: "Usuário não encontrado",
+        wrongPassword: "Senha incorreta"
+      },
+      en: {
+        subtitle: "Explore Nova projects visually and quickly",
+        emailLabel: "Email",
+        passwordLabel: "Password",
+        nameLabel: "Name",
+        confirmPasswordLabel: "Confirm Password",
+        loginButton: "Login",
+        registerButton: "Register",
+        noAccountText: "Don't have an account?",
+        hasAccountText: "Already have an account?",
+        passwordMismatch: "Passwords do not match",
+        registrationSuccess: "Account created successfully! Please login to continue.",
+        registrationError: "Error creating account: ",
+        loginError: "Login error: ",
+        emailInUse: "Email already in use",
+        invalidEmail: "Invalid email",
+        weakPassword: "Password too weak (minimum 6 characters)",
+        userNotFound: "User not found",
+        wrongPassword: "Wrong password"
+      },
+      es: {
+        subtitle: "Explora proyectos Nova visual y rápidamente",
+        emailLabel: "Correo electrónico",
+        passwordLabel: "Contraseña",
+        nameLabel: "Nombre",
+        confirmPasswordLabel: "Confirmar Contraseña",
+        loginButton: "Iniciar sesión",
+        registerButton: "Registrarse",
+        noAccountText: "¿No tienes cuenta?",
+        hasAccountText: "¿Ya tienes cuenta?",
+        passwordMismatch: "Las contraseñas no coinciden",
+        registrationSuccess: "¡Cuenta creada con éxito! Inicia sesión para continuar.",
+        registrationError: "Error al crear cuenta: ",
+        loginError: "Error al iniciar sesión: ",
+        emailInUse: "El correo electrónico ya está en uso",
+        invalidEmail: "Correo electrónico inválido",
+        weakPassword: "Contraseña demasiado débil (mínimo 6 caracteres)",
+        userNotFound: "Usuario no encontrado",
+        wrongPassword: "Contraseña incorrecta"
+      },
+      fr: {
+        subtitle: "Explorez les projets Nova visuellement et rapidement",
+        emailLabel: "Email",
+        passwordLabel: "Mot de passe",
+        nameLabel: "Nom",
+        confirmPasswordLabel: "Confirmer le mot de passe",
+        loginButton: "Se connecter",
+        registerButton: "S'inscrire",
+        noAccountText: "Vous n'avez pas de compte?",
+        hasAccountText: "Vous avez déjà un compte?",
+        passwordMismatch: "Les mots de passe ne correspondent pas",
+        registrationSuccess: "Compte créé avec succès! Connectez-vous pour continuer.",
+        registrationError: "Erreur lors de la création du compte: ",
+        loginError: "Erreur de connexion: ",
+        emailInUse: "Email déjà utilisé",
+        invalidEmail: "Email invalide",
+        weakPassword: "Mot de passe trop faible (minimum 6 caractères)",
+        userNotFound: "Utilisateur non trouvé",
+        wrongPassword: "Mot de passe incorrect"
+      }
+    };
+    
+    // Current language
+    let currentLang = 'pt';
+    
+    // Check if user is already logged in
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        // User is signed in, redirect to main page
+        window.location.href = 'index.html';
+      }
     });
+    
+    // Show register form
+    showRegisterBtn.addEventListener('click', () => {
+      loginForm.classList.add('hide');
+      registerForm.classList.remove('hide');
+    });
+    
+    // Show login form
+    showLoginBtn.addEventListener('click', () => {
+      registerForm.classList.add('hide');
+      loginForm.classList.remove('hide');
+    });
+    
+    // Login form submit
+    loginForm.addEventListener('submit', e => {
+      e.preventDefault();
+      
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+      
+      auth.signInWithEmailAndPassword(email, password)
+        .then(() => {
+          // Login successful, redirect to main page
+          window.location.href = 'index.html';
+        })
+        .catch(error => {
+          let errorMessage = translations[currentLang].loginError;
+          
+          // Translate common errors
+          if (error.code === 'auth/user-not-found') {
+            errorMessage += translations[currentLang].userNotFound;
+          } else if (error.code === 'auth/wrong-password') {
+            errorMessage += translations[currentLang].wrongPassword;
+          } else if (error.code === 'auth/invalid-email') {
+            errorMessage += translations[currentLang].invalidEmail;
+          } else {
+            errorMessage += error.message;
+          }
+          
+          showAlert(errorMessage, 'error');
+        });
+    });
+    
+    // Register form submit
+    registerForm.addEventListener('submit', e => {
+      e.preventDefault();
+      
+      const name = document.getElementById('registerName').value;
+      const email = document.getElementById('registerEmail').value;
+      const password = document.getElementById('registerPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      
+      // Check if passwords match
+      if (password !== confirmPassword) {
+        showAlert(translations[currentLang].passwordMismatch, 'error');
+        return;
+      }
+      
+      auth.createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          // Add user name to profile
+          return userCredential.user.updateProfile({
+            displayName: name
+          });
+        })
+        .then(() => {
+          // Registration successful
+          showAlert(translations[currentLang].registrationSuccess, 'success');
+          
+          // Clear form
+          registerForm.reset();
+          
+          // Switch to login form after a delay
+          setTimeout(() => {
+            registerForm.classList.add('hide');
+            loginForm.classList.remove('hide');
+          }, 2000);
+        })
+        .catch(error => {
+          let errorMessage = translations[currentLang].registrationError;
+          
+          // Translate common errors
+          if (error.code === 'auth/email-already-in-use') {
+            errorMessage += translations[currentLang].emailInUse;
+          } else if (error.code === 'auth/invalid-email') {
+            errorMessage += translations[currentLang].invalidEmail;
+          } else if (error.code === 'auth/weak-password') {
+            errorMessage += translations[currentLang].weakPassword;
+          } else {
+            errorMessage += error.message;
+          }
+          
+          showAlert(errorMessage, 'error');
+        });
+    });
+    
+    // Language switcher
+    const langButtons = document.querySelectorAll('.language-btn');
+    langButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const lang = btn.getAttribute('data-lang');
+        changeLanguage(lang);
+        
+        // Update active button
+        langButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+    
+    // Change language function
+    function changeLanguage(lang) {
+      currentLang = lang;
+      
+      // Update UI texts
+      document.getElementById('subtitle').textContent = translations[lang].subtitle;
+      document.getElementById('emailLabel').textContent = translations[lang].emailLabel;
+      document.getElementById('passwordLabel').textContent = translations[lang].passwordLabel;
+      document.getElementById('nameLabel').textContent = translations[lang].nameLabel;
+      document.getElementById('regEmailLabel').textContent = translations[lang].emailLabel;
+      document.getElementById('regPasswordLabel').textContent = translations[lang].passwordLabel;
+      document.getElementById('confirmPasswordLabel').textContent = translations[lang].confirmPasswordLabel;
+      document.getElementById('loginButton').textContent = translations[lang].loginButton;
+      document.getElementById('registerButton').textContent = translations[lang].registerButton;
+      document.getElementById('noAccountText').textContent = translations[lang].noAccountText;
+      document.getElementById('hasAccountText').textContent = translations[lang].hasAccountText;
+      document.getElementById('showRegister').textContent = translations[lang].registerButton;
+      document.getElementById('showLogin').textContent = translations[lang].loginButton;
+    }
+    
+    // Show alert function
+    function showAlert(message, type) {
+      // Remove any existing alerts
+      alertContainer.innerHTML = '';
+      
+      // Create alert element
+      const alert = document.createElement('div');
+      alert.className = `alert alert-${type}`;
+      alert.textContent = message;
+      
+      // Add to container
+      alertContainer.appendChild(alert);
+      
+      // Auto remove after 5 seconds
+      setTimeout(() => {
+        alert.remove();
+      }, 5000);
+    }
+    
+    // Initialize service worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then(function () {
+          console.log('Service Worker registado!');
+        });
+    }
   </script>
 </body>
 </html>
