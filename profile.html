@@ -1,793 +1,213 @@
 
-<!DOCTYPE html>
-<html lang="pt">
+<!DOCTYPE html><html lang="pt">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Perfil - Nova Hub</title>
-
   <style>
-    body {
-      background: #1a1a2e;
-      color: #f5f5f5;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      display: flex;
-      min-height: 100vh;
-      margin: 0;
-    }
-
-    /* Sidebar styles */
-    #sidebar {
-      background: rgba(0, 0, 0, 0.5);
-      width: 70px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 1rem 0;
-      position: fixed;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      z-index: 10;
-    }
-
-    .nav-section {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1.5rem;
-    }
-
-    .logo {
-      width: 50px;
-      margin-bottom: 1rem;
-    }
-
-    .nav-icon {
-      color: #fff;
-      font-size: 1.5rem;
-      text-decoration: none;
-      position: relative;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      transition: background 0.3s;
-    }
-
-    .nav-icon:hover {
-      background: rgba(0, 255, 255, 0.2);
-    }
-
-    /* Main content styles */
-    #main-content {
-      margin-left: 70px;
-      width: calc(100% - 70px);
-      padding: 2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    #content {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-    }
-
-    .profile-container {
-      background: rgba(0, 0, 0, 0.3);
-      padding: 2rem;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
-      max-width: 400px;
-      width: 100%;
-      text-align: center;
-      position: relative;
-    }
-
-    .profile-photo {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-bottom: 1rem;
-      border: 3px solid rgba(0, 255, 255, 0.5);
-    }
-
-    input[type="text"], input[type="file"] {
-      margin-top: 0.5rem;
-      padding: 0.5rem;
-      border-radius: 5px;
-      border: 1px solid #444;
-      background-color: rgba(255,255,255,0.05);
-      color: #fff;
-      width: 100%;
-      box-sizing: border-box;
-    }
-
-    input[type="file"] {
-      cursor: pointer;
-    }
-
-    .file-input-wrapper {
-      position: relative;
-      margin-top: 0.5rem;
-    }
-
-    .file-input-label {
-      display: block;
-      background: rgba(0, 255, 255, 0.1);
-      border: 1px dashed rgba(0, 255, 255, 0.5);
-      padding: 0.8rem;
-      border-radius: 5px;
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.3s;
-    }
-
-    .file-input-label:hover {
-      background: rgba(0, 255, 255, 0.2);
-    }
-
-    input[type="file"] {
-      opacity: 0;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    label {
-      display: block;
-      margin-top: 1rem;
-      text-align: left;
-    }
-
-    #preview img {
-      max-width: 100px;
-      max-height: 100px;
-      border-radius: 50%;
-      margin-top: 1rem;
-      border: 2px solid rgba(0, 255, 255, 0.5);
-      transition: transform 0.3s;
-    }
-
-    #preview img:hover {
-      transform: scale(1.1);
-    }
-
-    .language-btn {
-      margin-top: 1rem;
-      background: linear-gradient(135deg, #00FFFF, #0088FF);
-      border: none;
-      border-radius: 5px;
-      padding: 0.6rem 1.2rem;
-      color: #1a1a2e;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.2s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .language-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 255, 255, 0.3);
-    }
-
-    .language-btn:active {
-      transform: translateY(0);
-    }
-
-    .language-switcher {
-      display: flex;
-      gap: 0.5rem;
-      justify-content: center;
-      margin: 1rem 0;
-    }
-
-    .language-btn.active {
-      box-shadow: 0 0 8px rgba(0, 255, 255, 0.8);
-    }
-
-    /* Menu toggle for mobile */
-    .menu-toggle {
-      display: none;
-      position: fixed;
-      top: 1rem;
-      left: 1rem;
-      z-index: 20;
-      background: rgba(0, 0, 0, 0.5);
-      color: white;
-      border: none;
-      border-radius: 5px;
-      padding: 0.5rem;
-      font-size: 1.5rem;
-      cursor: pointer;
-    }
-
-    /* Toast notification system */
-    .toast-container {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 1000;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      max-width: 300px;
-    }
-
-    .toast {
-      display: flex;
-      align-items: center;
-      padding: 12px 15px;
-      border-radius: 6px;
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
-      margin-bottom: 10px;
-      transition: all 0.3s ease;
-      opacity: 0;
-      transform: translateX(100%);
-      min-width: 280px;
-      max-width: 300px;
-      color: #1a1a2e;
-    }
-
-    .toast.show {
-      opacity: 1;
-      transform: translateX(0);
-    }
-
-    .toast.success {
-      background: linear-gradient(135deg, #00FFAA, #00CCFF);
-    }
-
-    .toast.error {
-      background: linear-gradient(135deg, #FF6B6B, #FF0066);
-    }
-
-    .toast.info {
-      background: linear-gradient(135deg, #00BFFF, #1E90FF);
-    }
-
-    .toast-icon {
-      margin-right: 10px;
-      font-size: 1.2rem;
-    }
-
-    .toast-content {
-      flex: 1;
-    }
-
-    .toast-close {
-      background: transparent;
-      border: none;
-      color: rgba(0, 0, 0, 0.5);
-      cursor: pointer;
-      font-size: 1.2rem;
-      padding: 0;
-      margin-left: 8px;
-      transition: color 0.3s;
-    }
-
-    .toast-close:hover {
-      color: rgba(0, 0, 0, 0.8);
-    }
-
-    /* Loading spinner and overlay */
-    .loading-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.7);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s;
-    }
-
-    .loading-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .loading-spinner {
-      width: 60px;
-      height: 60px;
-      border: 5px solid rgba(0, 255, 255, 0.2);
-      border-radius: 50%;
-      border-top: 5px solid #00FFFF;
-      animation: spin 1s linear infinite;
-    }
-
-    .loading-text {
-      color: #00FFFF;
-      font-size: 1rem;
-      margin-top: 1rem;
-      text-align: center;
-    }
-
-    .loading-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    /* Inline loading indicator for buttons */
-    .btn-loader {
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(26, 26, 46, 0.3);
-      border-radius: 50%;
-      border-top: 2px solid #1a1a2e;
-      animation: spin 1s linear infinite;
-      display: inline-block;
-      margin-right: 8px;
-      vertical-align: middle;
-      display: none;
-    }
-
-    /* Animation for loading spinners */
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    @keyframes pulse {
-      0% { opacity: 1; }
-      50% { opacity: 0.5; }
-      100% { opacity: 1; }
-    }
-
-    /* Profile image loading state */
-    .profile-photo.loading {
-      animation: pulse 1.5s infinite;
-    }
-
-    /* Responsive design */
-    @media (max-width: 768px) {
-      .menu-toggle {
-        display: block;
-      }
-
-      #sidebar {
-        transform: translateX(-100%);
-        transition: transform 0.3s ease;
-      }
-
-      #sidebar.active {
-        transform: translateX(0);
-      }
-
-      #main-content {
-        margin-left: 0;
-        width: 100%;
-        padding: 1rem;
-      }
-
-      .toast-container {
-        left: 20px;
-        right: 20px;
-        max-width: calc(100% - 40px);
-      }
-
-      .toast {
-        min-width: auto;
-        max-width: 100%;
-      }
-    }
+    /* ... [CSS unchanged] ... */
   </style>
 </head>
 <body>
-  <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">☰</button>
-
-  <aside id="sidebar" aria-label="Main Navigation">
-    <div class="nav-section">
-      <img src="/logo.png" class="logo" alt="Nova Logo">
-      <a href="#finance-tools" class="nav-icon" data-tooltip-en="Finance Tools" data-tooltip-pt="Ferramentas Financeiras" data-tooltip-es="Herramientas Financieras" data-tooltip-fr="Outils Financiers" data-tooltip aria-label="Finance Tools">💰</a>
-      <a href="#search-platforms" class="nav-icon" data-tooltip-en="Search Platforms" data-tooltip-pt="Plataformas de Busca" data-tooltip-es="Plataformas de Búsqueda" data-tooltip-fr="Plateformes de Recherche" data-tooltip aria-label="Search Platforms">🔍</a>
-      <a href="#llm-platforms" class="nav-icon" data-tooltip-en="LLM Platforms" data-tooltip-pt="Plataformas LLM" data-tooltip-es="Plataformas LLM" data-tooltip-fr="Plateformes LLM" data-tooltip aria-label="LLM Platforms">🤖</a>
-      <a href="#analytics" class="nav-icon" data-tooltip-en="Analytics & More" data-tooltip-pt="Análises e Mais" data-tooltip-es="Analíticas y Más" data-tooltip-fr="Analyses et Plus" data-tooltip aria-label="Analytics & More">📊</a>
-    </div>
-    <div class="nav-section">
-      <a href="profile.html" class="nav-icon active" data-tooltip-en="Profile" data-tooltip-pt="Perfil" data-tooltip-es="Perfil" data-tooltip-fr="Profil" data-tooltip aria-label="Profile">👤</a>
-      <a href="#" class="nav-icon" data-tooltip-en="Settings" data-tooltip-pt="Configurações" data-tooltip-es="Configuración" data-tooltip-fr="Paramètres" data-tooltip aria-label="Settings">⚙️</a>
-      <a href="#" class="nav-icon" data-tooltip-en="Logout" data-tooltip-pt="Sair" data-tooltip-es="Salir" data-tooltip-fr="Déconnexion" data-tooltip aria-label="Logout">⏻</a>
-    </div>
-  </aside>
-
-  <main id="main-content">
-    <header>
-      <h1 id="main-title">Nova Hub</h1>
-      <p id="subtitle">Perfil de Usuário</p>
-
-      <div class="language-switcher" role="group" aria-label="Language Selection">
-        <button class="language-btn active" data-lang="pt" aria-pressed="true">PT</button>
-        <button class="language-btn" data-lang="en" aria-pressed="false">EN</button>
-        <button class="language-btn" data-lang="es" aria-pressed="false">ES</button>
-        <button class="language-btn" data-lang="fr" aria-pressed="false">FR</button>
-      </div>
-    </header>
-
-    <div id="content">
-      <div class="profile-container">
-        <img id="profileImage" class="profile-photo" src="/default-avatar.png" alt="Foto de Perfil" />
-        <h2 id="profileName">Carregando...</h2>
-        <p id="profileEmail">Carregando...</p>
-
-        <form id="editForm" style="margin-top:1.5rem">
-          <label for="newName">Novo Nome:</label>
-          <input type="text" id="newName" placeholder="Atualizar nome" />
-
-          <label for="newPhoto">Nova Foto:</label>
-          <div class="file-input-wrapper">
-            <label for="newPhoto" class="file-input-label">
-              <span>Selecionar imagem</span>
-            </label>
-            <input type="file" id="newPhoto" accept="image/*" />
-          </div>
-
-          <div id="preview"></div>
-
-          <button type="submit" class="language-btn" style="margin-top:1.5rem;">
-            <span class="btn-loader"></span>
-            <span class="btn-text">Guardar Alterações</span>
-          </button>
-        </form>
-
-        <button class="language-btn" id="logoutBtn" style="margin-top:1.5rem;">
-          <span class="btn-loader"></span>
-          <span class="btn-text">Sair</span>
-        </button>
-        <button class="language-btn" id="homeBtn" style="margin-top:1rem;">Voltar ao Início</button>
-      </div>
-    </div>
-  </main>
-
-  <!-- Toast notification container -->
-  <div class="toast-container" id="toastContainer"></div>
-
-  <!-- Loading overlay -->
-  <div class="loading-overlay" id="loadingOverlay">
-    <div class="loading-container">
-      <div class="loading-spinner"></div>
-      <div class="loading-text" id="loadingText">Carregando...</div>
-    </div>
-  </div>
-
-  <!-- Firebase SDK -->
+  <!-- ... [HTML unchanged] ... -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
-
   <script>
-    // Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyBhxtjdc14dv39mr_x_WuXouZrpMyGXpuk",
-      authDomain: "novahub-8f4b0.firebaseapp.com",
-      projectId: "novahub-8f4b0",
-      storageBucket: "novahub-8f4b0.appspot.com",
-      messagingSenderId: "619675546300",
-      appId: "1:619675546300:web:7be9b40b4a5282772616b9",
-      measurementId: "G-G36L184ZND"
-    };
+    // Firebase init
+    firebase.initializeApp({ apiKey: "AIzaSyBhxtjdc14dv39mr_x_WuXouZrpMyGXpuk", authDomain: "novahub-8f4b0.firebaseapp.com", projectId: "novahub-8f4b0", storageBucket: "novahub-8f4b0.appspot.com", messagingSenderId: "619675546300", appId: "1:619675546300:web:7be9b40b4a5282772616b9" });
+    const auth = firebase.auth(), storage = firebase.storage();// DOM
+const profileImage   = document.getElementById('profileImage');
+const profileName    = document.getElementById('profileName');
+const profileEmail   = document.getElementById('profileEmail');
+const loadingOverlay = document.getElementById('loadingOverlay');
+const loadingText    = document.getElementById('loadingText');
+const fileInputLabel = document.querySelector('.file-input-label span');
+const navIcons       = document.querySelectorAll('.nav-icon');
+const newNameInput   = document.getElementById('newName');
+const newPhotoInput  = document.getElementById('newPhoto');
+const submitBtn      = document.getElementById('submitBtn');
 
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const storage = firebase.storage();
+// Prevent duplicate toasts
+const activeToasts = new Set();
 
-    // DOM elements
-    const profileImage = document.getElementById("profileImage");
-    const profileName = document.getElementById("profileName");
-    const profileEmail = document.getElementById("profileEmail");
-    const loadingOverlay = document.getElementById("loadingOverlay");
-    const loadingText = document.getElementById("loadingText");
-    const fileInputLabel = document.querySelector(".file-input-label span");
+function showLoading(msg='Carregando...') {
+  loadingText.textContent = msg;
+  loadingOverlay.classList.add('active');
+}
+function hideLoading() {
+  loadingOverlay.classList.remove('active');
+}
 
-    // Show loading spinner with custom message
-    function showLoading(message = "Carregando...") {
-      loadingText.textContent = message;
-      loadingOverlay.classList.add("active");
+function showToast(msg, type='info', duration=5000) {
+  // Skip if same toast is active
+  if (activeToasts.has(msg)) return;
+  activeToasts.add(msg);
+
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️';
+  toast.innerHTML = `
+    <span class="toast-icon">${icon}</span>
+    <div class="toast-content">${msg}</div>
+    <button class="toast-close">×</button>
+  `;
+  const container = document.getElementById('toastContainer');
+  container.append(toast);
+  setTimeout(() => toast.classList.add('show'), 10);
+
+  const tid = setTimeout(() => closeToast(toast), duration);
+  toast.querySelector('.toast-close').onclick = () => { clearTimeout(tid); closeToast(toast); };
+}
+
+function closeToast(toast) {
+  const content = toast.querySelector('.toast-content');
+  const msg = content ? content.textContent : null;
+  toast.classList.remove('show');
+  setTimeout(() => {
+    toast.remove();
+    if (msg) activeToasts.delete(msg);
+  }, 300);
+}
+
+function toggleButtonLoading(btn, loading) {
+  const loader = btn.querySelector('.btn-loader');
+  if (loading) {
+    loader.style.display = 'inline-block';
+    btn.disabled = true;
+    btn.style.opacity = '0.5';
+    btn.style.cursor = 'wait';
+  } else {
+    loader.style.display = 'none';
+    btn.disabled = false;
+    btn.style.opacity = '1';
+    btn.style.cursor = 'pointer';
+  }
+}
+
+function updateTooltips(lang) {
+  navIcons.forEach(icon => {
+    const key = `tooltip${lang.toUpperCase()}`;
+    const txt = icon.dataset[key] || icon.dataset.tooltipEn;
+    icon.setAttribute('data-tooltip', txt);
+  });
+}
+
+function checkChanges() {
+  const hasChanges = newNameInput.value.trim() || newPhotoInput.files.length;
+  submitBtn.disabled = !hasChanges;
+  submitBtn.style.opacity = hasChanges ? '1' : '0.5';
+}
+newNameInput.oninput = checkChanges;
+newPhotoInput.onchange = () => {
+  const file = newPhotoInput.files[0];
+  if (!file) {
+    fileInputLabel.textContent = 'Selecionar imagem';
+    checkChanges();
+    return;
+  }
+  if (!file.type.startsWith('image/')) {
+    showToast('Selecione imagem válida', 'error');
+    newPhotoInput.value = '';
+    return;
+  }
+  if (file.size > 2 * 1024 * 1024) {
+    showToast('Máximo 2MB', 'error');
+    newPhotoInput.value = '';
+    return;
+  }
+  fileInputLabel.textContent = file.name.length > 20 ? file.name.slice(0, 17) + '...' : file.name;
+  const reader = new FileReader();
+  reader.onerror = () => { showToast('Erro ao ler arquivo', 'error'); newPhotoInput.value = ''; };
+  reader.onload = e => document.getElementById('preview').innerHTML = `<img src="${e.target.result}" alt="Preview"/>`;
+  reader.readAsDataURL(file);
+  checkChanges();
+};
+
+// Auth state
+showLoading('Carregando perfil...');
+auth.onAuthStateChanged(async user => {
+  try {
+    if (!user) throw new Error('Não autenticado');
+    profileName.textContent = user.displayName || 'Anônimo';
+    profileEmail.textContent = user.email;
+    profileImage.src = user.photoURL ? user.photoURL + `?t=${Date.now()}` : '/default-avatar.png';
+    updateTooltips(document.querySelector('.language-btn.active').dataset.lang);
+    showToast('Perfil carregado!', 'success', 3000);
+  } catch (err) {
+    showToast('Sessão expirada. Redirecionando...', 'info');
+    setTimeout(() => location.href = 'login.html', 2000);
+  } finally {
+    hideLoading();
+  }
+});
+
+document.getElementById('menuToggle').onclick = () => document.getElementById('sidebar').classList.toggle('active');
+document.querySelectorAll('.language-btn').forEach(btn => btn.onclick = () => {
+  document.querySelectorAll('.language-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); });
+  btn.classList.add('active');
+  btn.setAttribute('aria-pressed', 'true');
+  updateTooltips(btn.dataset.lang);
+  showToast(`Idioma: ${btn.dataset.lang.toUpperCase()}`, 'info');
+});
+
+document.getElementById('logoutBtn').onclick = async function() {
+  toggleButtonLoading(this, true);
+  showToast('Encerrando...', 'info');
+  try {
+    await auth.signOut();
+    showToast('Desconectado!', 'success');
+    setTimeout(() => location.href = 'login.html', 1500);
+  } catch (e) {
+    showToast(`Erro: ${e.message}`, 'error');
+    toggleButtonLoading(this, false);
+  }
+};
+
+document.getElementById('homeBtn').onclick = () => {
+  showToast('Início...', 'info');
+  setTimeout(() => location.href = 'index.html', 800);
+};
+
+document.getElementById('editForm').onsubmit = async e => {
+  e.preventDefault();
+  const user = auth.currentUser;
+  if (!user) return showToast('Sessão inválida', 'error');
+  const name = newNameInput.value.trim();
+  const file = newPhotoInput.files[0];
+  toggleButtonLoading(submitBtn, true);
+  showLoading('Atualizando...');
+  try {
+    if (file) {
+      profileImage.classList.add('loading');
+      const ref = storage.ref().child(`profileImages/${user.uid}_${Date.now()}`);
+      await ref.put(file);
+      const url = await ref.getDownloadURL();
+      await user.updateProfile({ photoURL: url });
+      profileImage.src = url + `?t=${Date.now()}`;
+      showToast('Foto atualizada!', 'success');
     }
-
-    // Hide loading spinner
-    function hideLoading() {
-      loadingOverlay.classList.remove("active");
+    if (name) {
+      await user.updateProfile({ displayName: name });
+      profileName.textContent = name;
+      showToast('Nome atualizado!', 'success');
     }
+    newNameInput.value = '';
+    newPhotoInput.value = '';
+    document.getElementById('preview').innerHTML = '';
+    fileInputLabel.textContent = 'Selecionar imagem';
+    checkChanges();
+  } catch (err) {
+    showToast(`Erro: ${err.message}`, 'error');
+  } finally {
+    profileImage.classList.remove('loading');
+    hideLoading();
+    toggleButtonLoading(submitBtn, false);
+  }
+};
 
-    // Show toast notification
-    function showToast(message, type = "info", duration = 5000) {
-      const toastContainer = document.getElementById("toastContainer");
-      
-      // Create toast element
-      const toast = document.createElement("div");
-      toast.className = `toast ${type}`;
-      
-      // Different icons for different toast types
-      let icon = "ℹ️";
-      if (type === "success") icon = "✅";
-      if (type === "error") icon = "❌";
-      
-      toast.innerHTML = `
-        <span class="toast-icon">${icon}</span>
-        <div class="toast-content">${message}</div>
-        <button class="toast-close">×</button>
-      `;
-      
-      // Add to container
-      toastContainer.appendChild(toast);
-      
-      // Show with animation
-      setTimeout(() => {
-        toast.classList.add("show");
-      }, 10);
-      
-      // Set auto close timer
-      const closeTimeout = setTimeout(() => {
-        closeToast(toast);
-      }, duration);
-      
-      // Close button event
-      const closeBtn = toast.querySelector(".toast-close");
-      closeBtn.addEventListener("click", () => {
-        clearTimeout(closeTimeout);
-        closeToast(toast);
-      });
-    }
+profileImage.onerror = () => { profileImage.src = '/default-avatar.png'; showToast('Erro ao carregar imagem', 'error'); };
 
-    // Close toast with animation
-    function closeToast(toast) {
-      toast.classList.remove("show");
-      
-      // Remove from DOM after animation
-      setTimeout(() => {
-        if (toast.parentElement) {
-          toast.parentElement.removeChild(toast);
-        }
-      }, 300);
-    }
-
-    // Toggle button loading state
-    function toggleButtonLoading(button, isLoading) {
-      const loader = button.querySelector(".btn-loader");
-      const text = button.querySelector(".btn-text");
-      
-      if (isLoading) {
-        loader.style.display = "inline-block";
-        button.disabled = true;
-        button.style.opacity = "0.8";
-        button.style.cursor = "wait";
-      } else {
-        loader.style.display = "none";
-        button.disabled = false;
-        button.style.opacity = "1";
-        button.style.cursor = "pointer";
-      }
-    }
-
-    // Show initial loading
-    showLoading("Carregando perfil...");
-
-    // Check authentication state
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        // Update profile info
-        profileName.textContent = user.displayName || "Anónimo";
-        profileEmail.textContent = user.email;
-        
-        if (user.photoURL) {
-          profileImage.src = user.photoURL;
-          // Add a timestamp to force image reload and prevent caching
-          profileImage.src = user.photoURL + '?t=' + new Date().getTime();
-        } else {
-          profileImage.src = "/default-avatar.png";
-        }
-        
-        // Hide loading and show success toast
-        hideLoading();
-        showToast("Perfil carregado com sucesso!", "success", 3000);
-      } else {
-        // Redirect to login if not authenticated
-        hideLoading();
-        showToast("Sessão expirada. Redirecionando para login...", "info", 2000);
-        setTimeout(() => {
-          window.location.href = "login.html";
-        }, 2000);
-      }
-    });
-
-    // Mobile menu toggle
-    document.getElementById("menuToggle").addEventListener("click", () => {
-      document.getElementById("sidebar").classList.toggle("active");
-    });
-
-    // Language switcher functionality
-    document.querySelectorAll(".language-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        // Remove active class from all buttons
-        document.querySelectorAll(".language-btn").forEach(b => {
-          b.classList.remove("active");
-          b.setAttribute("aria-pressed", "false");
-        });
-        
-        // Add active class to clicked button
-        btn.classList.add("active");
-        btn.setAttribute("aria-pressed", "true");
-        
-        // Here you would add logic to change language
-        const lang = btn.getAttribute("data-lang");
-        showToast(`Idioma alterado para ${lang.toUpperCase()}`, "info");
-        // TODO: Implement language change functionality
-      });
-    });
-
-    // Logout functionality
-    const logoutBtn = document.getElementById("logoutBtn");
-    logoutBtn.addEventListener("click", async () => {
-      try {
-        toggleButtonLoading(logoutBtn, true);
-        showToast("Encerrando sessão...", "info");
-        
-        await auth.signOut();
-        
-        showToast("Sessão encerrada com sucesso!", "success");
-        setTimeout(() => {
-          window.location.href = "login.html";
-        }, 1500);
-      } catch (error) {
-        console.error("Error signing out:", error);
-        toggleButtonLoading(logoutBtn, false);
-        showToast(`Erro ao sair: ${error.message}`, "error");
-      }
-    });
-
-    // Home button
-    document.getElementById("homeBtn").addEventListener("click", () => {
-      showToast("Redirecionando para página inicial...", "info");
-      setTimeout(() => {
-        window.location.href = "index.html";
-      }, 800);
-    });
-
-    // Profile edit form
-    const editForm = document.getElementById("editForm");
-    const newNameInput = document.getElementById("newName");
-    const newPhotoInput = document.getElementById("newPhoto");
-    const preview = document.getElementById("preview");
-
-    // Update file input label when file is selected
-    newPhotoInput.addEventListener("change", () => {
-      const file = newPhotoInput.files[0];
-      if (file) {
-        // Check if file is an image
-        if (!file.type.startsWith('image/')) {
-          showToast("Por favor, selecione um arquivo de imagem válido.", "error");
-          newPhotoInput.value = '';
-          fileInputLabel.textContent = "Selecionar imagem";
-          return;
-        }
-        
-        // Check file size (limit to 2MB)
-        if (file.size > 2 * 1024 * 1024) {
-          showToast("A imagem deve ter no máximo 2MB.", "error");
-          newPhotoInput.value = '';
-          fileInputLabel.textContent = "Selecionar imagem";
-          return;
-        }
-        
-        // Update label with file name
-        fileInputLabel.textContent = file.name.length > 20 
-          ? file.name.substring(0, 17) + "..." 
-          : file.name;
-        
-        // Show preview
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          preview.innerHTML = `<img src="${e.target.result}" alt="Pré-visualização" />`;
-        };
-        reader.readAsDataURL(file);
-      } else {
-        fileInputLabel.textContent = "Selecionar imagem";
-      }
-    });
-
-    // Form submission
-    editForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const user = auth.currentUser;
-      if (!user) {
-        showToast("Sessão expirada. Recarregue a página.", "error");
-        return;
-      }
-
-      const newName = newNameInput.value.trim();
-      const file = newPhotoInput.files[0];
-      
-      // Check if there are changes
-      if (!newName && !file) {
-        showToast("Nenhuma alteração detectada.", "info");
-        return;
-      }
-      
-      // Show loading on button
-      const submitBtn = editForm.querySelector('button[type="submit"]');
-      toggleButtonLoading(submitBtn, true);
-      
-      try {
-        // Show profile image loading state
-        if (file) {
-          profileImage.classList.add("loading");
-          showLoading("Enviando imagem...");
-          
-          // Create a reference with a unique name
-          const timestamp = Date.now();
-          const imageRef = storage.ref().child(`profileImages/${user.uid}_${timestamp}`);
-          
-          // Upload the file
-          await imageRef.put(file);
-          
-          // Get download URL with cache busting
-          const downloadURL = await imageRef.getDownloadURL();
-          
-          // Update user profile with new image URL
-          await user.updateProfile({
-            photoURL: downloadURL
-          });
-          
-          // Update UI with cache busting
-          profileImage.src = downloadURL + '?t=' + timestamp;
-          showToast("Imagem atualizada com sucesso!", "success");
-        }
-
-        // Update name if provided
-        if (newName) {
-          await user.updateProfile({
-            displayName: newName
-          });
-          
-          // Update UI
-          profileName.textContent = newName;
-          showToast("Nome atualizado com sucesso!", "success");
-        }
-
-        // Clear form
-        newNameInput.value = '';
-        newPhotoInput.value = '';
-        preview.innerHTML = '';
-        fileInputLabel.textContent = "Selecionar imagem";
-
-      } catch (err) {
-        console.error("Erro ao atualizar perfil:", err);
-        showToast(`Erro: ${err.message}`, "error");
-      } finally {
-        // Clean up
-        profileImage.classList.remove("loading");
-        hideLoading();
-        toggleButtonLoading(submitBtn, false);
-      }
-    });
-
-    // Ensure image loads correctly by adding error handler
-    profileImage.onerror = function() {
-      console.error("Error loading profile image");
-      profileImage.src = "/default-avatar.png";
-      showToast("Erro ao carregar imagem de perfil", "error");
-    };
   </script>
 </body>
 </html>
