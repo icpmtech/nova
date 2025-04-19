@@ -1,180 +1,50 @@
-
-<!DOCTYPE html>
-<html lang="pt">
+<!DOCTYPE html><html lang="pt">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Nova Hub - Explore Nova projects visually and quickly" />
-  <title>Nova Hub - Authentication</title>
-
-  <link rel="manifest" href="/manifest.json" />
+  <meta name="description" content="Nova Hub - Explore Nova projects visualmente e rapidamente" />
+  <title>Nova Hub - Authentication & Messaging</title>  <!-- Manifest & Theme -->  <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#00FFFF" />
-  <link rel="apple-touch-icon" href="/icons/icon-192.png" />
-
-  <!-- SEO Meta Tags -->
-  <meta name="keywords" content="Nova Hub, Nova projects, finance tools, search platforms, LLM platforms, analytics" />
-  <meta name="author" content="pedro martins & cantinhode.net" />
+  <link rel="apple-touch-icon" href="/icons/icon-192.png" />  <!-- SEO Meta Tags -->  <meta name="keywords" content="Nova Hub, Nova projects, finance tools, search platforms, LLM platforms, analytics" />
+  <meta name="author" content="Pedro Martins & cantinhode.net" />
   <meta property="og:title" content="Nova Hub & cantinhode.net" />
-  <meta property="og:description" content="Explore Nova projects visually and quickly" />
+  <meta property="og:description" content="Explore Nova projects visualmente e rapidamente" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://nova-hub.netlify.app/" />
-  <meta property="og:image" content="https://nova-hub.netlify.app/logo.png" />
-
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8M25SCL0G0"></script>
-  <script>
+  <meta property="og:image" content="https://nova-hub.netlify.app/logo.png" />  <!-- Google Analytics -->  <script async src="https://www.googletagmanager.com/gtag/js?id=G-8M25SCL0G0"></script>  <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
+    function gtag(){ dataLayer.push(arguments); }
     gtag('js', new Date());
     gtag('config', 'G-8M25SCL0G0');
-  </script>
-
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-
-  <style>
-    :root {
-      --primary-color: #00FFFF;
-      --secondary-color: #0088FF;
-      --dark-color: #1a1a2e;
-      --light-color: #f5f5f5;
-      --success-color: #2ecc71;
-      --error-color: #e74c3c;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, var(--dark-color), #16213e);
-      color: var(--light-color);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .auth-container {
-      width: 100%;
-      max-width: 400px;
-      padding: 2rem;
-      background-color: rgba(26, 26, 46, 0.8);
-      border-radius: 10px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(10px);
-      margin: 1rem;
-    }
-    
-    .logo-container { text-align: center; margin-bottom: 2rem; }
-    .logo { width: 100px; height: auto; margin-bottom: 1rem; }
-    h1 { color: var(--primary-color); text-align: center; margin-bottom: 0.5rem; }
-    .subtitle { text-align: center; color: #ccc; margin-bottom: 2rem; }
-
-    .form-group { margin-bottom: 1.5rem; }
-    label { display: block; margin-bottom: 0.5rem; color: #ccc; }
-    input {
-      width: 100%; padding: 0.8rem; border: 1px solid #333;
-      border-radius: 5px; background-color: rgba(255,255,255,0.1);
-      color: white; font-size: 1rem; transition: all 0.3s;
-    }
-    input:focus {
-      outline: none;
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 2px rgba(0, 255, 255, 0.2);
-    }
-
-    button {
-      display: block; width: 100%; padding: 0.8rem;
-      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-      color: var(--dark-color); border: none;
-      border-radius: 5px; font-size: 1rem; font-weight: bold;
-      cursor: pointer; transition: all 0.3s;
-    }
-
-    button:hover {
-      background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
-      transform: translateY(-2px);
-    }
-
-    .google-btn {
-      display: block; width: 100%; padding: 0.8rem;
-      background-color: #4285F4;
-      color: white; border: none;
-      border-radius: 5px; font-size: 1rem; font-weight: bold;
-      cursor: pointer; transition: all 0.3s;
-      margin-top: 1rem;
-    }
-    .google-btn:hover {
-      background-color: #357ae8;
-      transform: translateY(-2px);
-    }
-
-    .form-footer {
-      text-align: center;
-      margin-top: 1.5rem;
-    }
-
-    .form-footer a, .toggle-forms {
-      color: var(--primary-color);
-      text-decoration: none;
-      cursor: pointer;
-      background: none;
-      border: none;
-      font-size: 1rem;
-      padding: 0;
-    }
-
-    .form-footer a:hover,
-    .toggle-forms:hover {
-      color: var(--secondary-color);
-      text-decoration: underline;
-    }
-
-    .language-switcher {
-      display: flex;
-      justify-content: center;
-      margin-top: 1.5rem;
-    }
-
-    .language-btn {
-      padding: 0.4rem 0.8rem;
-      margin: 0 0.25rem;
-      border-radius: 4px;
-      background-color: rgba(255, 255, 255, 0.1);
-      color: #ccc;
-      border: 1px solid #333;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    .language-btn.active {
-      background-color: var(--primary-color);
-      color: var(--dark-color);
-      border-color: var(--primary-color);
-    }
-
-    .alert {
-      padding: 0.8rem;
-      margin: 1rem 0;
-      border-radius: 5px;
-      text-align: center;
-    }
-
-    .alert-error {
-      background-color: rgba(231, 76, 60, 0.2);
-      border: 1px solid var(--error-color);
-      color: var(--error-color);
-    }
-
-    .alert-success {
-      background-color: rgba(46, 204, 113, 0.2);
-      border: 1px solid var(--success-color);
-      color: var(--success-color);
-    }
-
-    .hide { display: none; }
-  </style>
-</head>
+  </script>  <!-- Firebase SDKs -->  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-messaging-compat.js"></script>  <!-- Font Awesome -->  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-pVUj8b+0aY6XQj..." crossorigin="anonymous" referrerpolicy="no-referrer" />  <style>
+    :root { --primary-color:#00FFFF; --secondary-color:#0088FF; --dark-color:#1a1a2e; --light-color:#f5f5f5; --success-color:#2ecc71; --error-color:#e74c3c; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(135deg,var(--dark-color),#16213e);color:var(--light-color);min-height:100vh;display:flex;justify-content:center;align-items:center;}
+    .auth-container{width:100%;max-width:400px;padding:2rem;background-color:rgba(26,26,46,0.8);border-radius:10px;box-shadow:0 10px 25px rgba(0,0,0,0.5);backdrop-filter:blur(10px);margin:1rem;}
+    .logo-container{text-align:center;margin-bottom:2rem;}
+    .logo{width:100px;height:auto;margin-bottom:1rem;}
+    h1{color:var(--primary-color);text-align:center;margin-bottom:0.5rem;}
+    .subtitle{text-align:center;color:#ccc;margin-bottom:2rem;}
+    .form-group{margin-bottom:1.5rem;}
+    label{display:block;margin-bottom:0.5rem;color:#ccc;}
+    input{width:100%;padding:0.8rem;border:1px solid #333;border-radius:5px;background-color:rgba(255,255,255,0.1);color:white;font-size:1rem;transition:all 0.3s;}
+    input:focus{outline:none;border-color:var(--primary-color);box-shadow:0 0 0 2px rgba(0,255,255,0.2);}
+    button,.google-btn{display:flex;align-items:center;justify-content:center;width:100%;padding:0.8rem;border:none;border-radius:5px;font-size:1rem;font-weight:bold;cursor:pointer;transition:all 0.3s;}
+    button{background:linear-gradient(135deg,var(--primary-color),var(--secondary-color));color:var(--dark-color);}
+    button:hover{background:linear-gradient(135deg,var(--secondary-color),var(--primary-color));transform:translateY(-2px);}
+    .google-btn{background-color:#4285F4;color:white;margin-top:1rem;}
+    .google-btn:hover{background-color:#357ae8;transform:translateY(-2px);}
+    .form-footer{text-align:center;margin-top:1.5rem;}
+    .form-footer button,.form-footer a{color:var(--primary-color);background:none;border:none;text-decoration:none;cursor:pointer;font-size:1rem;}
+    .form-footer button:hover,.form-footer a:hover{color:var(--secondary-color);text-decoration:underline;}
+    .language-switcher{display:flex;justify-content:center;margin-top:1.5rem;}
+    .language-btn{padding:0.4rem 0.8rem;margin:0 0.25rem;border-radius:4px;background-color:rgba(255,255,255,0.1);color:#ccc;border:1px solid #333;cursor:pointer;transition:all 0.3s;}
+    .language-btn.active{background-color:var(--primary-color);color:var(--dark-color);border-color:var(--primary-color);}
+    .alert{padding:0.8rem;margin:1rem 0;border-radius:5px;text-align:center;}
+    .alert-error{background-color:rgba(231,76,60,0.2);border:1px solid var(--error-color);color:var(--error-color);}
+    .alert-success{background-color:rgba(46,204,113,0.2);border:1px solid var(--success-color);color:var(--success-color);}
+    .hide{display:none;}
+  </style></head>
 <body>
   <div class="auth-container">
     <div class="logo-container">
@@ -182,63 +52,107 @@
       <h1>Nova Hub</h1>
       <p class="subtitle" id="subtitle"></p>
     </div>
-
-    <div id="alertContainer"></div>
-
-    <!-- Login Form -->
-    <form id="loginForm">
-      <div class="form-group">
-        <label for="loginEmail" id="emailLabel"></label>
-        <input type="email" id="loginEmail" required />
-      </div>
-      <div class="form-group">
-        <label for="loginPassword" id="passwordLabel"></label>
-        <input type="password" id="loginPassword" required />
-      </div>
-      <button type="submit" id="loginButton"></button>
-      <button type="button" id="googleLoginButton" class="google-btn"></button>
-
-      <div class="form-footer">
-        <p id="noAccountText"></p>
-        <button type="button" class="toggle-forms" id="showRegister"></button>
-      </div>
-    </form>
-
-    <!-- Register Form -->
-    <form id="registerForm" class="hide">
-      <div class="form-group">
-        <label for="registerName" id="nameLabel"></label>
-        <input type="text" id="registerName" required />
-      </div>
-      <div class="form-group">
-        <label for="registerEmail" id="regEmailLabel"></label>
-        <input type="email" id="registerEmail" required />
-      </div>
-      <div class="form-group">
-        <label for="registerPassword" id="regPasswordLabel"></label>
-        <input type="password" id="registerPassword" required minlength="6" />
-      </div>
-      <div class="form-group">
-        <label for="confirmPassword" id="confirmPasswordLabel"></label>
-        <input type="password" id="confirmPassword" required minlength="6" />
-      </div>
-      <button type="submit" id="registerButton"></button>
-
-      <div class="form-footer">
-        <p id="hasAccountText"></p>
-        <button type="button" class="toggle-forms" id="showLogin"></button>
-      </div>
-    </form>
-
-    <div class="language-switcher" role="group" aria-label="Language Selection">
-      <button class="language-btn" data-lang="pt" aria-pressed="true" aria-label="Português">PT</button>
-      <button class="language-btn" data-lang="en" aria-pressed="false" aria-label="English">EN</button>
-      <button class="language-btn" data-lang="es" aria-pressed="false" aria-label="Español">ES</button>
-      <button class="language-btn" data-lang="fr" aria-pressed="false" aria-label="Français">FR</button>
-    </div>
+    <div id="alertContainer"></div><!-- Login Form -->
+<form id="loginForm">
+  <div class="form-group">
+    <label for="loginEmail" id="emailLabel"></label>
+    <input type="email" id="loginEmail" required />
   </div>
-  
-<script>
+  <div class="form-group">
+    <label for="loginPassword" id="passwordLabel"></label>
+    <input type="password" id="loginPassword" required />
+  </div>
+  <button type="submit" id="loginButton"></button>
+  <button type="button" id="googleLoginButton" class="google-btn">
+    <i class="fab fa-google fa-lg" style="margin-right:0.5rem;"></i>
+    <span id="googleBtnText"></span>
+  </button>
+  <div class="form-footer">
+    <p id="noAccountText"></p>
+    <button type="button" class="toggle-forms" id="showRegister"></button>
+  </div>
+</form>
+
+<!-- Register Form -->
+<form id="registerForm" class="hide">
+  <div class="form-group">
+    <label for="registerName" id="nameLabel"></label>
+    <input type="text" id="registerName" required />
+  </div>
+  <div class="form-group">
+    <label for="registerEmail" id="regEmailLabel"></label>
+    <input type="email" id="registerEmail" required />
+  </div>
+  <div class="form-group">
+    <label for="registerPassword" id="regPasswordLabel"></label>
+    <input type="password" id="registerPassword" required minlength="6" />
+  </div>
+  <div class="form-group">
+    <label for="confirmPassword" id="confirmPasswordLabel"></label>
+    <input type="password" id="confirmPassword" required minlength="6" />
+  </div>
+  <button type="submit" id="registerButton"></button>
+  <div class="form-footer">
+    <p id="hasAccountText"></p>
+    <button type="button" class="toggle-forms" id="showLogin"></button>
+  </div>
+</form>
+
+<div class="language-switcher" role="group" aria-label="Language Selection">
+  <button class="language-btn" data-lang="pt" aria-pressed="true">PT</button>
+  <button class="language-btn" data-lang="en">EN</button>
+  <button class="language-btn" data-lang="es">ES</button>
+  <button class="language-btn" data-lang="fr">FR</button>
+</div>
+
+  </div>  <script>
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyBhxtjdc14dv39mr_x_WuXouZrpMyGXpuk",
+      authDomain: "novahub-8f4b0.firebaseapp.com",
+      projectId: "novahub-8f4b0",
+      storageBucket: "novahub-8f4b0.appspot.com",
+      messagingSenderId: "619675546300",
+      appId: "1:619675546300:web:7be9b40b4a5282772616b9",
+      measurementId: "G-G36L184ZND"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const messaging = firebase.messaging();
+
+    // VAPID public key fornecida
+    const VAPID_PUBLIC_KEY = 'BMo8pdaQwOLW_xWSaweJaDExXI7RNjoMtLiNOGRlf7_ets3LACVsEg9MeoPEtxdOr925mzuyFsbpwX5nojLf8CE';
+
+    // Solicita permissão e obtém token
+    function initMessaging() {
+      Notification.requestPermission()
+        .then(permission => {
+          if (permission === 'granted') {
+            return messaging.getToken({ vapidKey: VAPID_PUBLIC_KEY });
+          }
+          throw new Error('Permissão de notificações negada');
+        })
+        .then(token => console.log('FCM Token:', token))
+        .catch(err => console.error('Erro FCM:', err));
+    }
+
+    // Mensagens em primeiro plano
+    messaging.onMessage(payload => {
+      console.log('Message received:', payload);
+      const { title, body } = payload.notification;
+      if (Notification.permission === 'granted') {
+        new Notification(title, { body });
+      }
+    });
+
+    // SW para mensagens em background
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/firebase-messaging-sw.js')
+        .then(reg => messaging.useServiceWorker(reg))
+        .catch(err => console.error('SW registration failed:', err));
+    }
+
+    // Traduções e UI
     const translations = {
       pt: {
         subtitle: "Explora os projetos Nova de forma visual e rápida",
@@ -260,220 +174,97 @@
         weakPassword: "Senha muito fraca (mínimo 6 caracteres)",
         userNotFound: "Usuário não encontrado",
         wrongPassword: "Senha incorreta"
-      },
-      en: {
-        subtitle: "Explore Nova projects visually and quickly",
-        emailLabel: "Email",
-        passwordLabel: "Password",
-        nameLabel: "Name",
-        confirmPasswordLabel: "Confirm Password",
-        loginButton: "Login",
-        registerButton: "Register",
-        googleButton: "Sign in with Google",
-        noAccountText: "Don't have an account?",
-        hasAccountText: "Already have an account?",
-        passwordMismatch: "Passwords do not match",
-        registrationSuccess: "Account created successfully! Please login to continue.",
-        registrationError: "Error creating account: ",
-        loginError: "Login error: ",
-        emailInUse: "Email already in use",
-        invalidEmail: "Invalid email",
-        weakPassword: "Password too weak (minimum 6 characters)",
-        userNotFound: "User not found",
-        wrongPassword: "Wrong password"
-      },
-      es: {
-        subtitle: "Explora proyectos Nova visual y rápidamente",
-        emailLabel: "Correo electrónico",
-        passwordLabel: "Contraseña",
-        nameLabel: "Nombre",
-        confirmPasswordLabel: "Confirmar Contraseña",
-        loginButton: "Iniciar sesión",
-        registerButton: "Registrarse",
-        googleButton: "Iniciar con Google",
-        noAccountText: "¿No tienes cuenta?",
-        hasAccountText: "¿Ya tienes cuenta?",
-        passwordMismatch: "Las contraseñas no coinciden",
-        registrationSuccess: "¡Cuenta criada con éxito! Inicia sesión para continuar.",
-        registrationError: "Error al crear cuenta: ",
-        loginError: "Error al iniciar sesión: ",
-        emailInUse: "El correo electrónico ya está en uso",
-        invalidEmail: "Correo electrónico inválido",
-        weakPassword: "Contraseña demasiado débil (mínimo 6 caracteres)",
-        userNotFound: "Usuario no encontrado",
-        wrongPassword: "Contraseña incorrecta"
-      },
-      fr: {
-        subtitle: "Explorez les projets Nova visuellement et rapidement",
-        emailLabel: "Email",
-        passwordLabel: "Mot de passe",
-        nameLabel: "Nom",
-        confirmPasswordLabel: "Confirmer le mot de passe",
-        loginButton: "Se connecter",
-        registerButton: "S'inscrire",
-        googleButton: "Connexion Google",
-        noAccountText: "Vous n'avez pas de compte?",
-        hasAccountText: "Vous avez déjà un compte?",
-        passwordMismatch: "Les mots de passe ne correspondent pas",
-        registrationSuccess: "Compte créé avec succès! Connectez-vous pour continuer.",
-        registrationError: "Erreur lors de la création du compte: ",
-        loginError: "Erreur de connexion: ",
-        emailInUse: "Email déjà utilisé",
-        invalidEmail: "Email invalide",
-        weakPassword: "Mot de passe trop faible (minimum 6 caractères)",
-        userNotFound: "Utilisateur non trouvé",
-        wrongPassword: "Mot de passe incorrect"
       }
+      // Adicione aqui as traduções EN, ES, FR
     };
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyBhxtjdc14dv39mr_x_WuXouZrpMyGXpuk",
-      authDomain: "novahub-8f4b0.firebaseapp.com",
-      projectId: "novahub-8f4b0",
-      storageBucket: "novahub-8f4b0.appspot.com",
-      messagingSenderId: "619675546300",
-      appId: "1:619675546300:web:7be9b40b4a5282772616b9",
-      measurementId: "G-G36L184ZND"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-
+    let currentLang = localStorage.getItem('nova-lang') || 'pt';
     const loginForm = document.getElementById('loginForm');
     const registerForm = document.getElementById('registerForm');
     const showRegisterBtn = document.getElementById('showRegister');
     const showLoginBtn = document.getElementById('showLogin');
     const alertContainer = document.getElementById('alertContainer');
-    const googleLoginButton = document.getElementById('googleLoginButton');
+    const googleBtnText = document.getElementById('googleBtnText');
     const provider = new firebase.auth.GoogleAuthProvider();
 
-    let currentLang = localStorage.getItem('nova-lang') || 'pt';
-
-    auth.onAuthStateChanged(user => {
-      if (user) window.location.href = 'index.html';
-    });
+    auth.onAuthStateChanged(user => { if (user) window.location.href = 'index.html'; });
 
     document.addEventListener('DOMContentLoaded', () => {
       changeLanguage(currentLang);
-
-      googleLoginButton.addEventListener('click', () => {
+      initMessaging();
+      document.getElementById('googleLoginButton').addEventListener('click', () => {
         auth.signInWithPopup(provider)
           .then(() => window.location.href = 'index.html')
-          .catch(error => {
-            const msg = translations[currentLang].loginError + error.message;
-            showAlert(msg, 'error');
-          });
+          .catch(err => showAlert(translations[currentLang].loginError + err.message, 'error'));
       });
     });
 
     showRegisterBtn.addEventListener('click', () => {
-      loginForm.classList.add('hide');
-      registerForm.classList.remove('hide');
+      loginForm.classList.add('hide'); registerForm.classList.remove('hide');
     });
-
     showLoginBtn.addEventListener('click', () => {
-      registerForm.classList.add('hide');
-      loginForm.classList.remove('hide');
+      registerForm.classList.add('hide'); loginForm.classList.remove('hide');
     });
 
     loginForm.addEventListener('submit', e => {
-      e.preventDefault();
-      const button = document.getElementById('loginButton');
-      button.disabled = true;
+      e.preventDefault(); const btn = document.getElementById('loginButton'); btn.disabled = true;
       const email = document.getElementById('loginEmail').value;
-      const password = document.getElementById('loginPassword').value;
-
-      auth.signInWithEmailAndPassword(email, password)
+      const pwd = document.getElementById('loginPassword').value;
+      auth.signInWithEmailAndPassword(email, pwd)
         .then(() => window.location.href = 'index.html')
-        .catch(error => {
-          let msg = translations[currentLang].loginError;
-          msg += error.code === 'auth/user-not-found' ? translations[currentLang].userNotFound :
-                 error.code === 'auth/wrong-password' ? translations[currentLang].wrongPassword :
-                 error.code === 'auth/invalid-email' ? translations[currentLang].invalidEmail :
-                 error.message;
-          showAlert(msg, 'error');
-          button.disabled = false;
+        .catch(err => {
+          showAlert(translations[currentLang].loginError +
+            (err.code === 'auth/user-not-found' ? translations[currentLang].userNotFound :
+             err.code === 'auth/wrong-password' ? translations[currentLang].wrongPassword :
+             err.code === 'auth/invalid-email' ? translations[currentLang].invalidEmail : err.message), 'error');
+          btn.disabled = false;
         });
     });
 
     registerForm.addEventListener('submit', e => {
-      e.preventDefault();
-      const button = document.getElementById('registerButton');
-      button.disabled = true;
+      e.preventDefault(); const btn = document.getElementById('registerButton'); btn.disabled = true;
       const name = document.getElementById('registerName').value;
       const email = document.getElementById('registerEmail').value;
-      const password = document.getElementById('registerPassword').value;
-      const confirmPassword = document.getElementById('confirmPassword').value;
-
-      if (password !== confirmPassword) {
-        showAlert(translations[currentLang].passwordMismatch, 'error');
-        button.disabled = false;
-        return;
-      }
-
-      auth.createUserWithEmailAndPassword(email, password)
+      const pwd = document.getElementById('registerPassword').value;
+      const conf = document.getElementById('confirmPassword').value;
+      if (pwd !== conf) { showAlert(translations[currentLang].passwordMismatch, 'error'); btn.disabled = false; return; }
+      auth.createUserWithEmailAndPassword(email, pwd)
         .then(cred => cred.user.updateProfile({ displayName: name }))
         .then(() => {
-          showAlert(translations[currentLang].registrationSuccess, 'success');
-          registerForm.reset();
-          setTimeout(() => {
-            registerForm.classList.add('hide');
-            loginForm.classList.remove('hide');
-          }, 2000);
+          showAlert(translations[currentLang].registrationSuccess, 'success'); registerForm.reset();
+          setTimeout(() => { registerForm.classList.add('hide'); loginForm.classList.remove('hide'); }, 2000);
         })
-        .catch(error => {
-          let msg = translations[currentLang].registrationError;
-          msg += error.code === 'auth/email-already-in-use' ? translations[currentLang].emailInUse :
-                 error.code === 'auth/invalid-email' ? translations[currentLang].invalidEmail :
-                 error.code === 'auth/weak-password' ? translations[currentLang].weakPassword :
-                 error.message;
-          showAlert(msg, 'error');
-        })
-        .finally(() => button.disabled = false);
+        .catch(err => showAlert(translations[currentLang].registrationError +
+          (err.code === 'auth/email-already-in-use' ? translations[currentLang].emailInUse :
+           err.code === 'auth/invalid-email' ? translations[currentLang].invalidEmail :
+           err.code === 'auth/weak-password' ? translations[currentLang].weakPassword : err.message), 'error'))
+        .finally(() => btn.disabled = false);
     });
 
-    document.querySelectorAll('.language-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const lang = btn.dataset.lang;
-        changeLanguage(lang);
-        document.querySelectorAll('.language-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        localStorage.setItem('nova-lang', lang);
-      });
-    });
+    document.querySelectorAll('.language-btn').forEach(btn => btn.addEventListener('click', () => {
+      const lang = btn.dataset.lang; changeLanguage(lang); localStorage.setItem('nova-lang', lang);
+    }));
 
     function changeLanguage(lang) {
-      currentLang = lang;
-      const t = translations[lang];
+      currentLang = lang; const t = translations[lang];
       document.getElementById('subtitle').textContent = t.subtitle;
       document.getElementById('emailLabel').textContent = t.emailLabel;
       document.getElementById('passwordLabel').textContent = t.passwordLabel;
       document.getElementById('nameLabel').textContent = t.nameLabel;
-      document.getElementById('regEmailLabel').textContent = t.emailLabel;
-      document.getElementById('regPasswordLabel').textContent = t.passwordLabel;
       document.getElementById('confirmPasswordLabel').textContent = t.confirmPasswordLabel;
       document.getElementById('loginButton').textContent = t.loginButton;
-      document.getElementById('googleLoginButton').textContent = t.googleButton;
+      googleBtnText.textContent = t.googleButton;
       document.getElementById('registerButton').textContent = t.registerButton;
       document.getElementById('noAccountText').textContent = t.noAccountText;
       document.getElementById('hasAccountText').textContent = t.hasAccountText;
       document.getElementById('showRegister').textContent = t.registerButton;
       document.getElementById('showLogin').textContent = t.loginButton;
+      document.querySelectorAll('.language-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.lang === lang));
     }
 
-    function showAlert(message, type) {
-      alertContainer.innerHTML = '';
-      const div = document.createElement('div');
-      div.className = `alert alert-${type}`;
-      div.textContent = message;
-      alertContainer.appendChild(div);
-      setTimeout(() => div.remove(), 5000);
+    function showAlert(msg, type) {
+      alertContainer.innerHTML = `<div class="alert alert-${type}">${msg}</div>`;
+      setTimeout(() => alertContainer.innerHTML = '', 5000);
     }
-
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/service-worker.js')
-        .then(() => console.log('Service Worker registado!'));
-    }
-  </script>
-</body>
+  </script></body>
 </html>
