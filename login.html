@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -64,7 +65,7 @@
       margin: 1rem;
     }
     
-.logo-container { text-align: center; margin-bottom: 2rem; }
+    .logo-container { text-align: center; margin-bottom: 2rem; }
     .logo { width: 100px; height: auto; margin-bottom: 1rem; }
     h1 { color: var(--primary-color); text-align: center; margin-bottom: 0.5rem; }
     .subtitle { text-align: center; color: #ccc; margin-bottom: 2rem; }
@@ -92,6 +93,19 @@
 
     button:hover {
       background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+      transform: translateY(-2px);
+    }
+
+    .google-btn {
+      display: block; width: 100%; padding: 0.8rem;
+      background-color: #4285F4;
+      color: white; border: none;
+      border-radius: 5px; font-size: 1rem; font-weight: bold;
+      cursor: pointer; transition: all 0.3s;
+      margin-top: 1rem;
+    }
+    .google-btn:hover {
+      background-color: #357ae8;
       transform: translateY(-2px);
     }
 
@@ -182,6 +196,7 @@
         <input type="password" id="loginPassword" required />
       </div>
       <button type="submit" id="loginButton"></button>
+      <button type="button" id="googleLoginButton" class="google-btn"></button>
 
       <div class="form-footer">
         <p id="noAccountText"></p>
@@ -233,6 +248,7 @@
         confirmPasswordLabel: "Confirmar Senha",
         loginButton: "Entrar",
         registerButton: "Registrar",
+        googleButton: "Entrar com Google",
         noAccountText: "Ainda não tem conta?",
         hasAccountText: "Já tem conta?",
         passwordMismatch: "As senhas não coincidem",
@@ -253,6 +269,7 @@
         confirmPasswordLabel: "Confirm Password",
         loginButton: "Login",
         registerButton: "Register",
+        googleButton: "Sign in with Google",
         noAccountText: "Don't have an account?",
         hasAccountText: "Already have an account?",
         passwordMismatch: "Passwords do not match",
@@ -273,10 +290,11 @@
         confirmPasswordLabel: "Confirmar Contraseña",
         loginButton: "Iniciar sesión",
         registerButton: "Registrarse",
+        googleButton: "Iniciar con Google",
         noAccountText: "¿No tienes cuenta?",
         hasAccountText: "¿Ya tienes cuenta?",
         passwordMismatch: "Las contraseñas no coinciden",
-        registrationSuccess: "¡Cuenta creada con éxito! Inicia sesión para continuar.",
+        registrationSuccess: "¡Cuenta criada con éxito! Inicia sesión para continuar.",
         registrationError: "Error al crear cuenta: ",
         loginError: "Error al iniciar sesión: ",
         emailInUse: "El correo electrónico ya está en uso",
@@ -293,6 +311,7 @@
         confirmPasswordLabel: "Confirmer le mot de passe",
         loginButton: "Se connecter",
         registerButton: "S'inscrire",
+        googleButton: "Connexion Google",
         noAccountText: "Vous n'avez pas de compte?",
         hasAccountText: "Vous avez déjà un compte?",
         passwordMismatch: "Les mots de passe ne correspondent pas",
@@ -325,6 +344,8 @@
     const showRegisterBtn = document.getElementById('showRegister');
     const showLoginBtn = document.getElementById('showLogin');
     const alertContainer = document.getElementById('alertContainer');
+    const googleLoginButton = document.getElementById('googleLoginButton');
+    const provider = new firebase.auth.GoogleAuthProvider();
 
     let currentLang = localStorage.getItem('nova-lang') || 'pt';
 
@@ -334,6 +355,15 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       changeLanguage(currentLang);
+
+      googleLoginButton.addEventListener('click', () => {
+        auth.signInWithPopup(provider)
+          .then(() => window.location.href = 'index.html')
+          .catch(error => {
+            const msg = translations[currentLang].loginError + error.message;
+            showAlert(msg, 'error');
+          });
+      });
     });
 
     showRegisterBtn.addEventListener('click', () => {
@@ -423,6 +453,7 @@
       document.getElementById('regPasswordLabel').textContent = t.passwordLabel;
       document.getElementById('confirmPasswordLabel').textContent = t.confirmPasswordLabel;
       document.getElementById('loginButton').textContent = t.loginButton;
+      document.getElementById('googleLoginButton').textContent = t.googleButton;
       document.getElementById('registerButton').textContent = t.registerButton;
       document.getElementById('noAccountText').textContent = t.noAccountText;
       document.getElementById('hasAccountText').textContent = t.hasAccountText;
