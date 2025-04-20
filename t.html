@@ -1,0 +1,980 @@
+<!DOCTYPE html><html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Nova Hub - Explore Nova projects visually and quickly">
+  <title>Nova Hub</title>
+  <!-- PWA Manifest & Icons -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#00FFFF" />
+  <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+  <!-- SEO & Social -->
+  <meta name="keywords" content="Nova Hub, finance tools, search, LLM, analytics">
+  <meta name="author" content="pedro martins & cantinhode.net">
+  <meta property="og:title" content="Nova Hub">
+  <meta property="og:description" content="Explore Nova projects visually and quickly">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://nova-hub.netlify.app/">
+  <meta property="og:image" content="https://nova-hub.netlify.app/logo.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- Unified CSS -->
+  <style>
+    :root {
+      --color-primary:#00d6de;--color-primary-light:#66f2f7;--color-primary-dark:#00a8af;
+      --color-bg:#0f0f0f;--color-bg-alt:#1a1a1a;--color-card:#1e1e1e;
+      --color-text:#f0f0f0;--color-text-muted:#b0b0b0;--color-border:#333;
+      --sidebar-width-mobile:60px;--sidebar-width-desktop:64px;
+      --border-radius-md:8px;--border-radius-lg:12px;
+      --space-sm:.5rem;--space-md:1rem;--space-lg:1.5rem;
+      --font-family-base:'Segoe UI',system-ui,sans-serif;
+      --font-family-heading:'Segoe UI',system-ui,sans-serif;
+      --font-size-md:1rem;--font-size-lg:1.25rem;--font-size-xl:1.5rem;
+      --line-height-normal:1.5;
+      --transition-speed:0.3s;
+    }
+    *,html,body{margin:0;padding:0;box-sizing:border-box;scroll-behavior:smooth;}
+    html,body{height:100%;background:var(--color-bg);color:var(--color-text);
+      font-family:var(--font-family-base);font-size:var(--font-size-md);line-height:var(--line-height-normal);
+      display:flex;flex-direction:column;overflow-x:hidden;}
+    h1,h2{margin-bottom:var(--space-md);font-family:var(--font-family-heading);}
+    :focus-visible{outline:2px solid var(--color-primary);outline-offset:2px;}
+    button:focus{outline:2px solid var(--color-primary);outline-offset:2px;}
+    
+    /* Menu Toggle Button */
+    .menu-toggle{position:fixed;top:10px;left:10px;z-index:1000;
+      background:var(--color-primary);color:var(--color-bg);border:none;
+      border-radius:var(--border-radius-md);width:40px;height:40px;
+      display:none;align-items:center;justify-content:center;cursor:pointer;}
+    
+    /* Sidebar */
+    aside#sidebar{position:fixed;top:0;left:0;width:var(--sidebar-width-mobile);height:100vh;
+      background:var(--color-bg-alt);display:flex;flex-direction:column;justify-content:space-between;
+      align-items:center;padding:var(--space-lg) 0;z-index:999;
+      transition:transform var(--transition-speed) ease;}
+    .logo{width:36px;height:36px;margin-bottom:var(--space-lg);border-radius:var(--border-radius-md);}
+    .nav-section{display:flex;flex-direction:column;align-items:center;gap:var(--space-lg);width:100%;}
+    .nav-icon{width:100%;height:40px;font-size:var(--font-size-xl);display:flex;justify-content:center;
+      align-items:center;color:var(--color-text-muted);text-decoration:none;position:relative;cursor:pointer;
+      transition:color var(--transition-speed), background var(--transition-speed);}
+    .nav-icon:hover{color:var(--color-primary);background:rgba(0,214,222,0.1);}
+    .nav-icon.active{color:var(--color-primary);} 
+    .nav-icon.active::before{
+      content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);
+      width:3px;height:60%;background:var(--color-primary);}
+    
+    @media(min-width:640px){
+      .nav-icon:hover::after{content:attr(data-tooltip);
+        position:absolute;left:60px;top:50%;transform:translateY(-50%);
+        background:var(--color-card);color:var(--color-primary);
+        padding:2px 8px;border-radius:4px;font-size:.75rem;white-space:nowrap;
+        box-shadow:0 2px 5px rgba(0,0,0,0.3);z-index:1000;}
+    }
+    
+    /* Main & Header */
+    main{flex:1;margin-left:var(--sidebar-width-mobile);overflow:auto;
+      transition:margin-left var(--transition-speed) ease;}
+    header{text-align:center;padding:var(--space-lg) var(--space-md);
+      background:linear-gradient(to right,var(--color-bg-alt),#141414);}
+    header h1, header p{transition:opacity var(--transition-speed) ease;}
+    header h1{margin:0;font-size:clamp(var(--font-size-lg),4vw,var(--font-size-xl));}
+    header p{margin-top:4px;font-size:.875rem;color:var(--color-text-muted);}
+    
+    .language-switcher{margin-top:var(--space-sm);display:flex;gap:4px;justify-content:center;}
+    .language-btn{background:none;border:1px solid var(--color-text-muted);border-radius:4px;padding:2px 6px;
+      color:var(--color-text);cursor:pointer;transition:var(--transition-speed);}
+    .language-btn:hover{border-color:var(--color-primary-light);color:var(--color-primary-light);}
+    .language-btn.active{border-color:var(--color-primary);color:var(--color-primary);}
+    
+    /* Sections */
+    .section-title{display:flex;align-items:center;margin:var(--space-lg) var(--space-md) var(--space-md);
+      border-left:4px solid var(--color-primary);padding-left:8px;font-size:var(--font-size-lg);}
+    .container{display:grid;gap:var(--space-md);padding:var(--space-md);grid-template-columns:1fr;}
+    
+    /* Buttons */
+    button{cursor:pointer;transition:var(--transition-speed);}
+    #content > button, .container > button{
+      background:var(--color-bg-alt);color:var(--color-primary);
+      border:1px solid var(--color-primary);border-radius:var(--border-radius-md);
+      padding:var(--space-sm) var(--space-md);margin:var(--space-md);
+      font-size:var(--font-size-md);cursor:pointer;
+      transition:background-color var(--transition-speed), transform var(--transition-speed);}
+    #content > button:hover, .container > button:hover{
+      background-color:rgba(0,214,222,0.1);transform:translateY(-2px);}
+    
+    /* Section Headers */
+    section h2{display:flex;align-items:center;gap:var(--space-sm);
+      margin:var(--space-lg) var(--space-md) var(--space-sm);
+      border-left:4px solid var(--color-primary);padding-left:var(--space-sm);
+      font-size:var(--font-size-lg);}
+    section h2 button{
+      background:none;border:none;color:var(--color-text-muted);
+      font-size:var(--font-size-md);cursor:pointer;padding:2px 4px;
+      border-radius:var(--border-radius-md);margin-left:4px;}
+    section h2 button:hover{color:var(--color-primary);background:rgba(0,214,222,0.1);}
+    
+    /* Frames */
+    .frame{background:var(--color-card);border-radius:var(--border-radius-lg);
+      box-shadow:0 4px 10px rgba(0,0,0,0.3);display:flex;flex-direction:column;
+      position:relative;padding:var(--space-sm);overflow:hidden;margin-bottom:var(--space-md);
+      height:200px;transition:transform var(--transition-speed), box-shadow var(--transition-speed);}
+    .frame:hover{transform:translateY(-4px);box-shadow:0 6px 14px rgba(0,0,0,0.4);}
+    .frame.fullscreen{
+      position:fixed;top:50%;left:50%;transform:translate(-50%, -50%);
+      width:90vw;height:90vh;z-index:1001;margin:0;}
+    .controls{
+      position:absolute;top:8px;right:8px;display:flex;gap:4px;opacity:0;
+      transition:opacity var(--transition-speed);}
+    .frame:hover .controls{opacity:1;}
+    .controls button{
+      background:rgba(0,214,222,0.2);border:none;border-radius:4px;
+      padding:2px 4px;cursor:pointer;color:var(--color-text);
+      transition:background var(--transition-speed);}
+    .controls button:hover{background:rgba(0,214,222,0.4);}
+    iframe{flex:1;border:none;border-radius:4px;background:#111;width:100%;}
+    .site-title{
+      font-size:var(--font-size-md);padding:var(--space-sm);
+      text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    
+    /* Overlay */
+    .overlay{
+      position:fixed;top:0;left:0;right:0;bottom:0;
+      background:rgba(0,0,0,0.8);z-index:1000;display:none;}
+    .overlay.active{display:block;}
+    
+    /* Loading & Scroll */
+    .loading-container{display:flex;justify-content:center;align-items:center;height:200px;}
+    .loading-spinner{width:40px;height:40px;border:4px solid rgba(0,214,222,0.2);
+      border-top-color:var(--color-primary);border-radius:50%;animation:spin 1s linear infinite;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+    .scroll-top{
+      position:fixed;bottom:16px;right:16px;background:var(--color-primary);
+      color:#000;border:none;border-radius:50%;width:40px;height:40px;cursor:pointer;
+      display:none;justify-content:center;align-items:center;opacity:0;
+      transition:opacity var(--transition-speed), transform var(--transition-speed);}
+    .scroll-top.visible{display:flex;opacity:1;}
+    .scroll-top:hover{transform:translateY(-4px);}
+    
+    /* Responsive Styles */
+    @media(max-width:639px){
+      .menu-toggle{display:flex;}
+      aside#sidebar{transform:translateX(-100%);}
+      aside#sidebar.active{transform:translateX(0);}
+      main{margin-left:0;}
+    }
+    
+    @media(min-width:640px){
+      .container{grid-template-columns:repeat(2,1fr);}
+    }
+    
+    @media(min-width:1024px){
+      main{margin-left:var(--sidebar-width-desktop);}
+      .container{grid-template-columns:repeat(3,1fr);}
+    }
+    
+    @media(min-width:1280px){
+      .container{grid-template-columns:repeat(4,1fr);}
+    }
+  </style>
+</head>
+<body>
+  <button class="menu-toggle" id="menuToggle" aria-label="Toggle Menu">☰</button>
+  <aside id="sidebar" aria-label="Main Navigation">
+    <div class="nav-section">
+      <img src="/logo.png" class="logo" alt="Nova Logo">
+      <a href="#finance-tools" class="nav-icon active" data-tooltip="Ferramentas Financeiras" aria-label="Finance Tools">💰</a>
+      <a href="#search-platforms" class="nav-icon" data-tooltip="Plataformas de Busca" aria-label="Search Platforms">🔍</a>
+      <a href="#llm-platforms" class="nav-icon" data-tooltip="Plataformas LLM" aria-label="LLM Platforms">🤖</a>
+      <a href="#analytics" class="nav-icon" data-tooltip="Análises e Mais" aria-label="Analytics & More">📊</a>
+    </div>
+    <div class="nav-section">
+      <a href="profile.html" class="nav-icon" data-tooltip="Perfil" aria-label="Profile">👤</a>
+      <a href="#settings" class="nav-icon" data-tooltip="Configurações" aria-label="Settings">⚙️</a>
+      <a href="#logout" class="nav-icon" data-tooltip="Sair" aria-label="Logout">⏻</a>
+    </div>
+  </aside>
+  <main>
+    <header>
+      <h1 id="main-title">Nova Hub</h1>
+      <p id="subtitle">Explora os projetos Nova de forma visual e rápida</p>
+      <div class="language-switcher" role="group" aria-label="Language Selection">
+        <button class="language-btn active" data-lang="pt">PT</button>
+        <button class="language-btn" data-lang="en">EN</button>
+        <button class="language-btn" data-lang="es">ES</button>
+        <button class="language-btn" data-lang="fr">FR</button>
+      </div>
+    </header>
+    <div id="content">
+      <div class="loading-container" id="loading"><div class="loading-spinner" aria-label="Loading"></div></div>
+    </div>
+    <button class="scroll-top" id="scrollTop" aria-label="Scroll to top">⬆️</button>
+  </main>
+  <div id="overlay" class="overlay"></div>
+  <script>
+    (function(){
+      const translations = {
+        en: {
+          mainTitle: "Nova Hub",
+          subtitle: "Explore Nova projects visually and quickly",
+          sectionTitles: {
+            "Finance Tools": "Finance Tools",
+            "Search Platforms": "Search Platforms",
+            "LLM Platforms": "LLM Platforms",
+            "Analytics & More": "Analytics & More"
+          },
+          controls: {
+            fullscreen: "Fullscreen",
+            minimize: "Minimize",
+            edit: "Edit",
+            delete: "Delete"
+          },
+          buttons: {
+            newCategory: "＋ New Category",
+            addLink: "+ Add Link"
+          },
+          prompts: {
+            newCategory: "New category:",
+            rename: "Rename:",
+            title: "Title:",
+            url: "URL:",
+            deleteCategory: "Delete '{}' category?",
+            deleteLink: "Delete this link?"
+          },
+          errors: {
+            loading: "Failed to load content",
+            retry: "Retry"
+          }
+        },
+        pt: {
+          mainTitle: "Nova Hub",
+          subtitle: "Explora os projetos Nova de forma visual e rápida",
+          sectionTitles: {
+            "Finance Tools": "Ferramentas Financeiras",
+            "Search Platforms": "Plataformas de Busca",
+            "LLM Platforms": "Plataformas LLM",
+            "Analytics & More": "Análises e Mais"
+          },
+          controls: {
+            fullscreen: "Tela Cheia",
+            minimize: "Minimizar",
+            edit: "Editar",
+            delete: "Excluir"
+          },
+          buttons: {
+            newCategory: "＋ Nova Categoria",
+            addLink: "+ Adicionar Link"
+          },
+          prompts: {
+            newCategory: "Nova categoria:",
+            rename: "Renomear:",
+            title: "Título:",
+            url: "URL:",
+            deleteCategory: "Excluir categoria '{}'?",
+            deleteLink: "Excluir este link?"
+          },
+          errors: {
+            loading: "Falha ao carregar conteúdo",
+            retry: "Tentar novamente"
+          }
+        },
+        es: {
+          mainTitle: "Nova Hub",
+          subtitle: "Explora los proyectos Nova de forma visual y rápida",
+          sectionTitles: {
+            "Finance Tools": "Herramientas Financieras",
+            "Search Platforms": "Plataformas de Búsqueda",
+            "LLM Platforms": "Plataformas LLM",
+            "Analytics & More": "Analíticas y Más"
+          },
+          controls: {
+            fullscreen: "Pantalla Completa",
+            minimize: "Minimizar",
+            edit: "Editar",
+            delete: "Eliminar"
+          },
+          buttons: {
+            newCategory: "＋ Nueva Categoría",
+            addLink: "+ Añadir Enlace"
+          },
+          prompts: {
+            newCategory: "Nueva categoría:",
+            rename: "Renombrar:",
+            title: "Título:",
+            url: "URL:",
+            deleteCategory: "¿Eliminar categoría '{}'?",
+            deleteLink: "¿Eliminar este enlace?"
+          },
+          errors: {
+            loading: "Error al cargar contenido",
+            retry: "Reintentar"
+          }
+        },
+        fr: {
+          mainTitle: "Nova Hub",
+          subtitle: "Explorez les projets Nova visuellement et rapidement",
+          sectionTitles: {
+            "Finance Tools": "Outils Financiers",
+            "Search Platforms": "Plateformes de Recherche",
+            "LLM Platforms": "Plateformes LLM",
+            "Analytics & More": "Analyses et Plus"
+          },
+          controls: {
+            fullscreen: "Plein Écran",
+            minimize: "Réduire",
+            edit: "Modifier",
+            delete: "Supprimer"
+          },
+          buttons: {
+            newCategory: "＋ Nouvelle Catégorie",
+            addLink: "+ Ajouter Lien"
+          },
+          prompts: {
+            newCategory: "Nouvelle catégorie:",
+            rename: "Renommer:",
+            title: "Titre:",
+            url: "URL:",
+            deleteCategory: "Supprimer la catégorie '{}'?",
+            deleteLink: "Supprimer ce lien?"
+          },
+          errors: {
+            loading: "Échec du chargement du contenu",
+            retry: "Réessayer"
+          }
+        }
+      };
+      
+      // Initialize data from localStorage or use defaults
+      let categories = null;
+      let visible = null;
+
+      try {
+        categories = JSON.parse(localStorage.getItem('novaagg-categories')) || {
+          "Finance Tools": [
+            {title: "Nova Charts", url: "https://nova-charts.netlify.app/", description: "Interactive financial charts and analytics"}
+          ],
+          "Search Platforms": [],
+          "LLM Platforms": [],
+          "Analytics & More": []
+        };
+        
+        visible = JSON.parse(localStorage.getItem('novaagg-visible')) || 
+          Object.keys(categories).reduce((a, k) => (a[k] = true, a), {});
+      } catch (e) {
+        console.error("Error loading data from localStorage:", e);
+        categories = {
+          "Finance Tools": [
+            {title: "Nova Charts", url: "https://nova-charts.netlify.app/", description: "Interactive financial charts and analytics"}
+          ],
+          "Search Platforms": [],
+          "LLM Platforms": [],
+          "Analytics & More": []
+        };
+        visible = Object.keys(categories).reduce((a, k) => (a[k] = true, a), {});
+      }
+      
+      // Safe localStorage operations
+      const safe = {
+        get(k) {
+          try {
+            return localStorage.getItem(k);
+          } catch (e) {
+            console.warn("Error reading from localStorage:", e);
+            return null;
+          }
+        },
+        set(k, v) {
+          try {
+            localStorage.setItem(k, v);
+            return true;
+          } catch (e) {
+            console.warn("Error writing to localStorage:", e);
+            return false;
+          }
+        }
+      };
+      
+      // Save data functions
+      function save() {
+        return safe.set('novaagg-categories', JSON.stringify(categories));
+      }
+      
+      // Get translated text
+      function getText(path, defaultValue = "") {
+        const keys = path.split('.');
+        let current = translations[lang] || translations.en;
+        
+        for (const key of keys) {
+          if (current[key] === undefined) {
+            return defaultValue;
+          }
+          current = current[key];
+        }
+        
+        return current;
+      }
+      
+      // Format text with placeholders
+      function formatText(text, ...args) {
+        return text.replace(/{(\d+)}/g, (match, index) => 
+          typeof args[index] !== 'undefined' ? args[index] : match
+        ).replace(/{}/g, (match, index) => 
+          typeof args[0] !== 'undefined' ? args[0] : match
+        );
+      }
+      
+      // Category management functions
+      function addCategory() {
+        const n = prompt(getText('prompts.newCategory'));
+        if (!n || n.trim() === '' || categories[n]) return;
+        
+        categories[n] = [];
+        visible[n] = true;
+        
+        if (save()) {
+          safe.set('novaagg-visible', JSON.stringify(visible));
+          refresh();
+        }
+      }
+      
+      function editCategory(o) {
+        const n = prompt(getText('prompts.rename'), o);
+        if (!n || n.trim() === '' || n === o || categories[n]) return;
+        
+        categories[n] = categories[o];
+        delete categories[o];
+        visible[n] = visible[o];
+        delete visible[o];
+        
+        if (save()) {
+          safe.set('novaagg-visible', JSON.stringify(visible));
+          refresh();
+        }
+      }
+      
+      function deleteCategory(n) {
+        if (!confirm(formatText(getText('prompts.deleteCategory'), n))) return;
+        
+        delete categories[n];
+        delete visible[n];
+        
+        if (save()) {
+          safe.set('novaagg-visible', JSON.stringify(visible));
+          refresh();
+        }
+      }
+      
+      // Link management functions
+      function addLink(c) {
+        const t = prompt(getText('prompts.title'));
+        if (!t || t.trim() === '') return;
+        
+        const u = prompt(getText('prompts.url'));
+        if (!u || u.trim() === '') return;
+        
+        // Basic URL validation
+        let validUrl = u;
+        if (!/^https?:\/\//i.test(validUrl)) {
+          validUrl = 'https://' + validUrl;
+        }
+        
+        categories[c].push({title: t.trim(), url: validUrl, description: ''});
+        
+        if (save()) {
+          refresh();
+        }
+      }
+      
+      function editLink(c, i) {
+        const item = categories[c][i];
+        if (!item) return;
+        
+        const t = prompt(getText('prompts.title'), item.title);
+        if (!t || t.trim() === '') return;
+        
+        const u = prompt(getText('prompts.url'), item.url);
+        if (!u || u.trim() === '') return;
+        
+        // Basic URL validation
+        let validUrl = u;
+        if (!/^https?:\/\//i.test(validUrl)) {
+          validUrl = 'https://' + validUrl;
+        }
+        
+        categories[c][i] = {title: t.trim(), url: validUrl, description: item.description || ''};
+        
+        if (save()) {
+          refresh();
+        }
+      }
+      
+      function deleteLink(c, i) {
+        if (!confirm(getText('prompts.deleteLink'))) return;
+        
+        if (Array.isArray(categories[c]) && categories[c][i]) {
+          categories[c].splice(i, 1);
+          
+          if (save()) {
+            refresh();
+          }
+        }
+      }
+      
+      // Toggle category visibility
+      function toggle(c) {
+        visible[c] = !visible[c];
+        safe.set('novaagg-visible', JSON.stringify(visible));
+        
+        const container = document.querySelector(`section[data-category="${c}"] .container`);
+        if (container) {
+          container.style.display = visible[c] ? 'grid' : 'none';
+          
+          const toggleBtn = document.querySelector(`section[data-category="${c}"] h2 button:first-child`);
+          if (toggleBtn) {
+            toggleBtn.textContent = visible[c] ? '▼' : '▶';
+            toggleBtn.setAttribute('aria-label', visible[c] ? 'Collapse' : 'Expand');
+          }
+        }
+      }
+      
+      // Update tooltips for different languages
+      function updateTooltips(lang) {
+        document.querySelectorAll('.nav-icon').forEach(l => {
+          const a = `data-tooltip-${lang}`;
+          if (l.hasAttribute(a)) {
+            l.setAttribute('data-tooltip', l.getAttribute(a));
+            l.setAttribute('aria-label', l.getAttribute(a));
+          }
+        });
+      }
+      
+      // Language management
+      let lang = safe.get('novaagg-lang') || 'pt';
+      
+      function changeLanguage(l) {
+        if (!translations[l] || l === lang) return;
+        
+        lang = l;
+        
+        // Update language buttons
+        document.querySelectorAll('.language-btn').forEach(b => {
+          const a = b.dataset.lang === l;
+          b.classList.toggle('active', a);
+          b.setAttribute('aria-pressed', a);
+        });
+        
+        // Update header content with animation
+        const mt = document.getElementById('main-title');
+        const st = document.getElementById('subtitle');
+        [mt, st].forEach(x => x.style.opacity = 0);
+        
+        setTimeout(() => {
+          mt.textContent = getText('mainTitle');
+          st.textContent = getText('subtitle');
+          [mt, st].forEach(x => x.style.opacity = 1);
+        }, 200);
+        
+        updateTooltips(l);
+        safe.set('novaagg-lang', l);
+        
+        // Update all translatable content
+        updateAllTranslations();
+      }
+      
+      // Update all translated content
+      function updateAllTranslations() {
+        // Update section titles
+        document.querySelectorAll('section').forEach(section => {
+          const categoryName = section.dataset.category;
+          const h2 = section.querySelector('h2');
+          
+          if (!h2 || !categoryName || !translations[lang].sectionTitles[categoryName]) return;
+          
+          const buttons = Array.from(h2.querySelectorAll('button'));
+          h2.innerHTML = '';
+          
+          if (buttons[0]) h2.appendChild(buttons[0]); // Toggle button
+          h2.append(translations[lang].sectionTitles[categoryName] || categoryName);
+          buttons.slice(1).forEach(b => h2.appendChild(b)); // Edit/delete buttons
+        });
+        
+        // Update buttons text
+        document.querySelectorAll('#content > button').forEach(btn => {
+          if (btn.dataset.key) {
+            btn.textContent = getText(btn.dataset.key, btn.textContent);
+          }
+        });
+        
+        document.querySelectorAll('.container > button').forEach(btn => {
+          if (btn.dataset.key) {
+            btn.textContent = getText(btn.dataset.key, btn.textContent);
+          }
+        });
+        
+        // Update control buttons accessibility
+        document.querySelectorAll('.controls button').forEach((btn, index) => {
+          if (index < 4) { // Only process the first 4 buttons
+            const labels = ['fullscreen', 'minimize', 'edit', 'delete'];
+            btn.setAttribute('aria-label', getText(`controls.${labels[index]}`));
+          }
+        });
+      }
+      
+      // Create frame element
+      function createFrame(s, c, i) {
+        const f = document.createElement('div');
+        f.className = 'frame';
+        
+        // Controls
+        const ctr = document.createElement('div');
+        ctr.className = 'controls';
+        
+        const controlLabels = ['fullscreen', 'minimize', 'edit', 'delete'];
+        const controlIcons = ['🔍', '◻️', '✏️', '🗑️'];
+        
+        controlLabels.forEach((label, j) => {
+          const b = document.createElement('button');
+          b.textContent = controlIcons[j];
+          b.setAttribute('aria-label', getText(`controls.${label}`));
+          
+          b.onclick = e => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            if (j === 0) {
+              f.classList.add('fullscreen');
+              document.getElementById('overlay').classList.add('active');
+              const ifr = f.querySelector('iframe');
+              if (ifr && ifr.dataset.src && !ifr.src) {
+                ifr.src = ifr.dataset.src;
+              }
+              f.focus();
+            } else if (j === 1) {
+              f.classList.remove('fullscreen');
+              document.getElementById('overlay').classList.remove('active');
+            } else if (j === 2) {
+              editLink(c, i);
+            } else if (j === 3) {
+              deleteLink(c, i);
+            }
+          };
+          ctr.appendChild(b);
+        });
+        
+        f.appendChild(ctr);
+        
+// Iframe
+        const ifr = document.createElement('iframe');
+        ifr.dataset.src = s.url;
+        ifr.loading = 'lazy';
+        ifr.title = s.title;
+        ifr.setAttribute('sandbox', 'allow-scripts allow-same-origin');
+        f.appendChild(ifr);
+        
+        // Site title
+        const st = document.createElement('div');
+        st.className = 'site-title';
+        st.textContent = s.title;
+        f.appendChild(st);
+        
+        // Add click handler to open frame in fullscreen
+        f.addEventListener('click', (e) => {
+          // If clicked on controls, don't open fullscreen
+          if (e.target.closest('.controls')) return;
+          
+          f.classList.add('fullscreen');
+          document.getElementById('overlay').classList.add('active');
+          const iframe = f.querySelector('iframe');
+          if (iframe && iframe.dataset.src && !iframe.src) {
+            iframe.src = iframe.dataset.src;
+          }
+        });
+        
+        return f;
+      }
+      
+      // Generate content
+      function generateContent() {
+        const ct = document.getElementById('content');
+        ct.innerHTML = '';
+        
+        // Add Category button
+        const ac = document.createElement('button');
+        ac.textContent = getText('buttons.newCategory', '＋ New Category');
+        ac.dataset.key = 'buttons.newCategory';
+        ac.onclick = addCategory;
+        ct.appendChild(ac);
+        
+        // Generate sections for each category
+        Object.entries(categories).forEach(([c, arr]) => {
+          const sec = document.createElement('section');
+          sec.dataset.category = c;
+          
+          // Create section header
+          const h2 = document.createElement('h2');
+          h2.id = c.toLowerCase().replace(/\s+/g, '-');
+          
+          // Toggle button
+          const tb = document.createElement('button');
+          tb.textContent = visible[c] ? '▼' : '▶';
+          tb.setAttribute('aria-label', visible[c] ? 'Collapse' : 'Expand');
+          tb.onclick = (e) => {
+            e.preventDefault();
+            toggle(c);
+          };
+          h2.appendChild(tb);
+          
+          // Category name - translate if available
+          const translatedName = translations[lang]?.sectionTitles[c] || c;
+          h2.append(translatedName);
+          
+          // Edit and delete buttons
+          const editBtn = document.createElement('button');
+          editBtn.textContent = '✏️';
+          editBtn.setAttribute('aria-label', getText('controls.edit', 'Edit category'));
+          editBtn.onclick = (e) => {
+            e.preventDefault();
+            editCategory(c);
+          };
+          h2.appendChild(editBtn);
+          
+          const deleteBtn = document.createElement('button');
+          deleteBtn.textContent = '🗑️';
+          deleteBtn.setAttribute('aria-label', getText('controls.delete', 'Delete category'));
+          deleteBtn.onclick = (e) => {
+            e.preventDefault();
+            deleteCategory(c);
+          };
+          h2.appendChild(deleteBtn);
+          
+          sec.appendChild(h2);
+          
+          // Container for frames
+          const cont = document.createElement('div');
+          cont.className = 'container';
+          cont.style.display = visible[c] ? 'grid' : 'none';
+          
+          // Add frames
+          if (Array.isArray(arr)) {
+            arr.forEach((s, i) => {
+              if (s && s.title && s.url) {
+                cont.appendChild(createFrame(s, c, i));
+              }
+            });
+          }
+          
+          // Add link button
+          const al = document.createElement('button');
+          al.textContent = getText('buttons.addLink', '+ Add Link');
+          al.dataset.key = 'buttons.addLink';
+          al.onclick = (e) => {
+            e.preventDefault();
+            addLink(c);
+          };
+          cont.appendChild(al);
+          
+          sec.appendChild(cont);
+          ct.appendChild(sec);
+        });
+        
+        document.getElementById('loading').style.display = 'none';
+        initObservers();
+      }
+      
+      // Helper function for debouncing
+      function debounce(fn, wait) {
+        let timeout;
+        return (...args) => {
+          clearTimeout(timeout);
+          timeout = setTimeout(() => fn(...args), wait);
+        };
+      }
+      
+      // Initialize observers for lazy loading and navigation
+      function initObservers() {
+        // Lazy load frames
+        if ('IntersectionObserver' in window) {
+          const lazyObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                const iframe = entry.target.querySelector('iframe');
+                if (iframe && iframe.dataset.src && !iframe.src) {
+                  iframe.src = iframe.dataset.src;
+                }
+                lazyObserver.unobserve(entry.target);
+              }
+            });
+          }, {rootMargin: '100px', threshold: 0.1});
+          
+          document.querySelectorAll('.frame').forEach(frame => lazyObserver.observe(frame));
+          
+          // Update active nav item on scroll
+          const scrollObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting && entry.intersectionRatio > 0.3) {
+                const id = entry.target.querySelector('h2')?.id;
+                if (id) {
+                  document.querySelectorAll('.nav-icon').forEach(link => {
+                    const isActive = link.getAttribute('href') === `#${id}`;
+                    link.classList.toggle('active', isActive);
+                  });
+                }
+              }
+            });
+          }, {threshold: [0.1, 0.3]});
+          
+          document.querySelectorAll('section').forEach(section => scrollObserver.observe(section));
+        } else {
+          // Fallback for browsers without IntersectionObserver
+          const frames = document.querySelectorAll('.frame');
+          function checkVisibility() {
+            frames.forEach(frame => {
+              const rect = frame.getBoundingClientRect();
+              const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+              if (isVisible) {
+                const iframe = frame.querySelector('iframe');
+                if (iframe && iframe.dataset.src && !iframe.src) {
+                  iframe.src = iframe.dataset.src;
+                }
+              }
+            });
+          }
+          
+          window.addEventListener('scroll', debounce(checkVisibility, 200));
+          checkVisibility(); // Initial check
+        }
+      }
+      
+      // Refresh content
+      function refresh() {
+        generateContent();
+        updateAllTranslations();
+      }
+      
+      // Handle scroll for scroll-to-top button
+      const scrollHandler = debounce(() => {
+        const scrollTopBtn = document.getElementById('scrollTop');
+        if (scrollTopBtn) {
+          scrollTopBtn.classList.toggle('visible', window.scrollY > 300);
+        }
+      }, 100);
+      
+      // Close fullscreen frames
+      function closeFull() {
+        const fullscreenFrame = document.querySelector('.frame.fullscreen');
+        if (fullscreenFrame) {
+          fullscreenFrame.classList.remove('fullscreen');
+        }
+        document.getElementById('overlay').classList.remove('active');
+      }
+      
+      // Handle errors gracefully
+      function handleError(error, element) {
+        console.error("Error:", error);
+        if (element) {
+          element.innerHTML = `
+            <div style="text-align:center;padding:2rem;">
+              <p style="color:var(--color-primary-light);margin-bottom:1rem;">
+                ${getText('errors.loading', 'Failed to load content')}
+              </p>
+              <button onclick="location.reload()">
+                ${getText('errors.retry', 'Retry')}
+              </button>
+            </div>
+          `;
+        }
+      }
+      
+      // Handle page visibility changes (to pause/resume resource-intensive operations)
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+          // Resume any paused operations if needed
+        } else {
+          // Pause any resource-intensive operations
+        }
+      });
+      
+      // Event listeners
+      document.addEventListener('DOMContentLoaded', () => {
+        try {
+          // Set up overlay click handler
+          document.getElementById('overlay').addEventListener('click', closeFull);
+          
+          // Set up Escape key handler
+          document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') {
+              closeFull();
+            }
+          });
+          
+          // Set up scroll to top button
+          document.getElementById('scrollTop').addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          });
+          
+          // Set up language buttons
+          document.querySelectorAll('.language-btn').forEach(button => 
+            button.addEventListener('click', () => changeLanguage(button.dataset.lang))
+          );
+          
+          // Set up menu toggle for mobile
+          document.getElementById('menuToggle').addEventListener('click', () => {
+            document.getElementById('sidebar').classList.toggle('active');
+          });
+          
+          // Set up sidebar navigation
+          document.querySelectorAll('.nav-icon').forEach(link => {
+            if (link.getAttribute('href').startsWith('#')) {
+              link.addEventListener('click', (e) => {
+                // Close sidebar on mobile when clicking a nav link
+                if (window.innerWidth < 640) {
+                  document.getElementById('sidebar').classList.remove('active');
+                }
+                
+                // Smooth scroll to section
+                const targetId = link.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                  e.preventDefault();
+                  targetElement.scrollIntoView({ behavior: 'smooth' });
+                  
+                  // Update active nav item
+                  document.querySelectorAll('.nav-icon').forEach(navLink => {
+                    navLink.classList.toggle('active', navLink === link);
+                  });
+                }
+              });
+            }
+          });
+          
+          // Set up scroll event
+          window.addEventListener('scroll', scrollHandler);
+          
+          // Initial language setup
+          changeLanguage(lang);
+          
+          // Generate content with slight delay to allow animations
+          setTimeout(() => {
+            try {
+              generateContent();
+            } catch (error) {
+              handleError(error, document.getElementById('content'));
+            }
+          }, 200);
+          
+        } catch (error) {
+          handleError(error, document.getElementById('content'));
+        }
+      });
+      
+      // Handle service worker registration for PWA
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').then(
+            registration => console.log('ServiceWorker registration successful with scope: ', registration.scope),
+            error => console.log('ServiceWorker registration failed: ', error)
+          );
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
