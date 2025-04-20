@@ -210,869 +210,907 @@
   </main>
   <div id="overlay" class="overlay"></div>
   <script>
-    (function(){
-      const translations = {
-        en: {
-          mainTitle: "Nova Hub",
-          subtitle: "Explore Nova projects visually and quickly",
-          sectionTitles: {
-            "Finance Tools": "Finance Tools",
-            "Search Platforms": "Search Platforms",
-            "LLM Platforms": "LLM Platforms",
-            "Analytics & More": "Analytics & More"
-          },
-          controls: {
-            fullscreen: "Fullscreen",
-            minimize: "Minimize",
-            edit: "Edit",
-            delete: "Delete"
-          },
-          buttons: {
-            newCategory: "＋ New Category",
-            addLink: "+ Add Link"
-          },
-          prompts: {
-            newCategory: "New category:",
-            rename: "Rename:",
-            title: "Title:",
-            url: "URL:",
-            deleteCategory: "Delete '{}' category?",
-            deleteLink: "Delete this link?"
-          },
-          errors: {
-            loading: "Failed to load content",
-            retry: "Retry"
-          }
-        },
-        pt: {
-          mainTitle: "Nova Hub",
-          subtitle: "Explora os projetos Nova de forma visual e rápida",
-          sectionTitles: {
-            "Finance Tools": "Ferramentas Financeiras",
-            "Search Platforms": "Plataformas de Busca",
-            "LLM Platforms": "Plataformas LLM",
-            "Analytics & More": "Análises e Mais"
-          },
-          controls: {
-            fullscreen: "Tela Cheia",
-            minimize: "Minimizar",
-            edit: "Editar",
-            delete: "Excluir"
-          },
-          buttons: {
-            newCategory: "＋ Nova Categoria",
-            addLink: "+ Adicionar Link"
-          },
-          prompts: {
-            newCategory: "Nova categoria:",
-            rename: "Renomear:",
-            title: "Título:",
-            url: "URL:",
-            deleteCategory: "Excluir categoria '{}'?",
-            deleteLink: "Excluir este link?"
-          },
-          errors: {
-            loading: "Falha ao carregar conteúdo",
-            retry: "Tentar novamente"
-          }
-        },
-        es: {
-          mainTitle: "Nova Hub",
-          subtitle: "Explora los proyectos Nova de forma visual y rápida",
-          sectionTitles: {
-            "Finance Tools": "Herramientas Financieras",
-            "Search Platforms": "Plataformas de Búsqueda",
-            "LLM Platforms": "Plataformas LLM",
-            "Analytics & More": "Analíticas y Más"
-          },
-          controls: {
-            fullscreen: "Pantalla Completa",
-            minimize: "Minimizar",
-            edit: "Editar",
-            delete: "Eliminar"
-          },
-          buttons: {
-            newCategory: "＋ Nueva Categoría",
-            addLink: "+ Añadir Enlace"
-          },
-          prompts: {
-            newCategory: "Nueva categoría:",
-            rename: "Renombrar:",
-            title: "Título:",
-            url: "URL:",
-            deleteCategory: "¿Eliminar categoría '{}'?",
-            deleteLink: "¿Eliminar este enlace?"
-          },
-          errors: {
-            loading: "Error al cargar contenido",
-            retry: "Reintentar"
-          }
-        },
-        fr: {
-          mainTitle: "Nova Hub",
-          subtitle: "Explorez les projets Nova visuellement et rapidement",
-          sectionTitles: {
-            "Finance Tools": "Outils Financiers",
-            "Search Platforms": "Plateformes de Recherche",
-            "LLM Platforms": "Plateformes LLM",
-            "Analytics & More": "Analyses et Plus"
-          },
-          controls: {
-            fullscreen: "Plein Écran",
-            minimize: "Réduire",
-            edit: "Modifier",
-            delete: "Supprimer"
-          },
-          buttons: {
-            newCategory: "＋ Nouvelle Catégorie",
-            addLink: "+ Ajouter Lien"
-          },
-          prompts: {
-            newCategory: "Nouvelle catégorie:",
-            rename: "Renommer:",
-            title: "Titre:",
-            url: "URL:",
-            deleteCategory: "Supprimer la catégorie '{}'?",
-            deleteLink: "Supprimer ce lien?"
-          },
-          errors: {
-            loading: "Échec du chargement du contenu",
-            retry: "Réessayer"
-          }
-        }
-      };
-      
-      // Initialize data from localStorage or use defaults
-      const defaultCategories = {
-  "Finance Tools": [
-    {
-      title: "Nova Charts",
-      url: "https://nova-charts.netlify.app/",
-      description: "Interactive financial charts and analytics"
+      (function(){
+  const translations = {
+    en: {
+      mainTitle: "Nova Hub",
+      subtitle: "Explore Nova projects visually and quickly",
+      sectionTitles: {
+        "Finance Tools": "Finance Tools",
+        "Search Platforms": "Search Platforms",
+        "LLM Platforms": "LLM Platforms",
+        "Analytics & More": "Analytics & More"
+      },
+      controls: {
+        fullscreen: "Fullscreen",
+        minimize: "Minimize",
+        edit: "Edit",
+        delete: "Delete"
+      },
+      buttons: {
+        newCategory: "＋ New Category",
+        addLink: "+ Add Link"
+      },
+      prompts: {
+        newCategory: "New category:",
+        rename: "Rename:",
+        title: "Title:",
+        url: "URL:",
+        deleteCategory: "Delete '{}' category?",
+        deleteLink: "Delete this link?"
+      },
+      errors: {
+        loading: "Failed to load content",
+        retry: "Retry"
+      }
     },
-    {
-      title: "Nova Finance Hub",
-      url: "https://nova-finance-hub.netlify.app/",
-      description: "Comprehensive financial management tools"
+    pt: {
+      mainTitle: "Nova Hub",
+      subtitle: "Explora os projetos Nova de forma visual e rápida",
+      sectionTitles: {
+        "Finance Tools": "Ferramentas Financeiras",
+        "Search Platforms": "Plataformas de Busca",
+        "LLM Platforms": "Plataformas LLM",
+        "Analytics & More": "Análises e Mais"
+      },
+      controls: {
+        fullscreen: "Tela Cheia",
+        minimize: "Minimizar",
+        edit: "Editar",
+        delete: "Excluir"
+      },
+      buttons: {
+        newCategory: "＋ Nova Categoria",
+        addLink: "+ Adicionar Link"
+      },
+      prompts: {
+        newCategory: "Nova categoria:",
+        rename: "Renomear:",
+        title: "Título:",
+        url: "URL:",
+        deleteCategory: "Excluir categoria '{}'?",
+        deleteLink: "Excluir este link?"
+      },
+      errors: {
+        loading: "Falha ao carregar conteúdo",
+        retry: "Tentar novamente"
+      }
     },
-    {
-      title: "Market Wallet",
-      url: "https://market-wallet.netlify.app/",
-      description: "Track and manage your investment portfolio"
+    es: {
+      mainTitle: "Nova Hub",
+      subtitle: "Explora los proyectos Nova de forma visual y rápida",
+      sectionTitles: {
+        "Finance Tools": "Herramientas Financieras",
+        "Search Platforms": "Plataformas de Búsqueda",
+        "LLM Platforms": "Plataformas LLM",
+        "Analytics & More": "Analíticas y Más"
+      },
+      controls: {
+        fullscreen: "Pantalla Completa",
+        minimize: "Minimizar",
+        edit: "Editar",
+        delete: "Eliminar"
+      },
+      buttons: {
+        newCategory: "＋ Nueva Categoría",
+        addLink: "+ Añadir Enlace"
+      },
+      prompts: {
+        newCategory: "Nueva categoría:",
+        rename: "Renombrar:",
+        title: "Título:",
+        url: "URL:",
+        deleteCategory: "¿Eliminar categoría '{}'?",
+        deleteLink: "¿Eliminar este enlace?"
+      },
+      errors: {
+        loading: "Error al cargar contenido",
+        retry: "Reintentar"
+      }
     },
-    {
-      title: "Agent Finance Demo",
-      url: "https://agent-finance-demo.netlify.app/",
-      description: "AI-powered financial assistant"
+    fr: {
+      mainTitle: "Nova Hub",
+      subtitle: "Explorez les projets Nova visuellement et rapidement",
+      sectionTitles: {
+        "Finance Tools": "Outils Financiers",
+        "Search Platforms": "Plateformes de Recherche",
+        "LLM Platforms": "Plateformes LLM",
+        "Analytics & More": "Analyses et Plus"
+      },
+      controls: {
+        fullscreen: "Plein Écran",
+        minimize: "Réduire",
+        edit: "Modifier",
+        delete: "Supprimer"
+      },
+      buttons: {
+        newCategory: "＋ Nouvelle Catégorie",
+        addLink: "+ Ajouter Lien"
+      },
+      prompts: {
+        newCategory: "Nouvelle catégorie:",
+        rename: "Renommer:",
+        title: "Titre:",
+        url: "URL:",
+        deleteCategory: "Supprimer la catégorie '{}'?",
+        deleteLink: "Supprimer ce lien?"
+      },
+      errors: {
+        loading: "Échec du chargement du contenu",
+        retry: "Réessayer"
+      }
     }
-  ],
-  "Search Platforms": [
-    {
-      title: "Nova Search Dividends - All",
-      url: "https://nova-search-dividends.netlify.app/all.html",
-      description: "Complete dividend information search"
-    },
-    {
-      title: "Nova Search Dividends",
-      url: "https://nova-search-dividends.netlify.app/",
-      description: "Dividend-focused search platform"
-    },
-    {
-      title: "Nova Search Stock",
-      url: "https://nova-search-stock.netlify.app/",
-      description: "Stock information search engine"
-    },
-    {
-      title: "NovaSearch",
-      url: "https://novasearch.app/",
-      description: "Main search platform for Nova ecosystem"
-    },
-    {
-      title: "NovaSearch Hub",
-      url: "https://novasearch.app/hubsearch",
-      description: "Centralized search hub for all Nova resources"
-    }
-  ],
-  "LLM Platforms": [
-    {
-      title: "ChatGPT",
-      url: "https://chat.openai.com",
-      description: "OpenAI's conversational AI"
-    },
-    {
-      title: "Google Gemini",
-      url: "https://gemini.google.com",
-      description: "Google's multimodal AI assistant"
-    },
-    {
-      title: "Claude AI",
-      url: "https://claude.ai",
-      description: "Anthropic's helpful AI assistant"
-    },
-    {
-      title: "Microsoft Copilot",
-      url: "https://copilot.microsoft.com",
-      description: "Microsoft's AI companion"
-    },
-    {
-      title: "Perplexity AI",
-      url: "https://perplexity.ai",
-      description: "AI-powered search and answers"
-    },
-    {
-      title: "Chat Cantinho",
-      url: "https://chat-cantinho.vercel.app/",
-      description: "Custom chat interface for Nova ecosystem"
-    }
-  ],
-  "Analytics & More": [
-    {
-      title: "Market Analytics Hub",
-      url: "https://marketanalyticshubapp.azurewebsites.net/",
-      description: "Advanced market analytics and insights"
-    },
-    {
-      title: "Cantinho de Net",
-      url: "https://cantinhode.net/",
-      description: "Community platform for Nova users"
-    },
-    {
-      title: "Example Site",
-      url: "https://example.com",
-      description: "Demo site for testing purposes"
-    },
-    {
-      title: "Wikipedia",
-      url: "https://wikipedia.org",
-      description: "Free online encyclopedia"
-    },
-    {
-      title: "OpenAI",
-      url: "https://openai.com",
-      description: "AI research and deployment"
-    },
-    {
-      title: "GitHub",
-      url: "https://github.com",
-      description: "Code hosting platform"
-    }
-  ]
-};
+  };
+  
+  // Initialize data from localStorage or use defaults
+  const defaultCategories = {
+    "Finance Tools": [
+      {
+        title: "Nova Charts",
+        url: "https://nova-charts.netlify.app/",
+        description: "Interactive financial charts and analytics"
+      },
+      {
+        title: "Nova Finance Hub",
+        url: "https://nova-finance-hub.netlify.app/",
+        description: "Comprehensive financial management tools"
+      },
+      {
+        title: "Market Wallet",
+        url: "https://market-wallet.netlify.app/",
+        description: "Track and manage your investment portfolio"
+      },
+      {
+        title: "Agent Finance Demo",
+        url: "https://agent-finance-demo.netlify.app/",
+        description: "AI-powered financial assistant"
+      }
+    ],
+    "Search Platforms": [
+      {
+        title: "Nova Search Dividends - All",
+        url: "https://nova-search-dividends.netlify.app/all.html",
+        description: "Complete dividend information search"
+      },
+      {
+        title: "Nova Search Dividends",
+        url: "https://nova-search-dividends.netlify.app/",
+        description: "Dividend-focused search platform"
+      },
+      {
+        title: "Nova Search Stock",
+        url: "https://nova-search-stock.netlify.app/",
+        description: "Stock information search engine"
+      },
+      {
+        title: "NovaSearch",
+        url: "https://novasearch.app/",
+        description: "Main search platform for Nova ecosystem"
+      },
+      {
+        title: "NovaSearch Hub",
+        url: "https://novasearch.app/hubsearch",
+        description: "Centralized search hub for all Nova resources"
+      }
+    ],
+    "LLM Platforms": [
+      {
+        title: "ChatGPT",
+        url: "https://chat.openai.com",
+        description: "OpenAI's conversational AI"
+      },
+      {
+        title: "Google Gemini",
+        url: "https://gemini.google.com",
+        description: "Google's multimodal AI assistant"
+      },
+      {
+        title: "Claude AI",
+        url: "https://claude.ai",
+        description: "Anthropic's helpful AI assistant"
+      },
+      {
+        title: "Microsoft Copilot",
+        url: "https://copilot.microsoft.com",
+        description: "Microsoft's AI companion"
+      },
+      {
+        title: "Perplexity AI",
+        url: "https://perplexity.ai",
+        description: "AI-powered search and answers"
+      },
+      {
+        title: "Chat Cantinho",
+        url: "https://chat-cantinho.vercel.app/",
+        description: "Custom chat interface for Nova ecosystem"
+      }
+    ],
+    "Analytics & More": [
+      {
+        title: "Market Analytics Hub",
+        url: "https://marketanalyticshubapp.azurewebsites.net/",
+        description: "Advanced market analytics and insights"
+      },
+      {
+        title: "Cantinho de Net",
+        url: "https://cantinhode.net/",
+        description: "Community platform for Nova users"
+      },
+      {
+        title: "Example Site",
+        url: "https://example.com",
+        description: "Demo site for testing purposes"
+      },
+      {
+        title: "Wikipedia",
+        url: "https://wikipedia.org",
+        description: "Free online encyclopedia"
+      },
+      {
+        title: "OpenAI",
+        url: "https://openai.com",
+        description: "AI research and deployment"
+      },
+      {
+        title: "GitHub",
+        url: "https://github.com",
+        description: "Code hosting platform"
+      }
+    ]
+  };
 
-try {
-  categories = JSON.parse(localStorage.getItem('novaagg-categories')) || defaultCategories;
-  visible   = JSON.parse(localStorage.getItem('novaagg-visible')) ||
+  // Fix for variable declarations - these need to be declared before use
+  let categories;
+  let visible;
+
+  try {
+    categories = JSON.parse(localStorage.getItem('novaagg-categories')) || defaultCategories;
+    visible = JSON.parse(localStorage.getItem('novaagg-visible')) ||
               Object.keys(defaultCategories).reduce((a, k) => (a[k] = true, a), {});
-} catch (e) {
-  console.error("Error loading data from localStorage:", e);
-  categories = defaultCategories;
-  visible   = Object.keys(defaultCategories).reduce((a, k) => (a[k] = true, a), {});
-}
-      
-      // Safe localStorage operations
-      const safe = {
-        get(k) {
-          try {
-            return localStorage.getItem(k);
-          } catch (e) {
-            console.warn("Error reading from localStorage:", e);
-            return null;
-          }
-        },
-        set(k, v) {
-          try {
-            localStorage.setItem(k, v);
-            return true;
-          } catch (e) {
-            console.warn("Error writing to localStorage:", e);
-            return false;
-          }
-        }
-      };
-      
-      // Save data functions
-      function save() {
-        return safe.set('novaagg-categories', JSON.stringify(categories));
+  } catch (e) {
+    console.error("Error loading data from localStorage:", e);
+    categories = defaultCategories;
+    visible = Object.keys(defaultCategories).reduce((a, k) => (a[k] = true, a), {});
+  }
+  
+  // Safe localStorage operations
+  const safe = {
+    get(k) {
+      try {
+        return localStorage.getItem(k);
+      } catch (e) {
+        console.warn("Error reading from localStorage:", e);
+        return null;
       }
-      
-      // Get translated text
-      function getText(path, defaultValue = "") {
-        const keys = path.split('.');
-        let current = translations[lang] || translations.en;
-        
-        for (const key of keys) {
-          if (current[key] === undefined) {
-            return defaultValue;
-          }
-          current = current[key];
-        }
-        
-        return current;
+    },
+    set(k, v) {
+      try {
+        localStorage.setItem(k, v);
+        return true;
+      } catch (e) {
+        console.warn("Error writing to localStorage:", e);
+        return false;
       }
-      
-      // Format text with placeholders
-      function formatText(text, ...args) {
-        return text.replace(/{(\d+)}/g, (match, index) => 
-          typeof args[index] !== 'undefined' ? args[index] : match
-        ).replace(/{}/g, (match, index) => 
-          typeof args[0] !== 'undefined' ? args[0] : match
-        );
+    }
+  };
+  
+  // Get active language from localStorage or default to pt
+  let lang = safe.get('novaagg-lang') || 'pt';
+  
+  // Save data functions
+  function save() {
+    return safe.set('novaagg-categories', JSON.stringify(categories));
+  }
+  
+  // Get translated text
+  function getText(path, defaultValue = "") {
+    const keys = path.split('.');
+    let current = translations[lang] || translations.en;
+    
+    for (const key of keys) {
+      if (current[key] === undefined) {
+        return defaultValue;
       }
+      current = current[key];
+    }
+    
+    return current;
+  }
+  
+  // Format text with placeholders
+  function formatText(text, ...args) {
+    return text.replace(/{(\d+)}/g, (match, index) => 
+      typeof args[index] !== 'undefined' ? args[index] : match
+    ).replace(/{}/g, () => 
+      typeof args[0] !== 'undefined' ? args[0] : ""
+    );
+  }
+  
+  // Category management functions
+  function addCategory() {
+    const n = prompt(getText('prompts.newCategory'));
+    if (!n || n.trim() === '' || categories[n]) return;
+    
+    categories[n] = [];
+    visible[n] = true;
+    
+    if (save()) {
+      safe.set('novaagg-visible', JSON.stringify(visible));
+      refresh();
+    }
+  }
+  
+  function editCategory(o) {
+    const n = prompt(getText('prompts.rename'), o);
+    if (!n || n.trim() === '' || n === o || categories[n]) return;
+    
+    categories[n] = categories[o];
+    delete categories[o];
+    visible[n] = visible[o];
+    delete visible[o];
+    
+    if (save()) {
+      safe.set('novaagg-visible', JSON.stringify(visible));
+      refresh();
+    }
+  }
+  
+  function deleteCategory(n) {
+    if (!confirm(formatText(getText('prompts.deleteCategory'), n))) return;
+    
+    delete categories[n];
+    delete visible[n];
+    
+    if (save()) {
+      safe.set('novaagg-visible', JSON.stringify(visible));
+      refresh();
+    }
+  }
+  
+  // Link management functions
+  function addLink(c) {
+    const t = prompt(getText('prompts.title'));
+    if (!t || t.trim() === '') return;
+    
+    const u = prompt(getText('prompts.url'));
+    if (!u || u.trim() === '') return;
+    
+    // Basic URL validation
+    let validUrl = u;
+    if (!/^https?:\/\//i.test(validUrl)) {
+      validUrl = 'https://' + validUrl;
+    }
+    
+    categories[c].push({title: t.trim(), url: validUrl, description: ''});
+    
+    if (save()) {
+      refresh();
+    }
+  }
+  
+  function editLink(c, i) {
+    const item = categories[c][i];
+    if (!item) return;
+    
+    const t = prompt(getText('prompts.title'), item.title);
+    if (!t || t.trim() === '') return;
+    
+    const u = prompt(getText('prompts.url'), item.url);
+    if (!u || u.trim() === '') return;
+    
+    // Basic URL validation
+    let validUrl = u;
+    if (!/^https?:\/\//i.test(validUrl)) {
+      validUrl = 'https://' + validUrl;
+    }
+    
+    categories[c][i] = {title: t.trim(), url: validUrl, description: item.description || ''};
+    
+    if (save()) {
+      refresh();
+    }
+  }
+  
+  function deleteLink(c, i) {
+    if (!confirm(getText('prompts.deleteLink'))) return;
+    
+    if (Array.isArray(categories[c]) && categories[c][i]) {
+      categories[c].splice(i, 1);
       
-      // Category management functions
-      function addCategory() {
-        const n = prompt(getText('prompts.newCategory'));
-        if (!n || n.trim() === '' || categories[n]) return;
-        
-        categories[n] = [];
-        visible[n] = true;
-        
-        if (save()) {
-          safe.set('novaagg-visible', JSON.stringify(visible));
-          refresh();
-        }
+      if (save()) {
+        refresh();
       }
+    }
+  }
+  
+  // Toggle category visibility
+  function toggle(c) {
+    visible[c] = !visible[c];
+    safe.set('novaagg-visible', JSON.stringify(visible));
+    
+    const container = document.querySelector(`section[data-category="${c}"] .container`);
+    if (container) {
+      container.style.display = visible[c] ? 'grid' : 'none';
       
-      function editCategory(o) {
-        const n = prompt(getText('prompts.rename'), o);
-        if (!n || n.trim() === '' || n === o || categories[n]) return;
-        
-        categories[n] = categories[o];
-        delete categories[o];
-        visible[n] = visible[o];
-        delete visible[o];
-        
-        if (save()) {
-          safe.set('novaagg-visible', JSON.stringify(visible));
-          refresh();
-        }
+      const toggleBtn = document.querySelector(`section[data-category="${c}"] h2 button:first-child`);
+      if (toggleBtn) {
+        toggleBtn.textContent = visible[c] ? '▼' : '▶';
+        toggleBtn.setAttribute('aria-label', visible[c] ? 'Collapse' : 'Expand');
       }
-      
-      function deleteCategory(n) {
-        if (!confirm(formatText(getText('prompts.deleteCategory'), n))) return;
-        
-        delete categories[n];
-        delete visible[n];
-        
-        if (save()) {
-          safe.set('novaagg-visible', JSON.stringify(visible));
-          refresh();
-        }
+    }
+  }
+  
+  // Update tooltips for different languages
+  function updateTooltips(lang) {
+    document.querySelectorAll('.nav-icon').forEach(l => {
+      const a = `data-tooltip-${lang}`;
+      if (l.hasAttribute(a)) {
+        l.setAttribute('data-tooltip', l.getAttribute(a));
+        l.setAttribute('aria-label', l.getAttribute(a));
       }
+    });
+  }
+  
+  // Language management
+  function changeLanguage(l) {
+    if (!translations[l] || l === lang) return;
+    
+    lang = l;
+    
+    // Update language buttons
+    document.querySelectorAll('.language-btn').forEach(b => {
+      const a = b.dataset.lang === l;
+      b.classList.toggle('active', a);
+      b.setAttribute('aria-pressed', a);
+    });
+    
+    // Update header content with animation
+    const mt = document.getElementById('main-title');
+    const st = document.getElementById('subtitle');
+    if (mt && st) {
+      [mt, st].forEach(x => x.style.opacity = 0);
       
-      // Link management functions
-      function addLink(c) {
-        const t = prompt(getText('prompts.title'));
-        if (!t || t.trim() === '') return;
-        
-        const u = prompt(getText('prompts.url'));
-        if (!u || u.trim() === '') return;
-        
-        // Basic URL validation
-        let validUrl = u;
-        if (!/^https?:\/\//i.test(validUrl)) {
-          validUrl = 'https://' + validUrl;
-        }
-        
-        categories[c].push({title: t.trim(), url: validUrl, description: ''});
-        
-        if (save()) {
-          refresh();
-        }
+      setTimeout(() => {
+        mt.textContent = getText('mainTitle');
+        st.textContent = getText('subtitle');
+        [mt, st].forEach(x => x.style.opacity = 1);
+      }, 200);
+    }
+    
+    updateTooltips(l);
+    safe.set('novaagg-lang', l);
+    
+    // Update all translatable content
+    updateAllTranslations();
+  }
+  
+  // Update all translated content
+  function updateAllTranslations() {
+    // Update section titles
+    document.querySelectorAll('section').forEach(section => {
+      const categoryName = section.dataset.category;
+      const h2 = section.querySelector('h2');
+      
+      if (!h2 || !categoryName || !translations[lang].sectionTitles[categoryName]) return;
+      
+      const buttons = Array.from(h2.querySelectorAll('button'));
+      h2.innerHTML = '';
+      
+      if (buttons[0]) h2.appendChild(buttons[0]); // Toggle button
+      h2.append(translations[lang].sectionTitles[categoryName] || categoryName);
+      buttons.slice(1).forEach(b => h2.appendChild(b)); // Edit/delete buttons
+    });
+    
+    // Update buttons text
+    document.querySelectorAll('#content > button').forEach(btn => {
+      if (btn.dataset.key) {
+        btn.textContent = getText(btn.dataset.key, btn.textContent);
       }
-      
-      function editLink(c, i) {
-        const item = categories[c][i];
-        if (!item) return;
-        
-        const t = prompt(getText('prompts.title'), item.title);
-        if (!t || t.trim() === '') return;
-        
-        const u = prompt(getText('prompts.url'), item.url);
-        if (!u || u.trim() === '') return;
-        
-        // Basic URL validation
-        let validUrl = u;
-        if (!/^https?:\/\//i.test(validUrl)) {
-          validUrl = 'https://' + validUrl;
-        }
-        
-        categories[c][i] = {title: t.trim(), url: validUrl, description: item.description || ''};
-        
-        if (save()) {
-          refresh();
-        }
+    });
+    
+    document.querySelectorAll('.container > button').forEach(btn => {
+      if (btn.dataset.key) {
+        btn.textContent = getText(btn.dataset.key, btn.textContent);
       }
-      
-      function deleteLink(c, i) {
-        if (!confirm(getText('prompts.deleteLink'))) return;
-        
-        if (Array.isArray(categories[c]) && categories[c][i]) {
-          categories[c].splice(i, 1);
-          
-          if (save()) {
-            refresh();
-          }
-        }
+    });
+    
+    // Update control buttons accessibility
+    document.querySelectorAll('.controls button').forEach((btn, index) => {
+      if (index < 4) { // Only process the first 4 buttons
+        const labels = ['fullscreen', 'minimize', 'edit', 'delete'];
+        btn.setAttribute('aria-label', getText(`controls.${labels[index]}`));
       }
+    });
+  }
+  
+  // Create frame element
+  function createFrame(s, c, i) {
+    const f = document.createElement('div');
+    f.className = 'frame';
+    
+    // Controls
+    const ctr = document.createElement('div');
+    ctr.className = 'controls';
+    
+    const controlLabels = ['fullscreen', 'minimize', 'edit', 'delete'];
+    const controlIcons = ['🔍', '◻️', '✏️', '🗑️'];
+    
+    controlLabels.forEach((label, j) => {
+      const b = document.createElement('button');
+      b.textContent = controlIcons[j];
+      b.setAttribute('aria-label', getText(`controls.${label}`));
       
-      // Toggle category visibility
-      function toggle(c) {
-        visible[c] = !visible[c];
-        safe.set('novaagg-visible', JSON.stringify(visible));
+      b.onclick = e => {
+        e.preventDefault();
+        e.stopPropagation();
         
-        const container = document.querySelector(`section[data-category="${c}"] .container`);
-        if (container) {
-          container.style.display = visible[c] ? 'grid' : 'none';
-          
-          const toggleBtn = document.querySelector(`section[data-category="${c}"] h2 button:first-child`);
-          if (toggleBtn) {
-            toggleBtn.textContent = visible[c] ? '▼' : '▶';
-            toggleBtn.setAttribute('aria-label', visible[c] ? 'Collapse' : 'Expand');
-          }
-        }
-      }
-      
-      // Update tooltips for different languages
-      function updateTooltips(lang) {
-        document.querySelectorAll('.nav-icon').forEach(l => {
-          const a = `data-tooltip-${lang}`;
-          if (l.hasAttribute(a)) {
-            l.setAttribute('data-tooltip', l.getAttribute(a));
-            l.setAttribute('aria-label', l.getAttribute(a));
-          }
-        });
-      }
-      
-      // Language management
-      let lang = safe.get('novaagg-lang') || 'pt';
-      
-      function changeLanguage(l) {
-        if (!translations[l] || l === lang) return;
-        
-        lang = l;
-        
-        // Update language buttons
-        document.querySelectorAll('.language-btn').forEach(b => {
-          const a = b.dataset.lang === l;
-          b.classList.toggle('active', a);
-          b.setAttribute('aria-pressed', a);
-        });
-        
-        // Update header content with animation
-        const mt = document.getElementById('main-title');
-        const st = document.getElementById('subtitle');
-        [mt, st].forEach(x => x.style.opacity = 0);
-        
-        setTimeout(() => {
-          mt.textContent = getText('mainTitle');
-          st.textContent = getText('subtitle');
-          [mt, st].forEach(x => x.style.opacity = 1);
-        }, 200);
-        
-        updateTooltips(l);
-        safe.set('novaagg-lang', l);
-        
-        // Update all translatable content
-        updateAllTranslations();
-      }
-      
-      // Update all translated content
-      function updateAllTranslations() {
-        // Update section titles
-        document.querySelectorAll('section').forEach(section => {
-          const categoryName = section.dataset.category;
-          const h2 = section.querySelector('h2');
-          
-          if (!h2 || !categoryName || !translations[lang].sectionTitles[categoryName]) return;
-          
-          const buttons = Array.from(h2.querySelectorAll('button'));
-          h2.innerHTML = '';
-          
-          if (buttons[0]) h2.appendChild(buttons[0]); // Toggle button
-          h2.append(translations[lang].sectionTitles[categoryName] || categoryName);
-          buttons.slice(1).forEach(b => h2.appendChild(b)); // Edit/delete buttons
-        });
-        
-        // Update buttons text
-        document.querySelectorAll('#content > button').forEach(btn => {
-          if (btn.dataset.key) {
-            btn.textContent = getText(btn.dataset.key, btn.textContent);
-          }
-        });
-        
-        document.querySelectorAll('.container > button').forEach(btn => {
-          if (btn.dataset.key) {
-            btn.textContent = getText(btn.dataset.key, btn.textContent);
-          }
-        });
-        
-        // Update control buttons accessibility
-        document.querySelectorAll('.controls button').forEach((btn, index) => {
-          if (index < 4) { // Only process the first 4 buttons
-            const labels = ['fullscreen', 'minimize', 'edit', 'delete'];
-            btn.setAttribute('aria-label', getText(`controls.${labels[index]}`));
-          }
-        });
-      }
-      
-      // Create frame element
-      function createFrame(s, c, i) {
-        const f = document.createElement('div');
-        f.className = 'frame';
-        
-        // Controls
-        const ctr = document.createElement('div');
-        ctr.className = 'controls';
-        
-        const controlLabels = ['fullscreen', 'minimize', 'edit', 'delete'];
-        const controlIcons = ['🔍', '◻️', '✏️', '🗑️'];
-        
-        controlLabels.forEach((label, j) => {
-          const b = document.createElement('button');
-          b.textContent = controlIcons[j];
-          b.setAttribute('aria-label', getText(`controls.${label}`));
-          
-          b.onclick = e => {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            if (j === 0) {
-              f.classList.add('fullscreen');
-              document.getElementById('overlay').classList.add('active');
-              const ifr = f.querySelector('iframe');
-              if (ifr && ifr.dataset.src && !ifr.src) {
-                ifr.src = ifr.dataset.src;
-              }
-              f.focus();
-            } else if (j === 1) {
-              f.classList.remove('fullscreen');
-              document.getElementById('overlay').classList.remove('active');
-            } else if (j === 2) {
-              editLink(c, i);
-            } else if (j === 3) {
-              deleteLink(c, i);
-            }
-          };
-          ctr.appendChild(b);
-        });
-        
-        f.appendChild(ctr);
-        
-// Iframe
-        const ifr = document.createElement('iframe');
-        ifr.dataset.src = s.url;
-        ifr.loading = 'lazy';
-        ifr.title = s.title;
-        ifr.setAttribute('sandbox', 'allow-scripts allow-same-origin');
-        f.appendChild(ifr);
-        
-        // Site title
-        const st = document.createElement('div');
-        st.className = 'site-title';
-        st.textContent = s.title;
-        f.appendChild(st);
-        
-        // Add click handler to open frame in fullscreen
-        f.addEventListener('click', (e) => {
-          // If clicked on controls, don't open fullscreen
-          if (e.target.closest('.controls')) return;
-          
+        if (j === 0) {
           f.classList.add('fullscreen');
           document.getElementById('overlay').classList.add('active');
-          const iframe = f.querySelector('iframe');
-          if (iframe && iframe.dataset.src && !iframe.src) {
-            iframe.src = iframe.dataset.src;
+          const ifr = f.querySelector('iframe');
+          if (ifr && ifr.dataset.src && !ifr.src) {
+            ifr.src = ifr.dataset.src;
+          }
+          f.focus();
+        } else if (j === 1) {
+          f.classList.remove('fullscreen');
+          document.getElementById('overlay').classList.remove('active');
+        } else if (j === 2) {
+          editLink(c, i);
+        } else if (j === 3) {
+          deleteLink(c, i);
+        }
+      };
+      ctr.appendChild(b);
+    });
+    
+    f.appendChild(ctr);
+    
+    // Iframe
+    const ifr = document.createElement('iframe');
+    ifr.dataset.src = s.url;
+    ifr.loading = 'lazy';
+    ifr.title = s.title;
+    ifr.setAttribute('sandbox', 'allow-scripts allow-same-origin');
+    f.appendChild(ifr);
+    
+    // Site title
+    const st = document.createElement('div');
+    st.className = 'site-title';
+    st.textContent = s.title;
+    f.appendChild(st);
+    
+    // Add click handler to open frame in fullscreen
+    f.addEventListener('click', (e) => {
+      // If clicked on controls, don't open fullscreen
+      if (e.target.closest('.controls')) return;
+      
+      f.classList.add('fullscreen');
+      document.getElementById('overlay').classList.add('active');
+      const iframe = f.querySelector('iframe');
+      if (iframe && iframe.dataset.src && !iframe.src) {
+        iframe.src = iframe.dataset.src;
+      }
+    });
+    
+    return f;
+  }
+  
+  // Generate content
+  function generateContent() {
+    const ct = document.getElementById('content');
+    if (!ct) return;
+    
+    ct.innerHTML = '';
+    
+    // Add Category button
+    const ac = document.createElement('button');
+    ac.textContent = getText('buttons.newCategory', '＋ New Category');
+    ac.dataset.key = 'buttons.newCategory';
+    ac.onclick = addCategory;
+    ct.appendChild(ac);
+    
+    // Generate sections for each category
+    Object.entries(categories).forEach(([c, arr]) => {
+      const sec = document.createElement('section');
+      sec.dataset.category = c;
+      
+      // Create section header with a safe ID
+      const h2 = document.createElement('h2');
+      h2.id = c.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      
+      // Toggle button
+      const tb = document.createElement('button');
+      tb.textContent = visible[c] ? '▼' : '▶';
+      tb.setAttribute('aria-label', visible[c] ? 'Collapse' : 'Expand');
+      tb.onclick = (e) => {
+        e.preventDefault();
+        toggle(c);
+      };
+      h2.appendChild(tb);
+      
+      // Category name - translate if available
+      const translatedName = translations[lang]?.sectionTitles[c] || c;
+      h2.append(translatedName);
+      
+      // Edit and delete buttons
+      const editBtn = document.createElement('button');
+      editBtn.textContent = '✏️';
+      editBtn.setAttribute('aria-label', getText('controls.edit', 'Edit category'));
+      editBtn.onclick = (e) => {
+        e.preventDefault();
+        editCategory(c);
+      };
+      h2.appendChild(editBtn);
+      
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = '🗑️';
+      deleteBtn.setAttribute('aria-label', getText('controls.delete', 'Delete category'));
+      deleteBtn.onclick = (e) => {
+        e.preventDefault();
+        deleteCategory(c);
+      };
+      h2.appendChild(deleteBtn);
+      
+      sec.appendChild(h2);
+      
+      // Container for frames
+      const cont = document.createElement('div');
+      cont.className = 'container';
+      cont.style.display = visible[c] ? 'grid' : 'none';
+      
+      // Add frames
+      if (Array.isArray(arr)) {
+        arr.forEach((s, i) => {
+          if (s && s.title && s.url) {
+            cont.appendChild(createFrame(s, c, i));
           }
         });
-        
-        return f;
       }
       
-      // Generate content
-      function generateContent() {
-        const ct = document.getElementById('content');
-        ct.innerHTML = '';
-        
-        // Add Category button
-        const ac = document.createElement('button');
-        ac.textContent = getText('buttons.newCategory', '＋ New Category');
-        ac.dataset.key = 'buttons.newCategory';
-        ac.onclick = addCategory;
-        ct.appendChild(ac);
-        
-        // Generate sections for each category
-        Object.entries(categories).forEach(([c, arr]) => {
-          const sec = document.createElement('section');
-          sec.dataset.category = c;
-          
-          // Create section header
-          const h2 = document.createElement('h2');
-          h2.id = c.toLowerCase().replace(/\s+/g, '-');
-          
-          // Toggle button
-          const tb = document.createElement('button');
-          tb.textContent = visible[c] ? '▼' : '▶';
-          tb.setAttribute('aria-label', visible[c] ? 'Collapse' : 'Expand');
-          tb.onclick = (e) => {
-            e.preventDefault();
-            toggle(c);
-          };
-          h2.appendChild(tb);
-          
-          // Category name - translate if available
-          const translatedName = translations[lang]?.sectionTitles[c] || c;
-          h2.append(translatedName);
-          
-          // Edit and delete buttons
-          const editBtn = document.createElement('button');
-          editBtn.textContent = '✏️';
-          editBtn.setAttribute('aria-label', getText('controls.edit', 'Edit category'));
-          editBtn.onclick = (e) => {
-            e.preventDefault();
-            editCategory(c);
-          };
-          h2.appendChild(editBtn);
-          
-          const deleteBtn = document.createElement('button');
-          deleteBtn.textContent = '🗑️';
-          deleteBtn.setAttribute('aria-label', getText('controls.delete', 'Delete category'));
-          deleteBtn.onclick = (e) => {
-            e.preventDefault();
-            deleteCategory(c);
-          };
-          h2.appendChild(deleteBtn);
-          
-          sec.appendChild(h2);
-          
-          // Container for frames
-          const cont = document.createElement('div');
-          cont.className = 'container';
-          cont.style.display = visible[c] ? 'grid' : 'none';
-          
-          // Add frames
-          if (Array.isArray(arr)) {
-            arr.forEach((s, i) => {
-              if (s && s.title && s.url) {
-                cont.appendChild(createFrame(s, c, i));
-              }
-            });
+      // Add link button
+      const al = document.createElement('button');
+      al.textContent = getText('buttons.addLink', '+ Add Link');
+      al.dataset.key = 'buttons.addLink';
+      al.onclick = (e) => {
+        e.preventDefault();
+        addLink(c);
+      };
+      cont.appendChild(al);
+      
+      sec.appendChild(cont);
+      ct.appendChild(sec);
+    });
+    
+    const loadingEl = document.getElementById('loading');
+    if (loadingEl) {
+      loadingEl.style.display = 'none';
+    }
+    
+    initObservers();
+  }
+  
+  // Helper function for debouncing
+  function debounce(fn, wait) {
+    let timeout;
+    return (...args) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => fn(...args), wait);
+    };
+  }
+  
+  // Initialize observers for lazy loading and navigation
+  function initObservers() {
+    // Lazy load frames
+    if ('IntersectionObserver' in window) {
+      const lazyObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const iframe = entry.target.querySelector('iframe');
+            if (iframe && iframe.dataset.src && !iframe.src) {
+              iframe.src = iframe.dataset.src;
+            }
+            lazyObserver.unobserve(entry.target);
           }
-          
-          // Add link button
-          const al = document.createElement('button');
-          al.textContent = getText('buttons.addLink', '+ Add Link');
-          al.dataset.key = 'buttons.addLink';
-          al.onclick = (e) => {
-            e.preventDefault();
-            addLink(c);
-          };
-          cont.appendChild(al);
-          
-          sec.appendChild(cont);
-          ct.appendChild(sec);
         });
-        
-        document.getElementById('loading').style.display = 'none';
-        initObservers();
-      }
+      }, {rootMargin: '100px', threshold: 0.1});
       
-      // Helper function for debouncing
-      function debounce(fn, wait) {
-        let timeout;
-        return (...args) => {
-          clearTimeout(timeout);
-          timeout = setTimeout(() => fn(...args), wait);
-        };
-      }
+      document.querySelectorAll('.frame').forEach(frame => lazyObserver.observe(frame));
       
-      // Initialize observers for lazy loading and navigation
-      function initObservers() {
-        // Lazy load frames
-        if ('IntersectionObserver' in window) {
-          const lazyObserver = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-              if (entry.isIntersecting) {
-                const iframe = entry.target.querySelector('iframe');
-                if (iframe && iframe.dataset.src && !iframe.src) {
-                  iframe.src = iframe.dataset.src;
-                }
-                lazyObserver.unobserve(entry.target);
-              }
-            });
-          }, {rootMargin: '100px', threshold: 0.1});
-          
-          document.querySelectorAll('.frame').forEach(frame => lazyObserver.observe(frame));
-          
-          // Update active nav item on scroll
-          const scrollObserver = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-              if (entry.isIntersecting && entry.intersectionRatio > 0.3) {
-                const id = entry.target.querySelector('h2')?.id;
-                if (id) {
-                  document.querySelectorAll('.nav-icon').forEach(link => {
-                    const isActive = link.getAttribute('href') === `#${id}`;
-                    link.classList.toggle('active', isActive);
-                  });
-                }
-              }
-            });
-          }, {threshold: [0.1, 0.3]});
-          
-          document.querySelectorAll('section').forEach(section => scrollObserver.observe(section));
-        } else {
-          // Fallback for browsers without IntersectionObserver
-          const frames = document.querySelectorAll('.frame');
-          function checkVisibility() {
-            frames.forEach(frame => {
-              const rect = frame.getBoundingClientRect();
-              const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
-              if (isVisible) {
-                const iframe = frame.querySelector('iframe');
-                if (iframe && iframe.dataset.src && !iframe.src) {
-                  iframe.src = iframe.dataset.src;
-                }
-              }
-            });
+      // Update active nav item on scroll
+      const scrollObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && entry.intersectionRatio > 0.3) {
+            const id = entry.target.querySelector('h2')?.id;
+            if (id) {
+              document.querySelectorAll('.nav-icon').forEach(link => {
+                const isActive = link.getAttribute('href') === `#${id}`;
+                link.classList.toggle('active', isActive);
+              });
+            }
           }
-          
-          window.addEventListener('scroll', debounce(checkVisibility, 200));
-          checkVisibility(); // Initial check
-        }
+        });
+      }, {threshold: [0.1, 0.3]});
+      
+      document.querySelectorAll('section').forEach(section => scrollObserver.observe(section));
+    } else {
+      // Fallback for browsers without IntersectionObserver
+      const frames = document.querySelectorAll('.frame');
+      function checkVisibility() {
+        frames.forEach(frame => {
+          const rect = frame.getBoundingClientRect();
+          const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+          if (isVisible) {
+            const iframe = frame.querySelector('iframe');
+            if (iframe && iframe.dataset.src && !iframe.src) {
+              iframe.src = iframe.dataset.src;
+            }
+          }
+        });
       }
       
-      // Refresh content
-      function refresh() {
-        generateContent();
-        updateAllTranslations();
+      window.addEventListener('scroll', debounce(checkVisibility, 200));
+      checkVisibility(); // Initial check
+    }
+  }
+  
+  // Refresh content
+  function refresh() {
+    generateContent();
+    updateAllTranslations();
+  }
+  
+  // Handle scroll for scroll-to-top button
+  const scrollHandler = debounce(() => {
+    const scrollTopBtn = document.getElementById('scrollTop');
+    if (scrollTopBtn) {
+      scrollTopBtn.classList.toggle('visible', window.scrollY > 300);
+    }
+  }, 100);
+  
+  // Close fullscreen frames
+  function closeFull() {
+    const fullscreenFrame = document.querySelector('.frame.fullscreen');
+    if (fullscreenFrame) {
+      fullscreenFrame.classList.remove('fullscreen');
+    }
+    
+    const overlay = document.getElementById('overlay');
+    if (overlay) {
+      overlay.classList.remove('active');
+    }
+  }
+  
+  // Handle errors gracefully
+  function handleError(error, element) {
+    console.error("Error:", error);
+    if (element) {
+      element.innerHTML = `
+        <div style="text-align:center;padding:2rem;">
+          <p style="color:var(--color-primary-light);margin-bottom:1rem;">
+            ${getText('errors.loading', 'Failed to load content')}
+          </p>
+          <button onclick="location.reload()">
+            ${getText('errors.retry', 'Retry')}
+          </button>
+        </div>
+      `;
+    }
+  }
+  
+  // Event listeners initialization
+  function initEventListeners() {
+    try {
+      // Set up overlay click handler
+      const overlay = document.getElementById('overlay');
+      if (overlay) {
+        overlay.addEventListener('click', closeFull);
       }
       
-      // Handle scroll for scroll-to-top button
-      const scrollHandler = debounce(() => {
-        const scrollTopBtn = document.getElementById('scrollTop');
-        if (scrollTopBtn) {
-          scrollTopBtn.classList.toggle('visible', window.scrollY > 300);
-        }
-      }, 100);
-      
-      // Close fullscreen frames
-      function closeFull() {
-        const fullscreenFrame = document.querySelector('.frame.fullscreen');
-        if (fullscreenFrame) {
-          fullscreenFrame.classList.remove('fullscreen');
-        }
-        document.getElementById('overlay').classList.remove('active');
-      }
-      
-      // Handle errors gracefully
-      function handleError(error, element) {
-        console.error("Error:", error);
-        if (element) {
-          element.innerHTML = `
-            <div style="text-align:center;padding:2rem;">
-              <p style="color:var(--color-primary-light);margin-bottom:1rem;">
-                ${getText('errors.loading', 'Failed to load content')}
-              </p>
-              <button onclick="location.reload()">
-                ${getText('errors.retry', 'Retry')}
-              </button>
-            </div>
-          `;
-        }
-      }
-      
-      // Handle page visibility changes (to pause/resume resource-intensive operations)
-      document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'visible') {
-          // Resume any paused operations if needed
-        } else {
-          // Pause any resource-intensive operations
+      // Set up Escape key handler
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+          closeFull();
         }
       });
       
-      // Event listeners
-      document.addEventListener('DOMContentLoaded', () => {
-        try {
-          // Set up overlay click handler
-          document.getElementById('overlay').addEventListener('click', closeFull);
-          
-          // Set up Escape key handler
-          document.addEventListener('keydown', e => {
-            if (e.key === 'Escape') {
-              closeFull();
+      // Set up scroll to top button
+      const scrollTopBtn = document.getElementById('scrollTop');
+      if (scrollTopBtn) {
+        scrollTopBtn.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+      
+      // Set up language buttons
+      document.querySelectorAll('.language-btn').forEach(button => 
+        button.addEventListener('click', () => changeLanguage(button.dataset.lang))
+      );
+      
+      // Set up menu toggle for mobile
+      const menuToggle = document.getElementById('menuToggle');
+      const sidebar = document.getElementById('sidebar');
+      if (menuToggle && sidebar) {
+        menuToggle.addEventListener('click', () => {
+          sidebar.classList.toggle('active');
+        });
+      }
+      
+      // Set up sidebar navigation
+      document.querySelectorAll('.nav-icon').forEach(link => {
+        if (link.getAttribute('href')?.startsWith('#')) {
+          link.addEventListener('click', (e) => {
+            // Close sidebar on mobile when clicking a nav link
+            if (window.innerWidth < 640 && sidebar) {
+              sidebar.classList.remove('active');
             }
-          });
-          
-          // Set up scroll to top button
-          document.getElementById('scrollTop').addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          });
-          
-          // Set up language buttons
-          document.querySelectorAll('.language-btn').forEach(button => 
-            button.addEventListener('click', () => changeLanguage(button.dataset.lang))
-          );
-          
-          // Set up menu toggle for mobile
-          document.getElementById('menuToggle').addEventListener('click', () => {
-            document.getElementById('sidebar').classList.toggle('active');
-          });
-          
-          // Set up sidebar navigation
-          document.querySelectorAll('.nav-icon').forEach(link => {
-            if (link.getAttribute('href').startsWith('#')) {
-              link.addEventListener('click', (e) => {
-                // Close sidebar on mobile when clicking a nav link
-                if (window.innerWidth < 640) {
-                  document.getElementById('sidebar').classList.remove('active');
-                }
-                
-                // Smooth scroll to section
-                const targetId = link.getAttribute('href').substring(1);
-                const targetElement = document.getElementById(targetId);
-                if (targetElement) {
-                  e.preventDefault();
-                  targetElement.scrollIntoView({ behavior: 'smooth' });
-                  
-                  // Update active nav item
-                  document.querySelectorAll('.nav-icon').forEach(navLink => {
-                    navLink.classList.toggle('active', navLink === link);
-                  });
-                }
+            
+            // Smooth scroll to section
+            const targetId = link.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+            if (targetElement) {
+              e.preventDefault();
+              targetElement.scrollIntoView({ behavior: 'smooth' });
+              
+              // Update active nav item
+              document.querySelectorAll('.nav-icon').forEach(navLink => {
+                navLink.classList.toggle('active', navLink === link);
               });
             }
           });
-          
-          // Set up scroll event
-          window.addEventListener('scroll', scrollHandler);
-          
-          // Initial language setup
-          changeLanguage(lang);
-          
-          // Generate content with slight delay to allow animations
-          setTimeout(() => {
-            try {
-              generateContent();
-            } catch (error) {
-              handleError(error, document.getElementById('content'));
-            }
-          }, 200);
-          
-        } catch (error) {
-          handleError(error, document.getElementById('content'));
         }
       });
       
-      // Handle service worker registration for PWA
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js').then(
-            registration => console.log('ServiceWorker registration successful with scope: ', registration.scope),
-            error => console.log('ServiceWorker registration failed: ', error)
-          );
-        });
-      }
-    })();
+      // Set up scroll event
+      window.addEventListener('scroll', scrollHandler);
+      
+    } catch (error) {
+      console.error("Error initializing event listeners:", error);
+    }
+  }
+  
+  // Handle page visibility changes (to pause/resume resource-intensive operations)
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      // Resume any paused operations if needed
+    } else {
+      // Pause any resource-intensive operations
+    }
+  });
+  
+  // Main initialization
+  document.addEventListener('DOMContentLoaded', () => {
+    try {
+      // Set up all event listeners
+      initEventListeners();
+      
+      // Initial language setup
+      changeLanguage(lang);
+      
+      // Generate content with slight delay to allow animations
+      setTimeout(() => {
+        try {
+          generateContent();
+        } catch (error) {
+          handleError(error, document.getElementById('content'));
+        }
+      }, 200);
+      
+    } catch (error) {
+      handleError(error, document.getElementById('content'));
+    }
+  });
+  
+  // Handle service worker registration for PWA
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').then(
+        registration => console.log('ServiceWorker registration successful with scope: ', registration.scope),
+        error => console.log('ServiceWorker registration failed: ', error)
+      );
+    });
+  }
+})();
   </script>
 </body>
 </html>
