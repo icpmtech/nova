@@ -723,79 +723,114 @@
     });
   }
   
-  // Create frame element
-  function createFrame(s, c, i) {
-    const f = document.createElement('div');
-    f.className = 'frame';
-    
-    // Controls
-    const ctr = document.createElement('div');
-    ctr.className = 'controls';
-    
-    const controlLabels = ['fullscreen', 'minimize', 'edit', 'delete'];
-    const controlIcons = ['🔍', '◻️', '✏️', '🗑️'];
-    
-    controlLabels.forEach((label, j) => {
-      const b = document.createElement('button');
-      b.textContent = controlIcons[j];
-      b.setAttribute('aria-label', getText(`controls.${label}`));
-      
-      b.onclick = e => {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        if (j === 0) {
-          f.classList.add('fullscreen');
-          document.getElementById('overlay').classList.add('active');
-          const ifr = f.querySelector('iframe');
-          if (ifr && ifr.dataset.src && !ifr.src) {
-            ifr.src = ifr.dataset.src;
-          }
-          f.focus();
-        } else if (j === 1) {
-          f.classList.remove('fullscreen');
-          document.getElementById('overlay').classList.remove('active');
-        } else if (j === 2) {
-          editLink(c, i);
-        } else if (j === 3) {
-          deleteLink(c, i);
-        }
-      };
-      ctr.appendChild(b);
-    });
-    
-    f.appendChild(ctr);
-    
-    // Iframe
+ // Substitua apenas a sua função createFrame pelo trecho abaixo:
+
+function createFrame(s, c, i) {
+  const f = document.createElement('div');
+  f.className = 'frame';
+
+  // Controles (fullscreen, minimizar, editar, excluir)
+  const ctr = document.createElement('div');
+  ctr.className = 'controls';
+  ['fullscreen', 'minimize', 'edit', 'delete'].forEach((label, j) => {
+    const b = document.createElement('button');
+    b.textContent = ['🔍', '◻️', '✏️', '🗑️'][j];
+    b.setAttribute('aria-label', getText(`controls.${label}`));
+    b.onclick = e => {
+      e.preventDefault(); e.stopPropagation();
+      if (j === 0) {
+        f.classList.add('fullscreen');
+        document.getElementById('overlay').classList.add('active');
+        const ifr = f.querySelector('iframe');
+        if (ifr && ifr.dataset.src && !ifr.src) ifr.src = ifr.dataset.src;
+      } else if (j === 1) {
+        f.classList.remove('fullscreen');
+        document.getElementById('overlay').classList.remove('active');
+      } else if (j === 2) {
+        editLink(c, i);
+      } else {
+        deleteLink(c, i);
+      }
+    };
+    ctr.appendChild(b);
+  });
+  f.appendChild(ctr);
+
+  // Container para spinner / fallback / iframe
+  const content = document.createElement('div');
+  content.className = 'container';
+  f.appendChild(content);
+
+  function showFallback() {
+    content.innerHTML = '';
+    const err = document.createElement('div');
+    err.style = 'display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;';
+    err.textContent = getText('errors.loading');
+    const retryBtn = document.createElement('button');
+    retryBtn.textContent = getText('errors.retry');
+    retryBtn.onclick = attemptLoad;
+    err.appendChild(retryBtn);
+    const openLink = document.createElement('a');
+    openLink.textContent = getText('errors.open');
+    openLink.href = s.url;
+    openLink.target = '_blank';
+    openLink.rel = 'noopener noreferrer';
+    openLink.className = 'retry-link';
+    err.appendChild(openLink);
+    content.appendChild(err);
+  }
+
+  function injectIframe() {
+    content.innerHTML = '';
     const ifr = document.createElement('iframe');
-    ifr.dataset.src = s.url;
+    ifr.src = s.url;
     ifr.loading = 'lazy';
     ifr.title = s.title;
+    ifr.style = 'width:100%;height:100%;border:none;';
     ifr.setAttribute('sandbox', 'allow-scripts allow-same-origin');
-    f.appendChild(ifr);
-    
-    // Site title
-    const st = document.createElement('div');
-    st.className = 'site-title';
-    st.textContent = s.title;
-    f.appendChild(st);
-    
-    // Add click handler to open frame in fullscreen
-    f.addEventListener('click', (e) => {
-      // If clicked on controls, don't open fullscreen
-      if (e.target.closest('.controls')) return;
-      
-      f.classList.add('fullscreen');
-      document.getElementById('overlay').classList.add('active');
-      const iframe = f.querySelector('iframe');
-      if (iframe && iframe.dataset.src && !iframe.src) {
-        iframe.src = iframe.dataset.src;
-      }
-    });
-    
-    return f;
+    content.appendChild(ifr);
   }
-  
+
+  function attemptLoad() {
+    content.innerHTML = '';
+    const spinner = document.createElement('div');
+    spinner.className = 'loading-spinner';
+    content.appendChild(spinner);
+
+    let pingUrl;
+    try {
+      const u = new URL(s.url);
+      pingUrl = u.origin + '/favicon.ico';
+    } catch {
+      pingUrl = s.url;
+    }
+
+    const img = new Image();
+    img.onload = injectIframe;
+    img.onerror = showFallback;
+    img.src = pingUrl;
+  }
+
+  // Inicia o processo de load
+  attemptLoad();
+
+  // Título do site
+  const st = document.createElement('div');
+  st.className = 'site-title';
+  st.textContent = s.title;
+  f.appendChild(st);
+
+  // Clique abre em fullscreen (lazy-load)
+  f.addEventListener('click', e => {
+    if (e.target.closest('.controls')) return;
+    f.classList.add('fullscreen');
+    document.getElementById('overlay').classList.add('active');
+    const iframe = f.querySelector('iframe');
+    if (iframe && iframe.dataset.src && !iframe.src) iframe.src = iframe.dataset.src;
+  });
+
+  return f;
+} 
   // Generate content
   function generateContent() {
     const ct = document.getElementById('content');
