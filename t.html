@@ -343,33 +343,131 @@
       };
       
       // Initialize data from localStorage or use defaults
-      let categories = null;
-      let visible = null;
+      const defaultCategories = {
+  "Finance Tools": [
+    {
+      title: "Nova Charts",
+      url: "https://nova-charts.netlify.app/",
+      description: "Interactive financial charts and analytics"
+    },
+    {
+      title: "Nova Finance Hub",
+      url: "https://nova-finance-hub.netlify.app/",
+      description: "Comprehensive financial management tools"
+    },
+    {
+      title: "Market Wallet",
+      url: "https://market-wallet.netlify.app/",
+      description: "Track and manage your investment portfolio"
+    },
+    {
+      title: "Agent Finance Demo",
+      url: "https://agent-finance-demo.netlify.app/",
+      description: "AI-powered financial assistant"
+    }
+  ],
+  "Search Platforms": [
+    {
+      title: "Nova Search Dividends - All",
+      url: "https://nova-search-dividends.netlify.app/all.html",
+      description: "Complete dividend information search"
+    },
+    {
+      title: "Nova Search Dividends",
+      url: "https://nova-search-dividends.netlify.app/",
+      description: "Dividend-focused search platform"
+    },
+    {
+      title: "Nova Search Stock",
+      url: "https://nova-search-stock.netlify.app/",
+      description: "Stock information search engine"
+    },
+    {
+      title: "NovaSearch",
+      url: "https://novasearch.app/",
+      description: "Main search platform for Nova ecosystem"
+    },
+    {
+      title: "NovaSearch Hub",
+      url: "https://novasearch.app/hubsearch",
+      description: "Centralized search hub for all Nova resources"
+    }
+  ],
+  "LLM Platforms": [
+    {
+      title: "ChatGPT",
+      url: "https://chat.openai.com",
+      description: "OpenAI's conversational AI"
+    },
+    {
+      title: "Google Gemini",
+      url: "https://gemini.google.com",
+      description: "Google's multimodal AI assistant"
+    },
+    {
+      title: "Claude AI",
+      url: "https://claude.ai",
+      description: "Anthropic's helpful AI assistant"
+    },
+    {
+      title: "Microsoft Copilot",
+      url: "https://copilot.microsoft.com",
+      description: "Microsoft's AI companion"
+    },
+    {
+      title: "Perplexity AI",
+      url: "https://perplexity.ai",
+      description: "AI-powered search and answers"
+    },
+    {
+      title: "Chat Cantinho",
+      url: "https://chat-cantinho.vercel.app/",
+      description: "Custom chat interface for Nova ecosystem"
+    }
+  ],
+  "Analytics & More": [
+    {
+      title: "Market Analytics Hub",
+      url: "https://marketanalyticshubapp.azurewebsites.net/",
+      description: "Advanced market analytics and insights"
+    },
+    {
+      title: "Cantinho de Net",
+      url: "https://cantinhode.net/",
+      description: "Community platform for Nova users"
+    },
+    {
+      title: "Example Site",
+      url: "https://example.com",
+      description: "Demo site for testing purposes"
+    },
+    {
+      title: "Wikipedia",
+      url: "https://wikipedia.org",
+      description: "Free online encyclopedia"
+    },
+    {
+      title: "OpenAI",
+      url: "https://openai.com",
+      description: "AI research and deployment"
+    },
+    {
+      title: "GitHub",
+      url: "https://github.com",
+      description: "Code hosting platform"
+    }
+  ]
+};
 
-      try {
-        categories = JSON.parse(localStorage.getItem('novaagg-categories')) || {
-          "Finance Tools": [
-            {title: "Nova Charts", url: "https://nova-charts.netlify.app/", description: "Interactive financial charts and analytics"}
-          ],
-          "Search Platforms": [],
-          "LLM Platforms": [],
-          "Analytics & More": []
-        };
-        
-        visible = JSON.parse(localStorage.getItem('novaagg-visible')) || 
-          Object.keys(categories).reduce((a, k) => (a[k] = true, a), {});
-      } catch (e) {
-        console.error("Error loading data from localStorage:", e);
-        categories = {
-          "Finance Tools": [
-            {title: "Nova Charts", url: "https://nova-charts.netlify.app/", description: "Interactive financial charts and analytics"}
-          ],
-          "Search Platforms": [],
-          "LLM Platforms": [],
-          "Analytics & More": []
-        };
-        visible = Object.keys(categories).reduce((a, k) => (a[k] = true, a), {});
-      }
+try {
+  categories = JSON.parse(localStorage.getItem('novaagg-categories')) || defaultCategories;
+  visible   = JSON.parse(localStorage.getItem('novaagg-visible')) ||
+              Object.keys(defaultCategories).reduce((a, k) => (a[k] = true, a), {});
+} catch (e) {
+  console.error("Error loading data from localStorage:", e);
+  categories = defaultCategories;
+  visible   = Object.keys(defaultCategories).reduce((a, k) => (a[k] = true, a), {});
+}
       
       // Safe localStorage operations
       const safe = {
